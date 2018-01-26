@@ -1,0 +1,24 @@
+{
+  "name": "ggj",
+  "version": "1.0.0",
+  "description": "Transmission ggj 2018",
+  "main": "index.js",
+  "dependencies": {
+    "generate-maze": "^0.2.0",
+    "phaser": "^2.6.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berithpy/ggj.git"
+  },
+  "author": "Team puretillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/berithpy/ggj/issues"
+  },
+  "homepage": "https://github.com/berithpy/ggj#readme"
+}
