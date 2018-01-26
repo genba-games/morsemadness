@@ -1,5 +1,5 @@
 # ggj
-NO THEME YET
+Transmission theme
 ## TEAM
 Alejo Carballude  
 Diego Diaz  
