@@ -1,24 +1,62 @@
 {
-  "name": "ggj",
-  "version": "1.0.0",
-  "description": "Transmission ggj 2018",
-  "main": "index.js",
-  "dependencies": {
-    "generate-maze": "^0.2.0",
-    "phaser": "^2.6.2"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/berithpy/ggj.git"
-  },
-  "author": "Team puretillo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/berithpy/ggj/issues"
-  },
-  "homepage": "https://github.com/berithpy/ggj#readme"
+    "name": "ggj",
+    "version": "1.0.0",
+    "description": "Transmission ggj 2018",
+    "main": "index.js",
+    "scripts": {
+        "dev": "webpack",
+        "deploy": "webpack --config webpack.production.config.js",
+        "cordova": "webpack --config webpack.cordova.config.js",
+        "test": "eslint './src/**/*.js'"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-eslint": "^8.1.2",
+        "babel-loader": "^7.1.2",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
+        "browser-sync": "^2.21.0",
+        "browser-sync-webpack-plugin": "^1.2.0",
+        "clean-webpack-plugin": "^0.1.17",
+        "copy-webpack-plugin": "^4.3.1",
+        "cordova": "^8.0.0",
+        "eslint": "^4.14.0",
+        "eslint-config-standard": "^10.2.1",
+        "eslint-plugin-import": "^2.8.0",
+        "eslint-plugin-node": "^5.2.1",
+        "eslint-plugin-promise": "^3.6.0",
+        "eslint-plugin-standard": "^3.0.1",
+        "expose-loader": "^0.7.4",
+        "html-webpack-plugin": "^2.30.1",
+        "webpack": "^3.10.0"
+    },
+    "dependencies": {
+        "cordova-android": "^7.0.0",
+        "cordova-browser": "^5.0.2",
+        "cordova-ios": "^4.5.4",
+        "cordova-plugin-whitelist": "^1.3.3",
+        "generate-maze": "^0.2.0",
+        "phaser-ce": "^2.9.4",
+        "webfontloader": "^1.6.28"
+    },
+    "cordova": {
+        "platforms": [
+            "android",
+            "browser",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-whitelist": {}
+        }
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/berithpy/ggj.git"
+    },
+    "author": "Team puretillo",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/berithpy/ggj/issues"
+    },
+    "homepage": "https://github.com/berithpy/ggj#readme"
 }
