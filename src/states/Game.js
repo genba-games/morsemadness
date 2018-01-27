@@ -5,10 +5,13 @@ import { generateMaze, TILE_TYPE } from '../code/maze'
 import Dweller from '../sprites/dweller'
 import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
+import config from '../config'
+import MorseTx from '../sprites/morsetx'
 
 export default class extends Phaser.State {
   init () {}
-  preload () {}
+  preload () {
+  }
 
   createShroom(mazeEntry, x, y) {
     let offset = 50;
@@ -23,6 +26,23 @@ export default class extends Phaser.State {
   }
   
   create () {
+    const T={
+      U:{art:'u',
+         morse:'u_morse',
+         y:0*config.tileHeight},
+      D:{art:'d',
+         morse:'d_morse',
+         y:1*config.tileHeight},
+      L:{art:'l',
+         morse:'l_morse',
+         y:2*config.tileHeight},
+      R:{art:'r',
+         morse:'r_morse',
+         y:3*config.tileHeight},
+      M:{art:'m',
+         morse:'m_morse',
+         y:4*config.tileHeight}
+    }
     const bannerText = 'GGJ 2018'
     let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
       font: '40px Bangers',
@@ -51,6 +71,7 @@ export default class extends Phaser.State {
       asset:'dweller',
       gamepad: game.input.gamepad.pad1,
     }));
+
     this.game.add.existing(new Operator({
       game: this.game,
       x:500,
@@ -80,6 +101,9 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
+    var gTx = this.game.add.group();
+    var txArray = [T.U, T.U, T.D, T.D,T.D,T.M,T.U,T.M,T.M,T.R,T.R,T.L,]
+    MorseTx(this.game, gTx, txArray)
   }
 
   render () {

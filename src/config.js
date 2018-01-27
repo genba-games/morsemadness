@@ -1,4 +1,4 @@
-config = {
+var config = {
   gameWidth: 960,
   gameHeight: 544,
   tileWidth: 16,

@@ -15,6 +15,18 @@ export default class extends Phaser.State {
     //
     this.load.image('mushroom', 'assets/images/mushroom2.png')
     this.load.image('dweller', 'assets/images/dweller.png')
+
+    this.load.image('u','assets/images/placeholder.png')
+    this.load.image('d','assets/images/placeholder.png')
+    this.load.image('l','assets/images/placeholder.png')
+    this.load.image('r','assets/images/placeholder.png')
+    this.load.image('m','assets/images/placeholder.png')
+
+    this.load.audio('u_morse','assets/audio/U.ogg')
+    this.load.audio('d_morse','assets/audio/D.ogg')
+    this.load.audio('l_morse','assets/audio/L.ogg')
+    this.load.audio('r_morse','assets/audio/R.ogg')
+    this.load.audio('m_morse','assets/audio/M.ogg')
   }
 
   create () {
