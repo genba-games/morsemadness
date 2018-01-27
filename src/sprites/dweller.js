@@ -1,32 +1,30 @@
 import Phaser from 'phaser'
+import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Phaser.Sprite {
-  constructor ({ game, x, y, asset, gamepad}) {
+  constructor ({ game, x, y, asset, keymap, gamepad }) {
     super(game, x, y, asset)
+    this.gamepad = new Gamepad(this, keymap, gamepad);
     this.anchor.setTo(0.5)
 
-    this.upKey = gamepad.up;
-    this.downKey = gamepad.down;
-    this.leftKey = gamepad.left;
-    this.rightKey = gamepad.right;
-    this.actionKey = gamepad.action;
+    console.log(this.pad);
   }
 
   update(){
-    if (this.upKey.isDown)
+    if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
     {
         this.y--;
     }
-    else if (this.downKey.isDown)
+    else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
     {
         this.y++;
     }
 
-    if (this.leftKey.isDown)
+    if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
     {
         this.x--;
     }
-    else if (this.rightKey.isDown)
+    else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
     {
         this.x++;
     }
