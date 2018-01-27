@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import generate from 'generate-maze'
+import dweller from '../sprites/dweller'
 
 export default class extends Phaser.State {
   init () {}
@@ -42,6 +43,12 @@ export default class extends Phaser.State {
         this.createShroom(maze[y][x], x, y);
       }
     }
+    this.game.add.existing(new dweller({
+      game: this.game,
+      x:35,
+      y:35,
+      asset:'dweller'
+    }));
   }
 
   render () {
