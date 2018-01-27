@@ -69,7 +69,7 @@ function generateItem() {
  * @returns {Array[Array]} Matrix of the specified width and height containing 
  * TILE_TYPE entries.
  */
-export default function generateMaze(width, height, doorChance, itemChance) {
+function generateMaze(width, height) {
   if (width % 2 == 0 || height % 2 == 0)
     throw 'Cannot generate maze with even dimensions. Dimensions MUST be odd!';
 
@@ -140,4 +140,12 @@ export default function generateMaze(width, height, doorChance, itemChance) {
       
     }
   }
+
+  return maze;
 };
+
+module.exports = {
+  TILE_TYPE,
+  generateMaze,
+  populateMaze,
+}
