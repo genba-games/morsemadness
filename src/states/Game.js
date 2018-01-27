@@ -1,7 +1,7 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
-import generate from 'generate-maze'
+import { generateMaze, TILE_TYPE } from '../code/maze'
 import Dweller from '../sprites/dweller'
 import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
@@ -12,18 +12,13 @@ export default class extends Phaser.State {
   preload () {}
 
   createShroom(mazeEntry, x, y) {
-    if (mazeEntry.left)
+    let offset = 100;
+    let mult = 48;
+    if (mazeEntry == TILE_TYPE.WALL)
       this.game.add.existing(new Mushroom({
         game: this.game,
-        x: 100 + 96 * x - 96,
-        y: 100 + 96 * y,
-        asset: 'mushroom'
-      }));
-    if (mazeEntry.top)
-      this.game.add.existing(new Mushroom({
-        game: this.game,
-        x: 100 + 96 * x,
-        y: 100 + 96 * y - 96,
+        x: offset + mult * x - mult,
+        y: offset + mult * y,
         asset: 'mushroom'
       }));
   }
@@ -39,11 +34,11 @@ export default class extends Phaser.State {
     banner.padding.set(10, 16)
     banner.anchor.setTo(0.5)
 
-    var maze = generateMaze(5, 7);
+    var maze = generateMaze(9, 25);
 
-    for (let x = 0; x < maze[0].length; x++) {
-      for (let y = 0; y < maze.length; y++) {
-        this.createShroom(maze[y][x], x, y);
+    for (let x = 0; x < maze.length; x++) {
+      for (let y = 0; y < maze[0].length; y++) {
+        this.createShroom(maze[x][y], x, y);
       }
     }
 
