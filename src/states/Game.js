@@ -6,7 +6,7 @@ import Dweller from '../sprites/dweller'
 import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
-import MorseTx from '../sprites/morsetx'
+import {morseFactory,signals} from '../sprites/morsetx'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
@@ -104,16 +104,15 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
-    this.T = config.T
+
+    this.signals=signals
     this.gTx = this.game.add.group();
-    var txArray = [this.T.U, this.T.U, this.T.D, this.T.D,this.T.D,this.T.M,this.T.U]
-    MorseTx(this.game, this.gTx, txArray)
   }
   update () {
     if(this.debugKey.isDown){
-      let i=Math.floor(Math.random()*Math.floor(config.signals.length))
-      let pattern = config.signals[i].pattern
-      MorseTx(this.game, this.gTx, pattern)
+      let i=Math.floor(Math.random()*Math.floor(this.signals.length))
+      let pattern = this.signals[i].pattern
+      morseFactory(this.game, this.gTx, pattern)
   }
   }
   render () {
