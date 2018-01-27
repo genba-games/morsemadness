@@ -11,8 +11,8 @@ import config from './config'
 class Game extends Phaser.Game {
   constructor () {
     const docElement = document.documentElement
-    const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth
-    const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight
+    const width = config.gameWidth
+    const height = config.gameHeight
 
     super(width, height, Phaser.CANVAS, 'content', null)
 
@@ -20,7 +20,8 @@ class Game extends Phaser.Game {
     this.state.add('Splash', SplashState, false)
     this.state.add('Game', GameState, false)
 
-    // with Cordova with need to wait that the device is ready so we will call the Boot state in another file
+    // with Cordova with need to wait that the device is ready so we will call 
+    // the Boot state in another file
     if (!window.cordova) {
       this.state.start('Boot')
     }

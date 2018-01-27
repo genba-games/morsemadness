@@ -1,16 +1,20 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
-import { generateMaze, TILE_TYPE } from '../code/maze'
+import { generateMaze, TILE_TYPE } from '../maze'
 import Dweller from '../sprites/dweller'
 import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
 import MorseTx from '../sprites/morsetx'
+const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
   init () {}
   preload () {
+    // Load the tilemap
+    let tilemap = 'src/tilemaps/basetilemap.csv';
+    game.load.image('tiles1', 'assets/images/tileset.png');
   }
 
   createShroom(mazeEntry, x, y) {
@@ -37,13 +41,28 @@ export default class extends Phaser.State {
     banner.padding.set(10, 16)
     banner.anchor.setTo(0.5)
 
-    var maze = generateMaze(9, 25);
-
-    for (let x = 0; x < maze.length; x++) {
-      for (let y = 0; y < maze[0].length; y++) {
-        this.createShroom(maze[x][y], x, y);
-      }
-    }
+    // Prepare the maze tilemap
+    var operatorMap = Array(5).fill(
+      [
+        TILE_TYPE.CLEAR,
+        ...Array(config.horizontalTiles - 2).fill(TILE_TYPE.CLEAR), 
+        TILE_TYPE.WALL
+      ]
+    )
+    operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.WALL));
+    for (let i=0; i < config.verticalTiles - operatorMap.length; i++) {
+      let arr = Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR)
+      operatorMap.push(arr);
+    } 
+    generateMaze(operatorMap, 0, 6, 59, 11);
+    
+    // Create the tilemap
+    operatorMap = arrayToCSV(operatorMap);
+    game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
+    var map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
+    map.addTilesetImage('tiles1');
+    var layer = map.createLayer(0);
+    layer.resizeWorld();
 
     //ACTORS
     game.input.gamepad.start();
