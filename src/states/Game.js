@@ -92,7 +92,8 @@ export default class extends Phaser.State {
   }
   update () {
     if(this.debugKey.isDown){
-      MorseTx(this.game, this.gTx, [this.T.U, this.T.U])
+      var pattern=config.pattern[getRandomInt(config.pattern.lenght)]
+      MorseTx(this.game, this.gTx, pattern)
   }
   }
   render () {

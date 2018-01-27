@@ -25,7 +25,17 @@ config.T={
 }
 config.horizontalTiles = config.gameWidth / config.tileWidth;
 config.verticalTiles = config.gameHeight / config.tileHeight;
+/*
 
+
+
+
+
+
+
+
+
+*/ 
 config.signals=[
   {pattern:[U,U,D,D,L,R,L,R,M,M],difficulty:0,},
   {pattern:[L,U,R,M],difficulty:0},
@@ -40,5 +50,12 @@ config.signals=[
   {pattern:[M,D,L,U,M],difficulty:0},
   {pattern:[L,D,R,M],difficulty:0},
   {pattern:[D,R,M],difficulty:0},
-  ]
+  {pattern:[U,R,R,L,R,M,R,L], difficulty:0},
+  {pattern:[D,U,D,M,L,L,D,U,R,R], difficulty:0},
+  {pattern:[U,M,L,L,U,M,L,R,L,M], difficulty:0},
+  {pattern:[U,D,U,M,L,R,L,R,U,M,D,U,I,D,I,D], difficulty:0},
+  {pattern:[D,A,L,L,M,R,D], difficulty:0},
+  {pattern:[L,D,R,M,U], difficulty:0},
+  {pattern:[D,M,U,M,D,M,L,M,D,M,R,M,U,M], difficulty:0},
+  {pattern:[R,L,L,L,M], difficulty:0},]
 export default config
