@@ -42,7 +42,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, 'assets/**/*'),
+        from: path.resolve(__dirname, 'src/**/*'),
         to: path.resolve(__dirname, 'www')
       }
     ]),
