@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import generate from 'generate-maze'
 import dweller from '../sprites/dweller'
+import operator from '../sprites/operator'
 
 export default class extends Phaser.State {
   init () {}
@@ -43,11 +44,25 @@ export default class extends Phaser.State {
         this.createShroom(maze[y][x], x, y);
       }
     }
+    //ACTORS
+    game.input.gamepad.start();
+
+    pad1 = game.input.gamepad.pad1;
+    pad2 = game.input.gamepad.pad2;
+
     this.game.add.existing(new dweller({
       game: this.game,
       x:35,
       y:35,
-      asset:'dweller'
+      asset:'dweller',
+      gamepad: pad1
+    }));
+    this.game.add.existing(new operator({
+      game: this.game,
+      x:500,
+      y:500,
+      asset:'dweller',
+      gamepad: pad2
     }));
   }
 

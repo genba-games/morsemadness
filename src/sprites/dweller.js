@@ -1,14 +1,15 @@
 import Phaser from 'phaser'
 
 export default class extends Phaser.Sprite {
-  constructor ({ game, x, y, asset }) {
+  constructor ({ game, x, y, asset, gamepad}) {
     super(game, x, y, asset)
     this.anchor.setTo(0.5)
 
-    this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-    this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    this.upKey = gamepad.up;
+    this.downKey = gamepad.down;
+    this.leftKey = gamepad.left;
+    this.rightKey = gamepad.right;
+    this.actionKey = gamepad.action;
   }
 
   update(){
