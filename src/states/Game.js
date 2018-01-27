@@ -2,8 +2,8 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import generate from 'generate-maze'
-import dweller from '../sprites/dweller'
-import operator from '../sprites/operator'
+import Dweller from '../sprites/dweller'
+import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 
 
@@ -49,15 +49,15 @@ export default class extends Phaser.State {
 
     //ACTORS
     game.input.gamepad.start();
-    
-    this.game.add.existing(new dweller({
+
+    this.game.add.existing(new Dweller({
       game: this.game,
       x:35,
       y:35,
       asset:'dweller',
       gamepad: game.input.gamepad.pad1,
     }));
-    this.game.add.existing(new operator({
+    this.game.add.existing(new Operator({
       game: this.game,
       x:500,
       y:500,

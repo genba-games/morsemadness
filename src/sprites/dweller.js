@@ -6,8 +6,6 @@ export default class extends Phaser.Sprite {
     super(game, x, y, asset)
     this.gamepad = new Gamepad(this, keymap, gamepad);
     this.anchor.setTo(0.5)
-
-    console.log(this.pad);
   }
 
   update(){
