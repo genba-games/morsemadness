@@ -107,6 +107,11 @@ export default class extends Phaser.State {
 
     this.signals=signals
     this.gTx = this.game.add.group();
+
+    //debugg
+    let i=Math.floor(Math.random()*Math.floor(this.signals.length))
+      let pattern = this.signals[i].pattern
+      morseFactory(this.game, this.gTx, pattern)
   }
   update () {
     if(this.debugKey.isDown){
