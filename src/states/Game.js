@@ -5,7 +5,11 @@ import generate from 'generate-maze'
 import dweller from '../sprites/dweller'
 import operator from '../sprites/operator'
 
+
 export default class extends Phaser.State {
+  constructor(){
+
+  }
   init () {}
   preload () {}
 
@@ -25,10 +29,10 @@ export default class extends Phaser.State {
         asset: 'mushroom'
       }));
   }
-
+  
   create () {
     const bannerText = 'GGJ 2018'
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
+    let banner = this.add.text(this.world.ce nterX, this.game.height - 80, bannerText, {
       font: '40px Bangers',
       fill: '#77BFA3',
       smoothed: false
@@ -47,8 +51,8 @@ export default class extends Phaser.State {
     //ACTORS
     game.input.gamepad.start();
 
-    pad1 = game.input.gamepad.pad1;
-    pad2 = game.input.gamepad.pad2;
+    this.pad1 = game.input.gamepad.pad1;
+    this.pad2 = game.input.gamepad.pad2;
 
     this.game.add.existing(new dweller({
       game: this.game,
