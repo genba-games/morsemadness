@@ -6,15 +6,14 @@ import Dweller from '../sprites/dweller'
 import Operator from '../sprites/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 
-
 export default class extends Phaser.State {
   init () {}
   preload () {}
 
   createShroom(mazeEntry, x, y) {
-    let offset = 100;
+    let offset = 50;
     let mult = 48;
-    if (mazeEntry == TILE_TYPE.WALL)
+    if (mazeEntry === TILE_TYPE.WALL)
       this.game.add.existing(new Mushroom({
         game: this.game,
         x: offset + mult * x - mult,
