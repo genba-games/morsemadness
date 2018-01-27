@@ -50,13 +50,13 @@
         }
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/berithpy/ggj.git"
+        "type": "git",
+        "url": "git+https://github.com/berithpy/ggj.git"
     },
     "author": "Team puretillo",
     "license": "ISC",
     "bugs": {
-      "url": "https://github.com/berithpy/ggj/issues"
+        "url": "https://github.com/berithpy/ggj/issues"
     },
     "homepage": "https://github.com/berithpy/ggj#readme"
 }
