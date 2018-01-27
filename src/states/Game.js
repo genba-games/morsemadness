@@ -62,8 +62,6 @@ export default class extends Phaser.State {
     var layer = map.createLayer(0);
     layer.resizeWorld();
 
-    console.log(operatorMap);
-
     //ACTORS
     game.input.gamepad.start();
 

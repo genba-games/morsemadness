@@ -1,6 +1,8 @@
 import generate from 'generate-maze'
+import Door from './door'
+import Item from './item'
 var randomObjProp = require('random-obj-prop')
-// var arrayToCSV = require('array-to-csv')
+
 
 var TILE_TYPE = {
   CLEAR: 0,
@@ -111,35 +113,23 @@ function generateMaze(tilemapData,
   height = height + verticalOffset;
   width = width + horizontalOffset;
 
-  console.log(height, width);
-
   // Convert the Eller matrix to a TILE_TYPE matrix.
   // No borders are included in the generated TILE_TYPE matrix, they are 
   // expected to be guaranteed by the game
   for (let x=verticalOffset; x < height; x += 2) {
     for (let y=horizontalOffset; y < width; y += 2) {
       let piece = gen[(x-verticalOffset)/2][(y-horizontalOffset)/2];
-      console.log('yx', x, y, 'lrud', piece.left, piece.right, piece.top, piece.bottom);
       // Set the current position to CLEAR
       tilemapData[x][y] = TILE_TYPE.CLEAR;
       // Set the corner down right to wall
-      if (x < height - 1 && y < width - 1) {
+      if (x < height - 1 && y < width - 1)
         tilemapData[x+1][y+1] = TILE_TYPE.WALL;
-        console.log(x+1 , y+1, tilemapData[x+1][y+1]);
-      }
       // Set the right and bottom walls
-      if (x < height - 1) {
+      if (x < height - 1)
         tilemapData[x+1][y] = piece.bottom ? TILE_TYPE.WALL : TILE_TYPE.CLEAR;
-        if (piece.bottom)
-          console.log(x+1 , y, tilemapData[x+1][y]);
-      }
-      if (y < width - 1) {
+      if (y < width - 1)
         tilemapData[x][y+1] = piece.right ? TILE_TYPE.WALL : TILE_TYPE.CLEAR;
-        if (piece.right)
-          console.log(x, y+1, tilemapData[x][y+1]);
-      }
     }
-    console.log('');
   } 
 
   // Set maze doors:
@@ -174,17 +164,17 @@ function generateMaze(tilemapData,
   }
 
   // Set maze items.
-  // if (!itemChance && itemChance !== 0)
-  //   itemChance = 0.1;
-  // for (let x=0; x < height; x += 1) {
-  //   for (let y=0; y < width; y += 1) {
-  //     // If placement roll does not succeed skip placement
-  //     if (Math.random() > itemChance || tilemapData[x][y] !== TILE_TYPE.CLEAR) 
-  //       continue
+  if (!itemChance && itemChance !== 0)
+    itemChance = 0.2;
+  for (let x=verticalOffset; x < height; x += 1) {
+    for (let y=horizontalOffset; y < width; y += 1) {
+      // If placement roll does not succeed skip placement
+      if (Math.random() > itemChance || tilemapData[x][y] !== TILE_TYPE.CLEAR) 
+        continue
 
-  //     tilemapData[x][y] = generateItem();
-  //   }
-  // }
+      tilemapData[x][y] = generateItem();
+    }
+  }
 
   return tilemapData;
 };
