@@ -1,12 +1,11 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
-import Mushroom from '../sprites/Mushroom'
 import { generateMaze, TILE_TYPE } from '../maze'
-import Dweller from '../sprites/dweller'
-import Operator from '../sprites/operator'
+import Dweller from '../actors/dweller'
+import Operator from '../actors/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
-import MorseTx from '../sprites/morsetx'
+import MorseTx from '../actors/morsetx'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
@@ -14,32 +13,16 @@ export default class extends Phaser.State {
   preload () {
     // Load the tilemap
     let tilemap = 'src/tilemaps/basetilemap.csv';
-    game.load.image('tiles1', 'assets/images/tileset.png');
+    game.load.image('tiles1', 'src/sprites/tileset.png');
   }
 
-  createShroom(mazeEntry, x, y) {
-    let offset = 50;
-    let mult = 48;
-    if (mazeEntry === TILE_TYPE.WALL)
-      this.game.add.existing(new Mushroom({
-        game: this.game,
-        x: offset + mult * x - mult,
-        y: offset + mult * y,
-        asset: 'mushroom'
-      }));
-  }
-  
-  create () {
-    this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-    const bannerText = 'GGJ 2018'
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
-      font: '40px Bangers',
-      fill: '#77BFA3',
-      smoothed: false
-    })
-
-    banner.padding.set(10, 16)
-    banner.anchor.setTo(0.5)
+  reset() {
+    // Setup groups
+    this.gActors = this.gActors || this.game.add.group();
+    this.gTx = this.gActors || this.game.add.group();
+    // Kill all children in case groups are from previous game
+    this.gActors.forEachAlive(o => o.destroy(), this);
+    this.gTx.forEachAlive(o => o.destroy(), this);
 
     // Prepare the maze tilemap
     var operatorMap = Array(5).fill(
@@ -53,7 +36,9 @@ export default class extends Phaser.State {
     for (let i=0; i < config.verticalTiles - operatorMap.length; i++) {
       let arr = Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR)
       operatorMap.push(arr);
-    } 
+    }
+
+    // Generate the maze
     generateMaze(operatorMap, 0, 6, 59, 11);
     
     // Create the tilemap
@@ -63,9 +48,6 @@ export default class extends Phaser.State {
     map.addTilesetImage('tiles1');
     var layer = map.createLayer(0);
     layer.resizeWorld();
-
-    //ACTORS
-    game.input.gamepad.start();
 
     this.game.add.existing(new Dweller({
       game: this.game,
@@ -104,11 +86,17 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
-    this.T = config.T
-    this.gTx = this.game.add.group();
-    var txArray = [this.T.U, this.T.U, this.T.D, this.T.D,this.T.D,this.T.M,this.T.U]
-    MorseTx(this.game, this.gTx, txArray)
+
+    // Start gamepads to track controller input
+    game.input.gamepad.start();
   }
+  
+  create () {
+    this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+
+    this.reset();
+  }
+
   update () {
     if(this.debugKey.isDown){
       let i=Math.floor(Math.random()*Math.floor(config.signals.length))

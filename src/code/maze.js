@@ -1,12 +1,13 @@
 import generate from 'generate-maze'
-import Door from './door'
-import Item from './item'
+import Door from './actors/door'
+import Item from './actors/item'
 var randomObjProp = require('random-obj-prop')
 
 
 var TILE_TYPE = {
   CLEAR: 0,
   WALL: 1,
+  TARGET: 2,
 };
 
 var DOOR_TYPE_UD = {
