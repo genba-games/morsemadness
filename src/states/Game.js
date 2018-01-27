@@ -1,8 +1,10 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
-import dweller from '../sprites/dweller'
-import generateMaze from '../code/maze'
+import generate from 'generate-maze'
+import Dweller from '../sprites/dweller'
+import Operator from '../sprites/operator'
+import GAMEPAD_KEY from '../gamepad/gamepad'
 
 
 export default class extends Phaser.State {
@@ -25,7 +27,7 @@ export default class extends Phaser.State {
         asset: 'mushroom'
       }));
   }
-
+  
   create () {
     const bannerText = 'GGJ 2018'
     let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
@@ -39,12 +41,50 @@ export default class extends Phaser.State {
 
     var maze = generateMaze(5, 7);
 
-    
-    this.game.add.existing(new dweller({
+    for (let x = 0; x < maze[0].length; x++) {
+      for (let y = 0; y < maze.length; y++) {
+        this.createShroom(maze[y][x], x, y);
+      }
+    }
+
+    //ACTORS
+    game.input.gamepad.start();
+
+    this.game.add.existing(new Dweller({
       game: this.game,
       x:35,
       y:35,
-      asset:'dweller'
+      asset:'dweller',
+      gamepad: game.input.gamepad.pad1,
+    }));
+    this.game.add.existing(new Operator({
+      game: this.game,
+      x:500,
+      y:500,
+      asset:'dweller',
+      keymap: {
+        [GAMEPAD_KEY.UP]: [
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.UP
+        ],
+        [GAMEPAD_KEY.DOWN]: [
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.DOWN
+        ],
+        [GAMEPAD_KEY.LEFT]: [
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.LEFT
+        ],
+        [GAMEPAD_KEY.RIGHT]: [
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.RIGHT
+        ],
+        [GAMEPAD_KEY.ACTION]: [
+            Phaser.Keyboard.X,
+            Phaser.Keyboard.SPACE,
+        ],
+      },
+      gamepad: game.input.gamepad.pad2,
     }));
   }
 
