@@ -5,7 +5,7 @@ import Dweller from '../actors/dweller'
 import Operator from '../actors/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
-import MorseTx from '../actors/morsetx'
+import { morseFactory, signals } from '../actors/morsetx'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
@@ -98,11 +98,11 @@ export default class extends Phaser.State {
   }
 
   update () {
-    if(this.debugKey.isDown){
-      let i=Math.floor(Math.random()*Math.floor(config.signals.length))
-      let pattern = config.signals[i].pattern
-      MorseTx(this.game, this.gTx, pattern)
-  }
+    if (this.debugKey.isDown) {
+      let i=Math.floor(Math.random()*Math.floor(this.signals.length))
+      let pattern = this.signals[i].pattern
+      morseFactory(this.game, this.gTx, pattern)
+    }
   }
   render () {
     if (__DEV__) {
