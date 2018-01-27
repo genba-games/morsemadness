@@ -26,23 +26,7 @@ export default class extends Phaser.State {
   }
   
   create () {
-    const T={
-      U:{art:'u',
-         morse:'u_morse',
-         y:0*config.tileHeight},
-      D:{art:'d',
-         morse:'d_morse',
-         y:1*config.tileHeight},
-      L:{art:'l',
-         morse:'l_morse',
-         y:2*config.tileHeight},
-      R:{art:'r',
-         morse:'r_morse',
-         y:3*config.tileHeight},
-      M:{art:'m',
-         morse:'m_morse',
-         y:4*config.tileHeight}
-    }
+    this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     const bannerText = 'GGJ 2018'
     let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
       font: '40px Bangers',
@@ -101,11 +85,16 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
-    var gTx = this.game.add.group();
-    var txArray = [T.U, T.U, T.D, T.D,T.D,T.M,T.U,T.M,T.M,T.R,T.R,T.L,]
-    MorseTx(this.game, gTx, txArray)
+    this.T = config.T
+    this.gTx = this.game.add.group();
+    var txArray = [this.T.U, this.T.U, this.T.D, this.T.D,this.T.D,this.T.M,this.T.U]
+    MorseTx(this.game, this.gTx, txArray)
   }
-
+  update () {
+    if(this.debugKey.isDown){
+      MorseTx(this.game, this.gTx, [this.T.U, this.T.U])
+  }
+  }
   render () {
     if (__DEV__) {
       //this.game.debug.spriteInfo(this.mushroom, 32, 32)
