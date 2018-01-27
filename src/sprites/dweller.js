@@ -9,23 +9,33 @@ export default class extends Phaser.Sprite {
   }
 
   update(){
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
+    if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) ==-1)
     {
         this.y--;
     }
-    else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
+    else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
+    ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) ==1)
     {
         this.y++;
     }
 
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
+    if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) ==-1)
     {
         this.x--;
     }
-    else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
+    else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) ==1)
     {
         this.x++;
     }
-      
+    
+    if(this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)){
+        this.height++;
+    }
+    if(this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)){
+        this.height--;
+    }
   }
 }

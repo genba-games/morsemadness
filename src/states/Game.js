@@ -39,13 +39,13 @@ export default class extends Phaser.State {
     banner.padding.set(10, 16)
     banner.anchor.setTo(0.5)
 
-    var maze = generateMaze(5, 7);
+    //var maze = generateMaze(5, 7);
 
-    for (let x = 0; x < maze[0].length; x++) {
-      for (let y = 0; y < maze.length; y++) {
-        this.createShroom(maze[y][x], x, y);
-      }
-    }
+    // for (let x = 0; x < maze[0].length; x++) {
+    //   for (let y = 0; y < maze.length; y++) {
+    //     this.createShroom(maze[y][x], x, y);
+    //   }
+    // }
 
     //ACTORS
     game.input.gamepad.start();

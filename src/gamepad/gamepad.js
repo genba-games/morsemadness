@@ -26,16 +26,26 @@
             Phaser.Keyboard.A,
             Phaser.Keyboard.LEFT,
             Phaser.Gamepad.PS3XC_DPAD_LEFT,
+            Phaser.Gamepad.AXIS_0
         ],
         [GAMEPAD_KEY.RIGHT]: [
             Phaser.Keyboard.D,
             Phaser.Keyboard.RIGHT,
             Phaser.Gamepad.PS3XC_DPAD_RIGHT,
+            Phaser.Gamepad.AXIS_0
         ],
         [GAMEPAD_KEY.ACTION]: [
             Phaser.Keyboard.X,
             Phaser.Keyboard.SPACE,
             Phaser.Gamepad.PS3XC_X,
+            Phaser.Gamepad.BUTTON_2,
+            
+        ],
+        [GAMEPAD_KEY.INTERACT]: [
+            Phaser.Keyboard.Z,
+            Phaser.Gamepad.PS3XC_CIRCLE,
+            Phaser.Gamepad.BUTTON_1,
+            
         ],
     }
 
@@ -52,6 +62,7 @@
      */
     function keyPressed(keymap, key) {
         key = keymap[key];
+        
         // Check if key was processed by Phaser
         if (key === true || key === false)  
             return key;
@@ -59,7 +70,7 @@
         for (let k in key) {
             k = key[k];
             if (game.input.keyboard.isDown(k)
-                || (this.pad && this.pad.isDown(k)) )
+                || (this.pad && this.pad.isDown(k)))
                 return true;
         }
         return false;
