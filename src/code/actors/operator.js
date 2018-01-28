@@ -24,23 +24,17 @@ class Operator extends Actor {
   }
   sendSignal(tx) {
     //create a bullet in the bulletGroup
-    console.log(game.time.now)
     if (game.time.now > this.signalTime) {
       //  Grab the first bullet we can from the pool
       this.signal = this.signalGroup.getFirstExists(false);
-      console.log('signal group',this.signalGroup)
-      this.signalGroup.forEachExists(e=>{
-        console.log(e)
-      })
-      console.log(this.signal)
       if (this.signal) {
         //  And fire it
         this.audio[tx.name].play()
-        console.log("fuck")
         this.signal.name=tx.name
         this.signal.reset(this.x+2, this.y);
         this.signal.body.velocity.x = +400;
         this.signalTime = game.time.now + 500;
+        console.log(this.signal.name)
       }
     }
 

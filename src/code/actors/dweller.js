@@ -11,8 +11,8 @@ export default class extends Phaser.Sprite {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
-    this.aIdle = this.animations.add('idle')
-    this.animations.add('idle', [0, 1, 2, 3], 2, true)
+    this.atwist1 = this.animations.add('twist')
+    this.animations.add('twist', [0, 1, 3, 2,0, 1, 3, 2,0,1,1,3,3,2,2,0,0,1,1,1,3,3,3,2,2,2,0,0,0],25, false)
     
     this.aLeft = this.animations.add('left')
     this.animations.add('left', [2], 1, true)
@@ -61,10 +61,11 @@ export default class extends Phaser.Sprite {
     else this.body.velocity.x = 0;
     
     if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)){
-        this.height++;
+        // this.height++;
+        this.animations.play('twist')
     }
     if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)){
-        this.height--;
+        // this.height--;
     }
   }
 }

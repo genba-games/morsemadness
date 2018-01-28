@@ -27,7 +27,7 @@ export default class extends Phaser.State {
     this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
     this.gSignal.createMultiple(30, 'signal');
     this.gSignal.setAll('anchor.x', 0.5);
-    this.gSignal.setAll('anchor.y', 1);
+    this.gSignal.setAll('anchor.y', 0.5);
     this.gSignal.setAll('outOfBoundsKill', true);
     this.gSignal.setAll('checkWorldBounds', true);
 
