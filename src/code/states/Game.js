@@ -22,18 +22,12 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
-<<<<<<< HEAD
-    this.lavaStartTimeMS = 0;
-=======
-    this.lavaStartTimeMS = 200;
->>>>>>> 6f6874ccd0243b13308f44ecd845d26e025ccd24
+    this.lavaStartTimeMS = 10000;
 
     this.reset()
   }
 
   reset() {
-    //setup timer
-    this.swapTimer=0
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -76,7 +70,7 @@ export default class extends Phaser.State {
         TILE_TYPE.CLEAR,
         ...Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR),
       ]
-    )
+    );
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
     for (let i = 0; i < config.verticalTiles - operatorMap.length - 2; i++) {
       let arr = Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR)
@@ -136,6 +130,8 @@ export default class extends Phaser.State {
       this.lava.start, 
       this.lava
     );
+
+    this.gameState = GAME_STATE.PLAY;
   }
 
   create() {
@@ -160,27 +156,12 @@ export default class extends Phaser.State {
   }
   
   swapGamepads() {
-<<<<<<< HEAD
     console.log("Swapping gamepads")
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
-    this.dweller.swapGamepad();
-    this.operator.swapGamepad();
-=======
-    if (this.swapTimer<game.time.now){
-      console.log("swapping gamepads")
-      this.gSignal.forEachAlive(alive => {
-        alive.kill()
-      })
-      this.dweller.swapGamepad();
-      this.operator.swapGamepad();
-      this.swapTimer=game.time.now+3000
-    }else{
-      console.log("not swapping yet")
-    }
-    
->>>>>>> 6f6874ccd0243b13308f44ecd845d26e025ccd24
+    this.dweller.swapGamepads();
+    this.operator.swapGamepads();
   }
 
   win() {
@@ -216,14 +197,14 @@ export default class extends Phaser.State {
       game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
       game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
     }
-    else if (this.gameState === GAME_STATE.END) {
-      // Get end screen input
+    else if (this.gameState === GAME_STATE.END
+             && this.dweller.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
+      this.reset();
     }
   }
 
   render() {
     if (__DEV__) {
-      //this.game.debug.spriteInfo(this.mushroom, 32, 32)
     }
   }
 }

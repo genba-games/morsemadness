@@ -24,7 +24,6 @@ export default class extends Phaser.Sprite {
     } else if (this.gamepad.padId == 1) {
       this.gamepad.setGamepad(game.input.gamepad.pad1)      
       this.gamepad.setKeymap(0)
-
     }
   }
 
