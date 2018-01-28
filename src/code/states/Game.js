@@ -174,18 +174,24 @@ export default class extends Phaser.State {
     this.operator.loadTexture(dwellerKey);
   }
 
-  win() {
+  stop() {
     this.lava.stop();
 
-    this.dweller.disableController();
-    this.operator.disableController();
+    // Stop players
+    this.dweller.stop();
+    this.operator.stop();
+  }
+
+  win() {
+    this.stop()
 
     // Show win graphics
   }
 
   lose () {
-    this.lava.stop();
+    this.stop()
 
+    // Stop player
     this.dweller.disableController();
     this.operator.disableController();
 

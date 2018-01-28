@@ -17,6 +17,16 @@ export default class extends Phaser.Sprite {
     this.controllerEnabled = true;
   }
 
+  stop () {
+    this.disableController();
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+  }
+
+  start () {
+    this.enableController();
+  }
+
   swapGamepads() {
     if (this.gamepad.padId == 0) {
       this.gamepad.setGamepad(game.input.gamepad.pad2)

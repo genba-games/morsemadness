@@ -10,7 +10,7 @@ export default class Signal extends Phaser.TileSprite {
       this.play('glow');
 
       // Lava speed
-      this.speed = speed || 5;
+      this.speed = speed || 7;
     }
 
     /**
