@@ -92,10 +92,11 @@ export default class extends Phaser.State {
     game.physics.startSystem(Phaser.Physics.ARCADE);
   }
 
-  collideActors(dweller, actor) {
+  collideActors(collider, actor) {
     console.log('COLLIDING');
-    actor.collide(dweller);
+    actor.collide(collider);
   }
+
 
   update() {
     // if (this.debugKey.isDown) {
@@ -105,6 +106,9 @@ export default class extends Phaser.State {
     // }
     game.physics.arcade.collide(this.dweller, this.layer);
     game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
+    
+    
+    game.physics.arcade.collide(this.gSignal, this.gtX, this.collideActors);    
   }
   render() {
     if (__DEV__) {

@@ -42,6 +42,8 @@ class Operator extends Actor {
   }
   collide(target) {
     //check if signal.name equals target.name
+    if()
+
   }
   update() {
     if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)

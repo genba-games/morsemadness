@@ -1,10 +1,20 @@
 import Phaser from 'phaser'
 import config from '../config'
 import Actor from './actor'
-class Signal extends Actor{
+class Morse extends Actor{
   constructor(game, x, y, asset) {
     super(game, x, y, asset);
   }
+  collide(target){
+    //check if target equals morses name
+    if(target.name===this.name){
+      target.kill()
+      this.kill()
+    }else{
+      target.kill()
+    }
+  }
+  
 }
 function factory(game, group, transmissions, player = 1) {
   let messageLength = transmissions.length
@@ -18,7 +28,7 @@ function factory(game, group, transmissions, player = 1) {
   transmissions.forEach(tx => {
     let morse = group.getFirstExists(false);
     if(!morse){
-      morse=game.add.existing(new Signal(game, origin, tx.y, tx.art))
+      morse=game.add.existing(new Morse(game, origin, tx.y, tx.art))
       group.add(morse)
     }else{
       morse.reset(origin,tx.y)
@@ -72,7 +82,7 @@ const T = {
   }
 }
 
-const signals = [
+const Morses = [
   { pattern: [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M], difficulty: 0, },
   { pattern: [T.L, T.U, T.R, T.M], difficulty: 0 },
   { pattern: [T.L, T.R, T.U, T.D, T.M], difficulty: 0 },
@@ -95,4 +105,4 @@ const signals = [
   { pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M], difficulty: 0 },
   { pattern: [T.R, T.L, T.L, T.L, T.M], difficulty: 0 },]
 
-module.exports = { signals, morseFactory: factory,T }
+module.exports = { Morses, morseFactory: factory,T }
