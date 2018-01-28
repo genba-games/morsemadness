@@ -8,7 +8,7 @@ export default class extends Actor {
   constructor(game, x, y, asset, gamepad, signalGroup) {
 
     super(game, x, y, asset);
-    this.gamepad = new Gamepad(this, keymap, gamepad);
+    this.gamepad = new Gamepad(this, 1, gamepad);
     this.signalGroup=signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
@@ -18,7 +18,6 @@ export default class extends Actor {
       M: game.add.audio(T.M.morse),
     }
     this.anchor.setTo(0.5)
-    console.log(keymap)
     this.signalTime=0
     
   }
@@ -72,37 +71,4 @@ export default class extends Actor {
     }
   }
 }
-const keymap = {
-  [GAMEPAD_KEY.UP]: [
-      Phaser.Keyboard.W,
-      Phaser.Keyboard.UP,
-      Phaser.Gamepad.PS3XC_DPAD_UP,
-  ],
-  [GAMEPAD_KEY.DOWN]: [
-      Phaser.Keyboard.S,
-      Phaser.Keyboard.DOWN,
-      Phaser.Gamepad.PS3XC_DPAD_DOWN,
-  ],
-  [GAMEPAD_KEY.LEFT]: [
-      Phaser.Keyboard.A,
-      Phaser.Keyboard.LEFT,
-      Phaser.Gamepad.PS3XC_DPAD_LEFT,
-  ],
-  [GAMEPAD_KEY.RIGHT]: [
-      Phaser.Keyboard.D,
-      Phaser.Keyboard.RIGHT,
-      Phaser.Gamepad.PS3XC_DPAD_RIGHT,
-  ],
-  [GAMEPAD_KEY.ACTION]: [
-      Phaser.Keyboard.X,
-      Phaser.Keyboard.SPACE,
-      Phaser.Gamepad.PS3XC_X,
-      Phaser.Gamepad.BUTTON_2,
-      
-  ],
-  [GAMEPAD_KEY.INTERACT]: [
-      Phaser.Keyboard.Z,
-      Phaser.Gamepad.PS3XC_CIRCLE,
-      Phaser.Gamepad.BUTTON_1,
-  ],
-}
+

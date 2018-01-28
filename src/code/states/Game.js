@@ -31,7 +31,7 @@ export default class extends Phaser.State {
     this.gSignal.setAll('outOfBoundsKill', true);
     this.gSignal.setAll('checkWorldBounds', true);
 
-    this.gTx.enableBody=true;
+    this.gTx.enableBody = true;
 
     // Create the dweller
     if (!this.dweller) {
@@ -76,9 +76,9 @@ export default class extends Phaser.State {
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
-    
+
     this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
-    this.antenna.anchor.set(0.5,1)
+    this.antenna.anchor.set(0.5, 1)
     this.operator = game.add.existing(new Operator(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal));
   }
 
@@ -93,20 +93,28 @@ export default class extends Phaser.State {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // DEBUG
-    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
+    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function () {
       console.log(this);
       let i = Math.floor(signals.length * Math.random());
       let pattern = signals[i].pattern;
       morseFactory(this.game, this.gTx, pattern);
     }.bind(this), this);
 
-    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function() {
+    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function () {
       this.gTx.forEachAlive(tx => {
         tx.kill();
       });
     }.bind(this), this);
   }
-
+  swapGamepads() {
+    console.log("swapping gamepads")
+    this.gSignal.forEachAlive(alive => {
+      alive.kill()
+    })
+    this.dweller.swapGamepad();
+    this.operator.swapGamepad();
+  }
+  
   collideActors(collider, actor) {
     actor.collide(collider);
   }
@@ -115,7 +123,7 @@ export default class extends Phaser.State {
   update() {
     game.physics.arcade.collide(this.dweller, this.layer);
     game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
-    
+
     game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActors);
 
   }

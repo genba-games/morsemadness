@@ -63,6 +63,9 @@ function factory(game, group, transmissions, door, player = 1) {
     })
   }else{
     //what happnes when we reach the limit?
+    console.log('limitReached')
+    console.log(game.state.getCurrentState())
+    game.state.getCurrentState().swapGamepads()
   }
 }
 
