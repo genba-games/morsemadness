@@ -19,7 +19,6 @@ export default class extends Actor {
     this.anchor.setTo(0.5);
     this.signalTime=0;
   }
-  
   sendSignal(tx) {
     //create a bullet in the bulletGroup
     if (game.time.now > this.signalTime) {

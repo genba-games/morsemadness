@@ -140,7 +140,7 @@ export default class extends Phaser.State {
 
   create() {
     this.swapText=game.add.existing(new Phaser.Text(game,100,50,"SWAP",'bold 72pt Arial'))
-    this.swapText.addColor('Yellow',0)
+    this.swapText.addColor('rgba(179,200,176)',0)
     this.swapText.scale.setTo(10,10)
     this.swapText.alpha=0
     // Start gamepads to track controller input
