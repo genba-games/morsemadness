@@ -28,6 +28,10 @@ export default class extends Phaser.State {
   }
 
   reset() {
+
+    //testerino
+
+    // 'bold 20pt Arial'
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -135,6 +139,10 @@ export default class extends Phaser.State {
   }
 
   create() {
+    this.swapText=game.add.existing(new Phaser.Text(game,100,50,"SWAP",'bold 72pt Arial'))
+    this.swapText.addColor('Yellow',0)
+    this.swapText.scale.setTo(10,10)
+    this.swapText.alpha=0
     // Start gamepads to track controller input
     game.input.gamepad.start();
 
@@ -162,6 +170,7 @@ export default class extends Phaser.State {
     })
     this.dweller.swapGamepads();
     this.operator.swapGamepads();
+    this.swapText.alpha=1
   }
 
   win() {
@@ -191,6 +200,10 @@ export default class extends Phaser.State {
   }
 
   update() {
+    if (this.swapText.alpha>0.1){
+      this.swapText.alpha-=0.1
+    }
+    
     if (this.gameState === GAME_STATE.PLAY) {
       game.physics.arcade.collide(this.dweller, this.layer);
       game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
