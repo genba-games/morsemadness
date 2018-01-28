@@ -30,8 +30,8 @@ export default class extends Actor {
         this.audio[tx.name].play()
         this.signal.name=tx.name
         this.signal.reset(this.x+2, this.y);
-        this.signal.body.velocity.x = + 600;
-        this.signalTime = game.time.now + 150;
+        this.signal.body.velocity.x = + 1200;
+        this.signalTime = game.time.now + 200;
       }
     }
   }

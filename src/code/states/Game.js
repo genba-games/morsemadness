@@ -22,12 +22,18 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
+<<<<<<< HEAD
     this.lavaStartTimeMS = 0;
+=======
+    this.lavaStartTimeMS = 200;
+>>>>>>> 6f6874ccd0243b13308f44ecd845d26e025ccd24
 
     this.reset()
   }
 
   reset() {
+    //setup timer
+    this.swapTimer=0
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -154,12 +160,27 @@ export default class extends Phaser.State {
   }
   
   swapGamepads() {
+<<<<<<< HEAD
     console.log("Swapping gamepads")
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
     this.dweller.swapGamepad();
     this.operator.swapGamepad();
+=======
+    if (this.swapTimer<game.time.now){
+      console.log("swapping gamepads")
+      this.gSignal.forEachAlive(alive => {
+        alive.kill()
+      })
+      this.dweller.swapGamepad();
+      this.operator.swapGamepad();
+      this.swapTimer=game.time.now+3000
+    }else{
+      console.log("not swapping yet")
+    }
+    
+>>>>>>> 6f6874ccd0243b13308f44ecd845d26e025ccd24
   }
 
   win() {
