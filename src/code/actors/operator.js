@@ -19,19 +19,28 @@ class Operator extends Actor {
     }
     this.anchor.setTo(0.5)
     console.log(keymap)
+    this.signalTime=0
+    
   }
   sendSignal(tx) {
     //create a bullet in the bulletGroup
-    console.log(tx)
+    console.log(game.time.now)
     if (game.time.now > this.signalTime) {
       //  Grab the first bullet we can from the pool
-      signal = this.signalGroup.getFirstExists(false);
-      signal.name=tx.name
-      if (signal) {
+      this.signal = this.signalGroup.getFirstExists(false);
+      console.log('signal group',this.signalGroup)
+      this.signalGroup.forEachExists(e=>{
+        console.log(e)
+      })
+      console.log(this.signal)
+      if (this.signal) {
         //  And fire it
-        signal.reset(this.x+2, this.y);
-        signal.body.velocity.x = +400;
-        this.signalTime = game.time.now + 200;
+        this.audio[tx.name].play()
+        console.log("fuck")
+        this.signal.name=tx.name
+        this.signal.reset(this.x+2, this.y);
+        this.signal.body.velocity.x = +400;
+        this.signalTime = game.time.now + 500;
       }
     }
 
@@ -44,7 +53,6 @@ class Operator extends Actor {
     if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
       this.sendSignal(T.U)
-      console.log("fuck")
     }
     else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {
@@ -68,7 +76,7 @@ class Operator extends Actor {
     }
   }
 }
-function factory(game, x, y, asset, keymap, gamepad, signalGroup, morseGroup) {
+function factory(game, x, y, asset, keymap, gamepad, signalGroup) {
   game.add.existing(new Operator(game, x, y, asset, keymap, gamepad, signalGroup))
   console.log(keymap)
 }

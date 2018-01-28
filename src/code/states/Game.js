@@ -21,7 +21,15 @@ export default class extends Phaser.State {
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
-    this.gSignal.forEachAlive(o => o.destroy(), this);
+
+    // Setup signal 
+    this.gSignal.enableBody = true;
+    this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
+    this.gSignal.createMultiple(30, 'signal');
+    this.gSignal.setAll('anchor.x', 0.5);
+    this.gSignal.setAll('anchor.y', 1);
+    this.gSignal.setAll('outOfBoundsKill', true);
+    this.gSignal.setAll('checkWorldBounds', true);
 
     // Create the dweller
     if (!this.dweller) {
@@ -68,7 +76,7 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     
-    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gTx);
+    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
   }
 
   create() {
