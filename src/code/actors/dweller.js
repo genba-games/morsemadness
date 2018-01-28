@@ -36,7 +36,7 @@ export default class extends Actor {
         25,
         false,
     ).onComplete.add(this.kill);
-    
+
     // Movement speed
     this.speed = 90;
   }
@@ -51,7 +51,7 @@ export default class extends Actor {
   }
 
   kill() {
-      game.state.getCurrentState().lose();
+      this.game.state.getCurrentState().lose();
       super.kill()
   }
 

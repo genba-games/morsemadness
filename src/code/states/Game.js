@@ -28,6 +28,10 @@ export default class extends Phaser.State {
   }
 
   reset() {
+    // Game swap timers
+    this.stunTimer = game.time.now
+    this.swapTimer = game.time.now
+
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -172,16 +176,21 @@ export default class extends Phaser.State {
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
-    // Swap gamepads
-    this.dweller.swapGamepads();
-    this.operator.swapGamepads();
-    // Swap appereances
-    let dwellerKey = this.dweller.key;
-    this.dweller.loadTexture(this.operator.key);
-    this.operator.loadTexture(dwellerKey);
-    // Show swap text
-    this.swapText.alpha=1
-    
+    if(this.swapTimer<game.time.now){
+      // Swap gamepads
+      this.dweller.swapGamepads();
+      this.operator.swapGamepads();
+      // Swap appereances
+      let dwellerKey = this.dweller.key;
+      this.dweller.loadTexture(this.operator.key);
+      this.operator.loadTexture(dwellerKey);
+      // Show swap text
+      this.swapText.alpha=1
+
+      this.swapTimer=game.time.now+3000
+
+      this.stunTimer=game.time.now+1000
+    }
   }
 
   stop() {
@@ -197,7 +206,7 @@ export default class extends Phaser.State {
 
     // Show win graphics
   }
-
+  
   lose () {
     this.stop()
 
@@ -217,8 +226,12 @@ export default class extends Phaser.State {
   }
 
   update() {
+    if (this.stunTimer<game.time.now){
+      this.dweller.enableController()
+      this.operator.enableController()
+    }
     if (this.swapText.alpha>0.1){
-      this.swapText.alpha-=0.1
+      this.swapText.alpha-=0.008
     }
     
     if (this.gameState === GAME_STATE.PLAY) {
