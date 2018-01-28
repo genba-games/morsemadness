@@ -87,7 +87,6 @@
      * player.
      */
     function Gamepad(player, keymap, gamepad) {
-        console.log(keymap)
         this.player = player;
         this.keymap = keymap || defaultKeymap;
         this.pad = gamepad;

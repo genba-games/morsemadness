@@ -1,35 +1,48 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
-import { generateMaze, TILE_TYPE } from '../maze'
 import Dweller from '../actors/dweller'
-import {operatorFactory} from '../actors/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
+import { generateMaze, TILE_TYPE } from '../maze'
+import {operatorFactory} from '../actors/operator'
 import { morseFactory, signals } from '../actors/morsetx'
+import Lava from '../actors/lava'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
   init() { }
-  preload() { }
+  preload() {
+    this.mazeX = 0;
+    this.mazeY = 6;
+    this.mazeWidth = 59;
+    this.mazeHeight = 13;
+
+    this.lavaStartTimeMS = 100;
+
+    this.reset()
+  }
 
   reset() {
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
     this.gTx = this.gTx || this.game.add.group();
-    this.gSignal = this.gSignal || this.game.add.group();
+    this.gLava = this.gLava || this.game.add.group();
+    if (!this.gSignal) {
+      this.gSignal = this.game.add.group();
+      this.gSignal.enableBody = true;
+      this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
+      this.gSignal.createMultiple(30, 'signal');
+      this.gSignal.setAll('anchor.x', 0.5);
+      this.gSignal.setAll('anchor.y', 0.5);
+      this.gSignal.setAll('outOfBoundsKill', true);
+      this.gSignal.setAll('checkWorldBounds', true);
+    }
+
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
-
-    // Setup signal 
-    this.gSignal.enableBody = true;
-    this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
-    this.gSignal.createMultiple(30, 'signal');
-    this.gSignal.setAll('anchor.x', 0.5);
-    this.gSignal.setAll('anchor.y', 0.5);
-    this.gSignal.setAll('outOfBoundsKill', true);
-    this.gSignal.setAll('checkWorldBounds', true);
+    this.gSignal.forEachAlive(o => o.destroy(), this);
 
     // Create the dweller
     if (!this.dweller) {
@@ -60,10 +73,11 @@ export default class extends Phaser.State {
 
     // Generate the maze
     generateMaze(operatorMap,
-      0, 6, 59, 13,
+      this.mazeX, this.mazeY, this.mazeWidth, this.mazeHeight,
       this.dweller, this.gActors,
       0.4, 0.25,
-      this.gTx);
+      this.gTx
+    );
 
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
@@ -75,14 +89,31 @@ export default class extends Phaser.State {
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
     
-    
-    // operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
+    // Create the operator
+    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
+
+    // Setup lava
+    if (!this.lava) {
+      this.lava = new Lava(
+        this.game,
+        this.mazeX * config.tileWidth,
+        this.mazeY * config.tileHeight,
+        (this.mazeWidth + 1) * config.tileWidth,
+        this.mazeHeight * config.tileHeight,
+      );
+      this.gLava.add(this.lava);
+    }
+    // Locate lava to the left of the screen
+    this.lava.x = -config.horizontalTiles * (config.tileWidth + 1);
+    // Start the lava timer
+    game.time.events.add(
+      this.lavaStartTimeMS, 
+      this.lava.start, 
+      this.lava
+    );
   }
 
   create() {
-    // Initialize the game
-    this.reset();
-
     // Start gamepads to track controller input
     game.input.gamepad.start();
 
@@ -91,7 +122,6 @@ export default class extends Phaser.State {
 
     // DEBUG
     game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
-      console.log(this);
       let i = Math.floor(signals.length * Math.random());
       let pattern = signals[i].pattern;
       morseFactory(this.game, this.gTx, pattern);
@@ -104,17 +134,23 @@ export default class extends Phaser.State {
     }.bind(this), this);
   }
 
-  collideActors(collider, actor) {
-    console.log('COLLIDING',actor,collider);
+  collideActor(collider, actor) {
+    console.log('COLLIDING');
     actor.collide(collider);
   }
 
+  collideCollider(collider, actor) {
+    console.log('COLLIDING');
+    collider.collide(actor);
+  }
 
   update() {
     game.physics.arcade.collide(this.dweller, this.layer);
-    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
-    game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActors);    
+    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);
+    game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActor);    
+    game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
   }
+
   render() {
     if (__DEV__) {
       //this.game.debug.spriteInfo(this.mushroom, 32, 32)

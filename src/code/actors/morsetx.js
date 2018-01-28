@@ -13,11 +13,11 @@ class Morse extends Actor{
 
   kill() {
     if (this.door) {
-      console.log('Opening door');
       this.door.open();
     }
     super.kill();
   }
+  
   collide(target){
     //check if target equals morses name
     if(target.name===this.name){

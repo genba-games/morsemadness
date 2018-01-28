@@ -18,7 +18,6 @@ class Operator extends Actor {
       M: game.add.audio(T.M.morse),
     }
     this.anchor.setTo(0.5)
-    console.log(keymap)
     this.signalTime=0
     
   }
@@ -34,7 +33,6 @@ class Operator extends Actor {
         this.signal.reset(this.x+2, this.y);
         this.signal.body.velocity.x = +400;
         this.signalTime = game.time.now + 500;
-        console.log(this.signal.name)
       }
     }
 
@@ -72,7 +70,6 @@ class Operator extends Actor {
 }
 function factory(game, x, y, asset, keymap, gamepad, signalGroup) {
   game.add.existing(new Operator(game, x, y, asset, keymap, gamepad, signalGroup))
-  console.log(keymap)
 }
 const keymap = {
   [GAMEPAD_KEY.UP]: [

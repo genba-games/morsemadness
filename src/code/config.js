@@ -6,7 +6,6 @@ var config = {
   localStorageName: 'transmissionADKL'
 }
 
-
 config.horizontalTiles = config.gameWidth / config.tileWidth;
 config.verticalTiles = config.gameHeight / config.tileHeight;
 
