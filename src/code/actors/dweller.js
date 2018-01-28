@@ -32,7 +32,7 @@ export default class extends Actor {
     )
     this.animations.add(
         'death', 
-        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0,4],
+        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 4],
         25,
         false,
     ).onComplete.add(this.kill);
