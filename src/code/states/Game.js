@@ -158,11 +158,10 @@ export default class extends Phaser.State {
   }
 
   collideActor(collider, actor) {
-    console.log('COLLIDING');
+    actor.collide(collider);
   }
 
   collideCollider(collider, actor) {
-    console.log('COLLIDING');
     collider.collide(actor);
   }
 
