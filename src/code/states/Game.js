@@ -210,10 +210,6 @@ export default class extends Phaser.State {
   lose () {
     this.stop()
 
-    // Stop player
-    this.dweller.disableController();
-    this.operator.disableController();
-
     // Show lose graphics
   }
 

@@ -7,6 +7,8 @@ export default class extends Actor {
   constructor ({ game, x, y, asset, gamepad }) {
     super(game, x, y, asset)
     
+    this.game = game;
+    
     this.gamepad = new Gamepad(this, 0, gamepad);
 
     // Enable physics
@@ -35,7 +37,7 @@ export default class extends Actor {
         [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 4],
         25,
         false,
-    ).onComplete.add(this.kill);
+    ).onComplete.add(this.kill.bind(this));
 
     // Movement speed
     this.speed = 90;
@@ -51,7 +53,7 @@ export default class extends Actor {
   }
 
   kill() {
-      this.game.state.getCurrentState().lose();
+      this.game.state.getCurrentState.lose();
       super.kill()
   }
 
