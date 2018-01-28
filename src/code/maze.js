@@ -69,7 +69,7 @@ function generateMaze(tilemapData,
   }
 
   // Set goal
-  // HACK this is technically getting out of the established
+  // HACK this is out of the established bounds
   let candidates = [];
   for (let x=verticalOffset; x < height; x += 1) {
     // Check if there's a clear path to be able to get to the end

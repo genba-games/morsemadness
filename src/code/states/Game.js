@@ -14,6 +14,7 @@ export default class extends Phaser.State {
 
   reset() {
     // Setup groups
+    this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
     this.gTx = this.gActors || this.game.add.group();
     // Kill all children in case groups are from previous game
@@ -44,6 +45,7 @@ export default class extends Phaser.State {
     map.addTilesetImage('tiles1');
     var layer = map.createLayer(0);
     layer.resizeWorld();
+    this.gTilemap.add(layer);
 
     this.game.add.existing(new Dweller({
       game: this.game,
