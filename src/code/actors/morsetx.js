@@ -2,6 +2,29 @@ import Phaser from 'phaser'
 import config from '../config'
 import Actor from './actor'
 
+class MorseQ {
+  constructor() {
+    this.q = [];
+    this.length = 0;
+  }
+
+  push(item) {
+    this.q.push(item);
+    this.length++;
+  }
+
+  isNext(value) {
+    let v = this.q[0];
+    return v !== undefined && v.name === value;
+  }
+
+  next() {
+    this.length--;
+    return this.q.shift();
+  }
+
+}
+
 class Morse extends Actor {
   constructor(game, x, y, asset, type) {
     super(game, x, y, asset);
@@ -22,19 +45,20 @@ class Morse extends Actor {
     //check if target equals morses name
     console.log('colliding morse with signal')
     if (target.name) {
-      if (target.name === this.name) {
-        target.kill()
-        this.body.velocity.x = +600
+      // If the target has the right code
+      if (this.q.isNext(target.name)) {
+        // Send the signal flying to the right
+        // The signal is killed automatically when it goes out of bounds
+        this.q.next().body.velocity.x = 600;
       } else {
-        target.kill()
         game.state.getCurrentState().swapRoles()
       }
     }
+    target.kill()
   }
-
 }
 
-function factory(game, group, transmissions, door, player = 1) {
+function morseFactory(game, group, transmissions, door, player = 1) {
   let offset = 1.5
   let messageLength = transmissions.length
   let position = offset * messageLength * config.tileWidth
@@ -54,12 +78,14 @@ function factory(game, group, transmissions, door, player = 1) {
       }
       // Assign the door if it is the last key in a transmission
       morse.door = id === transmissions.length - 1 && door;
-      morse.play('glow')
-      morse.tint = tint
-      morse.checkWorldBounds = true
-      morse.outOfBoundsKill = true
-      morse.name = tx.name
-      origin += config.tileWidth*offset
+      morse.play('glow');
+      morse.tint = tint;
+      morse.checkWorldBounds = true;
+      morse.outOfBoundsKill = true;
+      morse.name = tx.name;
+      morse.q = game.state.getCurrentState().signalQ;
+      morse.q.push(morse);
+      origin += config.tileWidth * offset;
     })
   } else {
     //what happnes when we reach the limit?
@@ -133,6 +159,7 @@ const signals = [
 
 module.exports = {
   signals,
-  morseFactory: factory,
+  morseFactory,
+  MorseQ,
   T
 }

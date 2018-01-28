@@ -5,7 +5,7 @@ import Operator from '../actors/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
 import { generateMaze, TILE_TYPE } from '../maze'
-import { morseFactory, signals } from '../actors/morsetx'
+import { MorseQ, morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 const arrayToCSV = require('array-to-csv')
 
@@ -22,16 +22,12 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
-    this.lavaStartTimeMS = 10000;
+    this.lavaStartTimeMS = 1000000;
 
     this.reset()
   }
 
   reset() {
-
-    //testerino
-
-    // 'bold 20pt Arial'
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -52,6 +48,9 @@ export default class extends Phaser.State {
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
     this.gSignal.forEachAlive(o => o.destroy(), this);
+
+    // Clear the signal queue
+    this.signalQ = new MorseQ();
 
     this.gTx.enableBody = true;
 

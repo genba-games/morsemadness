@@ -44,6 +44,7 @@ class Door extends Actor {
   constructor(game, x, y, type, orientation, morseGroup) {
     super(game, x, y, type.graphics);
     this.morseGroup = morseGroup
+    this.game = game;
     this.difficulty = type.difficulty;
     this.active = false;
 
@@ -76,7 +77,7 @@ class Door extends Actor {
         // Call Morse Factory and create a new combo
         let i = Math.floor(signals.length * Math.random());
         let pattern = signals[i].pattern
-        morseFactory(game, this.morseGroup, pattern, this);
+        morseFactory(this.game, this.morseGroup, pattern, this);
     }
   }
 
