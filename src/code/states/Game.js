@@ -76,7 +76,7 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     
-    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
+    // operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
   }
 
   create() {
@@ -112,9 +112,7 @@ export default class extends Phaser.State {
 
   update() {
     game.physics.arcade.collide(this.dweller, this.layer);
-    game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
-    
-    
+    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
     game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActors);    
   }
   render() {
