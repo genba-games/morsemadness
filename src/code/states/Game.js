@@ -105,7 +105,7 @@ export default class extends Phaser.State {
   }
 
   collideActors(collider, actor) {
-    console.log('COLLIDING');
+    console.log('COLLIDING',actor,collider);
     actor.collide(collider);
   }
 
@@ -115,7 +115,7 @@ export default class extends Phaser.State {
     game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
     
     
-    game.physics.arcade.collide(this.gSignal, this.gtX, this.collideActors);    
+    game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActors);    
   }
   render() {
     if (__DEV__) {
