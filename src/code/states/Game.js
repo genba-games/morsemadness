@@ -31,6 +31,8 @@ export default class extends Phaser.State {
     this.gSignal.setAll('outOfBoundsKill', true);
     this.gSignal.setAll('checkWorldBounds', true);
 
+    this.gTx.enableBody=true;
+
     // Create the dweller
     if (!this.dweller) {
       this.dweller = new Dweller({
@@ -75,7 +77,8 @@ export default class extends Phaser.State {
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
     
-    
+    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
+    this.antenna.anchor.set(0.5,1)
     operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
   }
 
@@ -114,7 +117,7 @@ export default class extends Phaser.State {
     game.physics.arcade.collide(this.dweller, this.layer);
     game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
     
-    game.physics.arcade.collide(this.gSignal, this.gTx, this.collideActors);
+    game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActors);
   }
   render() {
     if (__DEV__) {

@@ -23,9 +23,10 @@ class Morse extends Actor{
     console.log('colliding morse with signal')
     if(target.name===this.name){
       target.kill()
-      this.kill()
+      this.body.velocity.x =+600
     }else{
       target.kill()
+      
     }
   }
   
@@ -67,25 +68,25 @@ const T = {
     cycle:[0,1,2,3,4,3,2,1,],
     y: 0 * config.tileHeight
   },
-  D: {
-    art: 'ad',
-    morse: 'd_morse',
-    name: 'D',
-    cycle:[4,3,2,1,0,1,2,3],
-    y: 1 * config.tileHeight
-  },
   L: {
     art: 'al',
     morse: 'l_morse',
     name: 'L',
     cycle:[0,1,2,3,4,3,2,1,],
-    y: 2 * config.tileHeight
+    y: 1 * config.tileHeight
   },
   R: {
     art: 'ar',
     morse: 'r_morse',
     name: 'R',
     cycle:[0,1,2,3,4,3,2,1,],
+    y: 2 * config.tileHeight
+  },
+  D: {
+    art: 'ad',
+    morse: 'd_morse',
+    name: 'D',
+    cycle:[4,3,2,1,0,1,2,3],
     y: 3 * config.tileHeight
   },
   M: {
