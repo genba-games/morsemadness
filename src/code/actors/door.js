@@ -47,10 +47,9 @@ class Door extends Actor {
     this.difficulty = type.difficulty;
     
     if (orientation === DOOR_ORIENTATION.LR) {
-      this.anchor.setTo(0.5);
       this.angle += 90;
+      this.x += config.tileWidth;
     }
-
   }
 
   collide(target) {

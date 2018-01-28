@@ -85,7 +85,17 @@ function generateMaze(tilemapData,
   let ref = tilemapData.map(function(arr) { return arr.slice(); });
   
   // Set player start position
-
+  
+  // candidates = [];
+  // for (let x=verticalOffset; x < height; x += 1) {
+  //   // Check if there's a clear path to be able to get to the end
+  //   if (tilemapData[x][width-1] === TILE_TYPE.CLEAR)
+  //     candidates.push(x);
+  //   // Create a wall in the next column to set the end
+  //   tilemapData[x][width] = TILE_TYPE.WALL;
+  // }
+  // x = candidates[Math.floor(Math.random() * candidates.length)];
+  // tilemapData[x][width] = TILE_TYPE.GOAL;
 
   // Set maze doors:
   // * Doors must be place on coordinates that have either both left and right 
@@ -112,9 +122,9 @@ function generateMaze(tilemapData,
 
       // Place door
       if (wall_up && wall_down && clear_left && clear_right) 
-        ref[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.UD);
+        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.UD);
       if (wall_left && wall_right && clear_up && clear_down)
-        ref[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.LR);
+        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.LR);
     }
   }
 
