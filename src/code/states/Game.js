@@ -58,13 +58,12 @@ export default class extends Phaser.State {
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
     game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
-    var map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
-    map.addTilesetImage('tiles1');
-    var layer = map.createLayer(0);
-    layer.resizeWorld();
-    this.gTilemap.add(layer);
-
-    
+    this.map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
+    this.map.addTilesetImage('tiles1');
+    this.map.setCollisionByExclusion([TILE_TYPE.CLEAR, TILE_TYPE.GOAL])
+    this.layer = this.map.createLayer(0);
+    this.layer.resizeWorld();
+    this.gTilemap.add(this.layer);
 
     this.game.add.existing(new Operator({
       game: this.game,
@@ -110,12 +109,19 @@ export default class extends Phaser.State {
     game.physics.startSystem(Phaser.Physics.ARCADE);
   }
 
+  collideActors(dweller, actor) {
+    console.log('COLLIDING');
+    actor.collide(dweller);
+  }
+
   update () {
-    if (this.debugKey.isDown) {
-      let i = Math.floor(Math.random()*Math.floor(signals.length))
-      let pattern = signals[i].pattern
-      morseFactory(this.game, this.gTx, pattern)
-    }
+    // if (this.debugKey.isDown) {
+    //   let i = Math.floor(Math.random()*Math.floor(signals.length))
+    //   let pattern = signals[i].pattern
+    //   morseFactory(this.game, this.gTx, pattern)
+    // }
+    game.physics.arcade.collide(this.dweller, this.layer);
+    game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
   }
   render () {
     if (__DEV__) {

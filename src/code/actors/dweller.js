@@ -31,13 +31,13 @@ export default class extends Phaser.Sprite {
 
   update(){
     if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) ==-1)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1)
     {
         this.body.velocity.y = -this.speed;
         this.animations.play('up')
     }
     else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-    ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) ==1)
+    ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1)
     {
         this.body.velocity.y = this.speed;
         this.animations.play('down')
@@ -46,14 +46,14 @@ export default class extends Phaser.Sprite {
     else this.body.velocity.y = 0;
 
     if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) ==-1)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1)
     {
         this.body.velocity.x = -this.speed;
         this.animations.play('left')
         
     }
     else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) ==1)
+    || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1)
     {
         this.body.velocity.x = this.speed;
         this.animations.play('right')

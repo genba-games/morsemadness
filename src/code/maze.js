@@ -37,7 +37,7 @@ function generateMaze(tilemapData,
                       horizontalOffset, verticalOffset,
                       width, height,
                       player, actorGroup,
-                      doorChance, itemChance,morseGroup) {
+                      doorChance, itemChance, morseGroup) {
   if (width % 2 === 0 || height % 2 === 0)
     throw 'Cannot generate maze with even dimensions. Dimensions MUST be odd!';
   
@@ -126,9 +126,9 @@ function generateMaze(tilemapData,
 
       // Place door
       if (wall_up && wall_down && clear_left && clear_right) 
-        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.UD, undefined,morseGroup);
+        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.UD, undefined, morseGroup);
       if (wall_left && wall_right && clear_up && clear_down)
-        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.LR, undefined,morseGroup);
+        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.LR, undefined, morseGroup);
     }
   }
 

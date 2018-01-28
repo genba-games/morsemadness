@@ -41,7 +41,7 @@ function getRandomDoorType() {
  * Doors are what generate morse codes when a player attempts to cross it.
  */
 class Door extends Actor {
-  constructor(game, x, y, type, orientation,morseGroup) {
+  constructor(game, x, y, type, orientation, morseGroup) {
     super(game, x, y, type.graphics);
     this.morseGroup = morseGroup
     this.active = true;
@@ -84,8 +84,7 @@ function doorFactory(group, x, y, orientation, doorType, morseGroup) {
   // Resolve door type
   doorType = doorType || getRandomDoorType();
 
-  group.add(new Door(group.game, x, y, doorType, orientation,morseGroup));
-
+  group.add(new Door(group.game, x, y, doorType, orientation, morseGroup));
 }
 
 
