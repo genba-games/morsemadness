@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import config from '../config'
 import Actor from './actor'
 
-class Morse extends Actor{
+class Morse extends Actor {
   constructor(game, x, y, asset, type) {
     super(game, x, y, asset);
 
@@ -27,7 +27,7 @@ class Morse extends Actor{
         this.body.velocity.x =+600
       }else{
         target.kill()
-        game.state.getCurrentState().swapGamepads()
+        game.state.getCurrentState().swapRoles()
       }
     }
   }
@@ -65,7 +65,7 @@ function factory(game, group, transmissions, door, player = 1) {
     //what happnes when we reach the limit?
     console.log('limitReached')
     console.log(game.state.getCurrentState())
-    game.state.getCurrentState().swapGamepads()
+    game.state.getCurrentState().swapRoles()
   }
 }
 

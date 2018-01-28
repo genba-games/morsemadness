@@ -153,15 +153,26 @@ export default class extends Phaser.State {
         tx.kill();
       });
     }.bind(this), this);
+
+    // Swap characters
+    game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function () {
+      this.swapRoles();
+    }.bind(this), this);
   }
   
-  swapGamepads() {
-    console.log("Swapping gamepads")
+  swapRoles() {
+    // Kill all active signals
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
+    // Swap gamepads
     this.dweller.swapGamepads();
     this.operator.swapGamepads();
+    // Swap appereances
+    let dwellerKey = this.dweller.key;
+    console.log(dwellerKey);
+    this.dweller.loadTexture(this.operator.key);
+    this.operator.loadTexture(dwellerKey);
   }
 
   win() {
