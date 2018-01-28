@@ -87,8 +87,6 @@ export default class extends Phaser.State {
 
     // Start gamepads to track controller input
     game.input.gamepad.start();
-
-    this.signals=signals
   }
   
   create () {
@@ -99,8 +97,8 @@ export default class extends Phaser.State {
 
   update () {
     if (this.debugKey.isDown) {
-      let i=Math.floor(Math.random()*Math.floor(this.signals.length))
-      let pattern = this.signals[i].pattern
+      let i=Math.floor(Math.random()*Math.floor(signals.length))
+      let pattern = signals[i].pattern
       morseFactory(this.game, this.gTx, pattern)
     }
   }
