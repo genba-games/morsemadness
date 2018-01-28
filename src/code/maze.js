@@ -5,7 +5,8 @@ import Item from './actors/item'
 var TILE_TYPE = {
   CLEAR: 0,
   WALL: 1,
-  TARGET: 2,
+  GOAL: 2,
+  PLAYER_WALL: 3,
 };
 
 /**
@@ -65,38 +66,57 @@ function generateMaze(tilemapData,
       if (y < width - 1)
         tilemapData[x][y+1] = piece.right ? TILE_TYPE.WALL : TILE_TYPE.CLEAR;
     }
-  } 
+  }
+
+  // Set goal
+  // HACK this is technically getting out of the established
+  let candidates = [];
+  for (let x=verticalOffset; x < height; x += 1) {
+    // Check if there's a clear path to be able to get to the end
+    if (tilemapData[x][width-1] === TILE_TYPE.CLEAR)
+      candidates.push(x);
+    // Create a wall in the next column to set the end
+    tilemapData[x][width] = TILE_TYPE.WALL;
+  }
+  let x = candidates[Math.floor(Math.random() * candidates.length)];
+  tilemapData[x][width] = TILE_TYPE.GOAL;
+
+  // Being lazy and copying the whole structure to be able to place 
+  let ref = tilemapData.map(function(arr) { return arr.slice(); });
+  
+  // Set player start position
+
 
   // Set maze doors:
   // * Doors must be place on coordinates that have either both left and right 
   //   or up and down walled.
   // * Doors cannot be next to other doors.
-  // if (!doorChance && doorChance !== 0)
-  //   doorChance = 0.5;
-  // for (let x=verticalOffset; x < height; x += 1) {
-  //   for (let y=horizontalOffset; y < width; y += 1) {
-  //     // If placement roll does not succeed skip placement
-  //     if (Math.random() > doorChance || tilemapData[x][y] !== TILE_TYPE.CLEAR) 
-  //       continue
+  if (!doorChance && doorChance !== 0)
+    doorChance = 0.5;
+  for (let x=verticalOffset; x < height; x += 1) {
+    for (let y=horizontalOffset; y < width; y += 1) {
+      // If placement roll does not succeed skip placement
+      if (Math.random() > doorChance || ref[x][y] !== TILE_TYPE.CLEAR) 
+        continue
 
-  //     // Wall coordinate flags
-  //     let wall_up = x > 0 ? tilemapData[x-1][y] === TILE_TYPE.WALL : true;
-  //     let wall_down = x < height-1 ? tilemapData[x+1][y] === TILE_TYPE.WALL : true;
-  //     let wall_left = y > 0 ? tilemapData[x][y-1] === TILE_TYPE.WALL : true;
-  //     let wall_right = y < width-1 ? tilemapData[x][y+1] === TILE_TYPE.WALL : true;
-  //     // Clear coordinate flags
-  //     let clear_up = x > 0 ? tilemapData[x-1][y] === TILE_TYPE.CLEAR : false;
-  //     let clear_down = x < height-1 ? tilemapData[x+1][y] === TILE_TYPE.CLEAR : false;
-  //     let clear_left = y > 0 ? tilemapData[x][y-1] === TILE_TYPE.CLEAR : false;
-  //     let clear_right = y < width-1 ? tilemapData[x][y+1] === TILE_TYPE.CLEAR : false;
+      // Wall coordinate flags
+      let wall_up = x > 0 ? ref[x-1][y] === TILE_TYPE.WALL : true;
+      let wall_down = x < height-1 ? ref[x+1][y] === TILE_TYPE.WALL : true;
+      let wall_left = y > 0 ? ref[x][y-1] === TILE_TYPE.WALL : true;
+      let wall_right = y < width-1 ? ref[x][y+1] === TILE_TYPE.WALL : true;
+      // Clear coordinate flags
+      let clear_up = x > 0 ? ref[x-1][y] === TILE_TYPE.CLEAR : false;
+      let clear_down = x < height-1 ? ref[x+1][y] === TILE_TYPE.CLEAR : false;
+      let clear_left = y > 0 ? ref[x][y-1] === TILE_TYPE.CLEAR : false;
+      let clear_right = y < width-1 ? ref[x][y+1] === TILE_TYPE.CLEAR : false;
 
-  //     // Place door
-  //     if (wall_up && wall_down && clear_left && clear_right) 
-  //       tilemapData[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.UD);
-  //     if (wall_left && wall_right && clear_up && clear_down)
-  //       tilemapData[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.LR);
-  //   }
-  // }
+      // Place door
+      if (wall_up && wall_down && clear_left && clear_right) 
+        ref[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.UD);
+      if (wall_left && wall_right && clear_up && clear_down)
+        ref[x][y] = doorFactory(actorGroup, x, y, DOOR_ORIENTATION.LR);
+    }
+  }
 
   // Set maze items.
   // if (!itemChance && itemChance !== 0)
@@ -104,10 +124,10 @@ function generateMaze(tilemapData,
   // for (let x=verticalOffset; x < height; x += 1) {
   //   for (let y=horizontalOffset; y < width; y += 1) {
   //     // If placement roll does not succeed skip placement
-  //     if (Math.random() > itemChance || tilemapData[x][y] !== TILE_TYPE.CLEAR) 
+  //     if (Math.random() > itemChance || ref[x][y] !== TILE_TYPE.CLEAR) 
   //       continue
 
-  //     tilemapData[x][y] = generateItem();
+  //     ref[x][y] = generateItem();
   //   }
   // }
 

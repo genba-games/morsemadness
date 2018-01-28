@@ -10,10 +10,7 @@ const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
   init () {}
-  preload () {
-    // Load the tilemap
-    let tilemap = 'src/tilemaps/basetilemap.csv';
-  }
+  preload () {}
 
   reset() {
     // Setup groups
@@ -30,11 +27,12 @@ export default class extends Phaser.State {
         ...Array(config.horizontalTiles - 1).fill(TILE_TYPE.CLEAR),
       ]
     )
-    operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.WALL));
-    for (let i=0; i < config.verticalTiles - operatorMap.length; i++) {
+    operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
+    for (let i=0; i < config.verticalTiles - operatorMap.length - 2; i++) {
       let arr = Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR)
       operatorMap.push(arr);
     }
+    operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
 
     // Generate the maze
     generateMaze(operatorMap, 0, 6, 59, 13, this.gActors, 0.6, 0.25);
