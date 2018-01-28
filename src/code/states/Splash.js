@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
+import DOOR_TYPE from '../actors/door'
 
 export default class extends Phaser.State {
   init () {}
@@ -13,8 +14,14 @@ export default class extends Phaser.State {
     //
     // load your assets
     //
-    this.load.image('mushroom', 'src/sprites/mushroom2.png')
     this.load.image('dweller', 'src/sprites/dweller.png')
+
+    // Doors
+    // for (let type in DOOR_TYPE) {
+    //   type = DOOR_TYPE[type];
+    //   this.load.image(type.graphics, type.graphics_path);
+    // }
+    this.load.image('door1','src/sprites/actors/Door_1.png')
 
     this.load.image('u','src/sprites/placeholder.png')
     this.load.image('d','src/sprites/placeholder.png')

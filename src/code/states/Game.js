@@ -39,7 +39,7 @@ export default class extends Phaser.State {
     }
 
     // Generate the maze
-    generateMaze(operatorMap, 0, 6, 59, 11);
+    generateMaze(operatorMap, 0, 6, 59, 11, this.gActors, 0.6, 0.25);
     
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);

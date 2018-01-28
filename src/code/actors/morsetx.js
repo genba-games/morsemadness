@@ -3,16 +3,27 @@ import config from '../config'
 
 function factory(game, group, transmissions, player = 1) {
   console.log(transmissions)
-  var messageLength = transmissions.length
-  var position = messageLength * config.tileWidth
-  var origin = config.gameWidth - position
-
+  let messageLength = transmissions.length
+  let position = messageLength * config.tileWidth
+  let origin = config.gameWidth - position
+  let audio = {
+    U: game.add.audio(T.U.morse),
+    D: game.add.audio(T.D.morse),
+    L: game.add.audio(T.L.morse),
+    R: game.add.audio(T.R.morse),
+    M: game.add.audio(T.M.morse),
+  }
+ 
+  
+  
   group.forEachAlive(aTx => {
     aTx.x -= position
   })
+
   transmissions.forEach(tx => {
-    group.create(origin, tx.y, tx.art)
+    let morse=group.create(origin, tx.y, tx.art)
     origin += config.tileWidth
+    morse.events.onKilled.add(audio[tx.name].play)
   })
 }
 
@@ -20,26 +31,31 @@ const T = {
   U: {
     art: 'u',
     morse: 'u_morse',
+    name: 'U',
     y: 0 * config.tileHeight
   },
   D: {
     art: 'd',
     morse: 'd_morse',
+    name: 'D',
     y: 1 * config.tileHeight
   },
   L: {
     art: 'l',
     morse: 'l_morse',
+    name: 'L',
     y: 2 * config.tileHeight
   },
   R: {
     art: 'r',
     morse: 'r_morse',
+    name: 'R',
     y: 3 * config.tileHeight
   },
   M: {
     art: 'm',
     morse: 'm_morse',
+    name: 'M',
     y: 4 * config.tileHeight
   }
 }
@@ -67,4 +83,4 @@ const signals = [
   { pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M], difficulty: 0 },
   { pattern: [T.R, T.L, T.L, T.L, T.M], difficulty: 0 },]
 
-module.exports = {signals, morseFactory: factory }
+module.exports = { signals, morseFactory: factory }
