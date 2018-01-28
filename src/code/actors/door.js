@@ -49,6 +49,11 @@ class Door extends Actor {
 
     // Set physics
     this.body.immovable = true;
+
+    // Define animations
+    this.animations.add('closed', [0], 12)
+    this.animations.add('active', [1, 0], 1, true)
+    this.animations.add('open', [], 12, false)
     
     if (orientation === DOOR_ORIENTATION.LR) {
       this.anchor.setTo(0.5);
@@ -66,6 +71,8 @@ class Door extends Actor {
     if (!this.active) {
         // Stop door from sending more codes
         this.active = !this.active;
+        // Set door active animation
+        this.play('active');
         // Call Morse Factory and create a new combo
         let i = Math.floor(signals.length * Math.random());
         let pattern = signals[i].pattern
@@ -78,6 +85,7 @@ class Door extends Actor {
    */
   open() {
     this.body.enable = false;
+    this.play('open')
   }
 }
 
