@@ -1,6 +1,10 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Dweller from '../actors/dweller'
+<<<<<<< HEAD
+=======
+import Operator from '../actors/operator'
+>>>>>>> 7ec9ab70ac68d4cabf3c4ae443d90a39da8e92c9
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
 import { generateMaze, TILE_TYPE } from '../maze'
@@ -43,6 +47,8 @@ export default class extends Phaser.State {
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
     this.gSignal.forEachAlive(o => o.destroy(), this);
+
+    this.gTx.enableBody = true;
 
     // Create the dweller
     if (!this.dweller) {
@@ -90,7 +96,16 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     // Create the operator
-    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
+    this.operator = game.add.existing(
+      new Operator(
+        this.game, 
+        32, 
+        40, 
+        'operator', 
+        game.input.gamepad.pad2, 
+        this.gSignal
+      )
+    );
 
     // Setup lava
     if (!this.lava) {
@@ -111,6 +126,9 @@ export default class extends Phaser.State {
       this.lava.start, 
       this.lava
     );
+
+    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
+    this.antenna.anchor.set(0.5, 1)
   }
 
   create() {
@@ -121,21 +139,39 @@ export default class extends Phaser.State {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // DEBUG
+<<<<<<< HEAD
     game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
+=======
+    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function () {
+      console.log(this);
+>>>>>>> 7ec9ab70ac68d4cabf3c4ae443d90a39da8e92c9
       let i = Math.floor(signals.length * Math.random());
       let pattern = signals[i].pattern;
       morseFactory(this.game, this.gTx, pattern);
     }.bind(this), this);
 
-    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function() {
+    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function () {
       this.gTx.forEachAlive(tx => {
         tx.kill();
       });
     }.bind(this), this);
   }
+<<<<<<< HEAD
 
   collideActor(collider, actor) {
     console.log('COLLIDING');
+=======
+  swapGamepads() {
+    console.log("swapping gamepads")
+    this.gSignal.forEachAlive(alive => {
+      alive.kill()
+    })
+    this.dweller.swapGamepad();
+    this.operator.swapGamepad();
+  }
+  
+  collideActors(collider, actor) {
+>>>>>>> 7ec9ab70ac68d4cabf3c4ae443d90a39da8e92c9
     actor.collide(collider);
   }
 
@@ -146,9 +182,16 @@ export default class extends Phaser.State {
 
   update() {
     game.physics.arcade.collide(this.dweller, this.layer);
+<<<<<<< HEAD
     game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);
     game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActor);    
     game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
+=======
+    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
+
+    game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActors);
+
+>>>>>>> 7ec9ab70ac68d4cabf3c4ae443d90a39da8e92c9
   }
 
   render() {
