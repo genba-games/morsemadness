@@ -6,7 +6,6 @@ import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 class Operator extends Actor {
   constructor(game, x, y, asset, keymap, gamepad, signalGroup) {
-
     super(game, x, y, asset);
     this.gamepad = new Gamepad(this, keymap, gamepad);
     this.signalGroup=signalGroup
@@ -66,9 +65,8 @@ class Operator extends Actor {
   }
 }
 function factory(game, x, y, asset, keymap, gamepad, signalGroup, morseGroup) {
+
   game.add.existing(new Operator(game, x, y, asset, keymap, gamepad, signalGroup))
-
-
 }
 
 module.exports = { operatorFactory: factory }

@@ -1,6 +1,6 @@
 import Actor from './actor'
 import config from '../config'
-import signals from'../actors/morsetx'
+import { signals, morseFactory } from'../actors/morsetx'
 var randomObjProp = require('random-obj-prop')
 
 /**
@@ -48,8 +48,10 @@ class Door extends Actor {
     this.difficulty = type.difficulty;
     
     if (orientation === DOOR_ORIENTATION.LR) {
+      this.anchor.setTo(0.5);
       this.angle += 90;
-      this.x += config.tileWidth;
+      this.x += config.tileWidth / 2;
+      this.y += config.tileHeight / 2;
     }
   }
 
@@ -58,9 +60,9 @@ class Door extends Actor {
         // Stop door from sending more codes
         this.active = false;
         // Call Morse Factory and create a new combo
-        let i = Math.floor(Math.random()*Math.floor(signals.length))
+        let i = Math.floor(signals.length * Math.random());
         let pattern = signals[i].pattern
-        morseFactory(game, this.morseGroup, pattern)
+        morseFactory(game, this.morseGroup, pattern, this)
     }    
   }
 }

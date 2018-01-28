@@ -6,7 +6,7 @@ class Signal extends Actor{
     super(game, x, y, asset);
   }
 }
-function factory(game, group, transmissions, player = 1) {
+function factory(game, group, transmissions, door, player = 1) {
   let messageLength = transmissions.length
   let position = messageLength * config.tileWidth
   let origin = config.gameWidth - position
@@ -73,26 +73,31 @@ const T = {
 }
 
 const signals = [
-  { pattern: [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M], difficulty: 0, },
-  { pattern: [T.L, T.U, T.R, T.M], difficulty: 0 },
-  { pattern: [T.L, T.R, T.U, T.D, T.M], difficulty: 0 },
-  { pattern: [T.U, T.D, T.R, T.M], difficulty: 0 },
-  { pattern: [T.U, T.R, T.D, T.M], difficulty: 0 },
-  { pattern: [T.L, T.R, T.D, T.L, T.R, T.M], difficulty: 0 },
-  { pattern: [T.D, T.R, T.M], difficulty: 0 },
-  { pattern: [T.M, T.U, T.L, T.D, T.R, T.M], difficulty: 0 },
-  { pattern: [T.D, T.R, T.U, T.D, T.M], difficulty: 0 },
-  { pattern: [T.M, T.R, T.D, T.R, T.D], difficulty: 0 },
-  { pattern: [T.M, T.D, T.L, T.U, T.M], difficulty: 0 },
-  { pattern: [T.L, T.D, T.R, T.M], difficulty: 0 },
-  { pattern: [T.D, T.R, T.M], difficulty: 0 },
-  { pattern: [T.U, T.R, T.R, T.L, T.R, T.M, T.R, T.L], difficulty: 0 },
-  { pattern: [T.D, T.U, T.D, T.M, T.L, T.L, T.D, T.U, T.R, T.R], difficulty: 0 },
-  { pattern: [T.U, T.M, T.L, T.L, T.U, T.M, T.L, T.R, T.L, T.M], difficulty: 0 },
-  { pattern: [T.U, T.D, T.U, T.M, T.L, T.R, T.L, T.R, T.U, T.M, T.D, T.U, T.L, T.D, T.L, T.D], difficulty: 0 },
-  { pattern: [T.D, T.U, T.L, T.L, T.M, T.R, T.D], difficulty: 0 },
-  { pattern: [T.L, T.D, T.R, T.M, T.U], difficulty: 0 },
-  { pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M], difficulty: 0 },
-  { pattern: [T.R, T.L, T.L, T.L, T.M], difficulty: 0 },]
+  { difficulty: 0, pattern: [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M]},
+  { difficulty: 0, pattern: [T.L, T.U, T.R, T.M]},
+  { difficulty: 0, pattern: [T.L, T.R, T.U, T.D, T.M]},
+  { difficulty: 0, pattern: [T.U, T.D, T.R, T.M]},
+  { difficulty: 0, pattern: [T.U, T.R, T.D, T.M]},
+  { difficulty: 0, pattern: [T.L, T.R, T.D, T.L, T.R, T.M]},
+  { difficulty: 0, pattern: [T.D, T.R, T.M]},
+  { difficulty: 0, pattern: [T.M, T.U, T.L, T.D, T.R, T.M]},
+  { difficulty: 0, pattern: [T.D, T.R, T.U, T.D, T.M]},
+  { difficulty: 0, pattern: [T.M, T.R, T.D, T.R, T.D]},
+  { difficulty: 0, pattern: [T.M, T.D, T.L, T.U, T.M]},
+  { difficulty: 0, pattern: [T.L, T.D, T.R, T.M]},
+  { difficulty: 0, pattern: [T.D, T.R, T.M]},
+  { difficulty: 0, pattern: [T.U, T.R, T.R, T.L, T.R, T.M, T.R, T.L]},
+  { difficulty: 0, pattern: [T.D, T.U, T.D, T.M, T.L, T.L, T.D, T.U, T.R, T.R]},
+  { difficulty: 0, pattern: [T.U, T.M, T.L, T.L, T.U, T.M, T.L, T.R, T.L, T.M]},
+  { difficulty: 0, pattern: [T.U, T.D, T.U, T.M, T.L, T.R, T.L, T.R, T.U, T.M, T.D, T.U, T.L, T.D, T.L, T.D]},
+  { difficulty: 0, pattern: [T.D, T.U, T.L, T.L, T.M, T.R, T.D]},
+  { difficulty: 0, pattern: [T.L, T.D, T.R, T.M, T.U]},
+  { difficulty: 0, pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M]},
+  { difficulty: 0, pattern: [T.R, T.L, T.L, T.L, T.M]},
+]
 
-module.exports = { signals, morseFactory: factory,T }
+module.exports = { 
+  signals, 
+  morseFactory: factory,
+  T 
+}
