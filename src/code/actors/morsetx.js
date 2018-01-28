@@ -21,12 +21,14 @@ class Morse extends Actor{
   collide(target){
     //check if target equals morses name
     console.log('colliding morse with signal')
-    if(target.name===this.name){
-      target.kill()
-      this.body.velocity.x =+600
-    }else{
-      target.kill()
-      
+    if(target.name){
+      if(target.name===this.name){
+        target.kill()
+        this.body.velocity.x =+600
+      }else{
+        target.kill()
+        
+      }
     }
   }
   
@@ -37,27 +39,31 @@ function factory(game, group, transmissions, door, player = 1) {
   let position = messageLength * config.tileWidth
   let origin = config.gameWidth - position
   
-  group.forEachAlive(aTx => {
-    aTx.x -= position
-  })
-  let tint= 0xffffff-(Math.random()*0x444444)
-  transmissions.forEach((tx, id) => {
-    let morse = group.getFirstExists(false);
-    if (!morse || morse.name!=tx.name) {
-      morse=game.add.existing(new Morse(game, origin, tx.y, tx.art, tx))
-      group.add(morse)
-    } else {
-      morse.reset(origin,tx.y)
-    }
-    // Assign the door if it is the last key in a transmission
-    morse.door = id === transmissions.length - 1 && door;
-    morse.play('glow')
-    morse.tint=tint
-    morse.checkWorldBounds=true
-    morse.outOfBoundsKill=true
-    morse.name=tx.name
-    origin += config.tileWidth
-  })
+  if (group.countLiving()<45){
+    group.forEachAlive(aTx => {
+      aTx.x -= position
+    })
+    let tint= 0xffffff-(Math.random()*0x444444)
+    transmissions.forEach((tx, id) => {
+      let morse = group.getFirstExists(false);
+      if (!morse || morse.name!=tx.name) {
+        morse=game.add.existing(new Morse(game, origin, tx.y, tx.art, tx))
+        group.add(morse)
+      } else {
+        morse.reset(origin,tx.y)
+      }
+      // Assign the door if it is the last key in a transmission
+      morse.door = id === transmissions.length - 1 && door;
+      morse.play('glow')
+      morse.tint=tint
+      morse.checkWorldBounds=true
+      morse.outOfBoundsKill=true
+      morse.name=tx.name
+      origin += config.tileWidth
+    })
+  }else{
+    //what happnes when we reach the limit?
+  }
 }
 
 const T = {

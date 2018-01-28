@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 import { generateMaze, TILE_TYPE } from '../maze'
 import Dweller from '../actors/dweller'
-import {operatorFactory} from '../actors/operator'
+import Operator from '../actors/operator'
 import GAMEPAD_KEY from '../gamepad/gamepad'
 import config from '../config'
 import { morseFactory, signals } from '../actors/morsetx'
@@ -79,7 +79,7 @@ export default class extends Phaser.State {
     
     this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
     this.antenna.anchor.set(0.5,1)
-    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal);
+    this.operator = game.add.existing(new Operator(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gSignal));
   }
 
   create() {
@@ -108,7 +108,6 @@ export default class extends Phaser.State {
   }
 
   collideActors(collider, actor) {
-    console.log('COLLIDING',actor,collider);
     actor.collide(collider);
   }
 
@@ -118,6 +117,7 @@ export default class extends Phaser.State {
     game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
     
     game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActors);
+
   }
   render() {
     if (__DEV__) {

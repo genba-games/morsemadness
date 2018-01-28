@@ -4,7 +4,7 @@ import Actor from './actor'
 import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 
-class Operator extends Actor {
+export default class extends Actor {
   constructor(game, x, y, asset, gamepad, signalGroup) {
 
     super(game, x, y, asset);
@@ -41,7 +41,9 @@ class Operator extends Actor {
 
   }
   collide(target) {
-    //check if signal.name equals target.name
+    //when morse arrows collide what do
+    console.log(target)
+    console.log("morse arrow collision")
   }
   update() {
     if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
@@ -69,10 +71,6 @@ class Operator extends Actor {
       this.sendSignal(T.M)
     }
   }
-}
-function factory(game, x, y, asset, keymap, gamepad, signalGroup) {
-  game.add.existing(new Operator(game, x, y, asset, keymap, gamepad, signalGroup))
-  console.log(keymap)
 }
 const keymap = {
   [GAMEPAD_KEY.UP]: [
@@ -108,4 +106,3 @@ const keymap = {
       Phaser.Gamepad.BUTTON_1,
   ],
 }
-module.exports = { operatorFactory: factory }
