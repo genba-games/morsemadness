@@ -28,6 +28,10 @@ export default class extends Phaser.State {
   }
 
   reset() {
+
+    //testerino
+
+    // 'bold 20pt Arial'
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
@@ -98,7 +102,7 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     // Create the operator
-    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
+    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 50, 'antenna'))
     this.antenna.anchor.set(0.5, 1)
     this.operator = game.add.existing(
       new Operator(
@@ -135,6 +139,10 @@ export default class extends Phaser.State {
   }
 
   create() {
+    this.swapText=game.add.existing(new Phaser.Text(game,100,50,"SWAP",'bold 72pt Arial'))
+    this.swapText.addColor('rgba(179,200,176)',0)
+    this.swapText.scale.setTo(10,10)
+    this.swapText.alpha=0
     // Start gamepads to track controller input
     game.input.gamepad.start();
 
@@ -172,6 +180,9 @@ export default class extends Phaser.State {
     let dwellerKey = this.dweller.key;
     this.dweller.loadTexture(this.operator.key);
     this.operator.loadTexture(dwellerKey);
+    // Show swap text
+    this.swapText.alpha=1
+    
   }
 
   stop() {
@@ -207,6 +218,10 @@ export default class extends Phaser.State {
   }
 
   update() {
+    if (this.swapText.alpha>0.1){
+      this.swapText.alpha-=0.1
+    }
+    
     if (this.gameState === GAME_STATE.PLAY) {
       game.physics.arcade.collide(this.dweller, this.layer);
       game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
