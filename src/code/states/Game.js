@@ -66,30 +66,9 @@ export default class extends Phaser.State {
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
-    let operatorKeymap = {
-      [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.W,
-        Phaser.Keyboard.UP,
-        Phaser.Keyboard.O
-      ],
-      [GAMEPAD_KEY.DOWN]: [
-        Phaser.Keyboard.S,
-        Phaser.Keyboard.DOWN
-      ],
-      [GAMEPAD_KEY.LEFT]: [
-        Phaser.Keyboard.A,
-        Phaser.Keyboard.LEFT
-      ],
-      [GAMEPAD_KEY.RIGHT]: [
-        Phaser.Keyboard.D,
-        Phaser.Keyboard.RIGHT
-      ],
-      [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.X,
-        Phaser.Keyboard.SPACE,
-      ],
-    }
-    operatorFactory(this.game, 32, 40, 'operator', operatorKeymap, game.input.gamepad.pad2, this.gTx);
+    
+    
+    operatorFactory(this.game, 32, 40, 'operator', game.input.gamepad.pad2, this.gTx);
   }
 
   create() {
