@@ -170,7 +170,6 @@ export default class extends Phaser.State {
     this.operator.swapGamepads();
     // Swap appereances
     let dwellerKey = this.dweller.key;
-    console.log(dwellerKey);
     this.dweller.loadTexture(this.operator.key);
     this.operator.loadTexture(dwellerKey);
   }
