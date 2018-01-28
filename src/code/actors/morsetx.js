@@ -1,33 +1,35 @@
 import Phaser from 'phaser'
 import config from '../config'
-
+import Actor from './actor'
+class Signal extends Actor{
+  constructor(game, x, y, asset) {
+    super(game, x, y, asset);
+  }
+}
 function factory(game, group, transmissions, player = 1) {
-  console.log(transmissions)
   let messageLength = transmissions.length
   let position = messageLength * config.tileWidth
   let origin = config.gameWidth - position
-  let audio = {
-    U: game.add.audio(T.U.morse),
-    D: game.add.audio(T.D.morse),
-    L: game.add.audio(T.L.morse),
-    R: game.add.audio(T.R.morse),
-    M: game.add.audio(T.M.morse),
-  }
-  
-  
   
   group.forEachAlive(aTx => {
     aTx.x -= position
   })
   let tint= 0xffffff-(Math.random()*0x444444)
   transmissions.forEach(tx => {
-    let morse=group.create(origin, tx.y, tx.art)
-    origin += config.tileWidth
-    morse.events.onKilled.add(audio[tx.name].play)
+    let morse = group.getFirstExists(false);
+    if(!morse){
+      morse=game.add.existing(new Signal(game, origin, tx.y, tx.art))
+      group.add(morse)
+    }else{
+      morse.reset(origin,tx.y)
+    }
     morse.a = morse.animations.add('glow')
     morse.animations.add('glow', tx.cycle, 12, true)
     morse.play('glow')
     morse.tint=tint
+    morse.checkWorldBounds=true
+    morse.outOfBoundsKill=true
+    origin += config.tileWidth
   })
 }
 
