@@ -5,7 +5,18 @@ export default class extends Phaser.Sprite {
     super(game, x, y, asset)
 
     game.physics.arcade.enable(this);
+
+    this.controllerEnabled = true;
   }
+
+  disableController () {
+    this.controllerEnabled = false;
+  }
+
+  enableController () {
+    this.controllerEnabled = true;
+  }
+
   swapGamepads() {
     if (this.gamepad.padId == 0) {
       this.gamepad.padId = 1
@@ -13,6 +24,7 @@ export default class extends Phaser.Sprite {
       this.gamepad.padId = 0
     }
   }
+
   /**
    * Defines collision logic for this object.
    * @param {Phaser.Sprite} target Object colliding with this object.

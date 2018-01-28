@@ -28,40 +28,38 @@ export default class extends Actor {
         25,
         false,
     ).onComplete.add(this.kill);
-
-    this.canMove = true;
     
     // Movement speed
     this.speed = 90;
   }
 
   collide(target) {
-    if (this.canMove) {
+    if (this.controllerEnabled) {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-        this.canMove = false;
+        this.disableController();
         this.play('death');
     }
   }
 
   kill() {
+      game.state.getCurrentState().lose();
       super.kill()
   }
 
   update() {
-    if (this.canMove) {
+    if (this.controllerEnabled) {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1)
         {
             this.body.velocity.y = -this.speed;
-            this.animations.play('up')
+            this.animations.play('up');
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
         ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1)
         {
             this.body.velocity.y = this.speed;
-            this.animations.play('down')
-            
+            this.animations.play('down');
         }
         else this.body.velocity.y = 0;
 
@@ -69,14 +67,14 @@ export default class extends Actor {
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1)
         {
             this.body.velocity.x = -this.speed;
-            this.animations.play('left')
+            this.animations.play('left');
             
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1)
         {
             this.body.velocity.x = this.speed;
-            this.animations.play('right')
+            this.animations.play('right');
         }
         else this.body.velocity.x = 0;
     }

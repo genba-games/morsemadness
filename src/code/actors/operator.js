@@ -43,29 +43,31 @@ export default class extends Actor {
   }
   
   update() {
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-      || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
-      this.sendSignal(T.U)
-    }
-    else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-      || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {
-      this.sendSignal(T.D)
-    }
+    if (this.controllerEnabled) {
+      if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
+        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
+        this.sendSignal(T.U)
+      }
+      else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
+        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {
+        this.sendSignal(T.D)
+      }
 
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-      || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1) {
-      this.sendSignal(T.L)
-    }
-    else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-      || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1) {
-      this.sendSignal(T.R)
-    }
+      if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
+        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1) {
+        this.sendSignal(T.L)
+      }
+      else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
+        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1) {
+        this.sendSignal(T.R)
+      }
 
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
-      this.sendSignal(T.M)
-    }
-    if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)) {
-      this.sendSignal(T.M)
+      if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
+        this.sendSignal(T.M)
+      }
+      if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)) {
+        this.sendSignal(T.M)
+      }
     }
   }
 }

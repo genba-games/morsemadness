@@ -9,6 +9,11 @@ import { morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 const arrayToCSV = require('array-to-csv')
 
+const GAME_STATE = {
+  PLAY: 1,
+  END: 1,
+}
+
 export default class extends Phaser.State {
   init() { }
   preload() {
@@ -17,7 +22,7 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
-    this.lavaStartTimeMS = 100;
+    this.lavaStartTimeMS = 0;
 
     this.reset()
   }
@@ -63,7 +68,7 @@ export default class extends Phaser.State {
     var operatorMap = Array(5).fill(
       [
         TILE_TYPE.CLEAR,
-        ...Array(config.horizontalTiles - 1).fill(TILE_TYPE.CLEAR),
+        ...Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR),
       ]
     )
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
@@ -87,11 +92,14 @@ export default class extends Phaser.State {
     this.map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
     this.map.addTilesetImage('tiles1');
     this.map.setCollisionByExclusion([TILE_TYPE.CLEAR, TILE_TYPE.GOAL])
+    this.map.setTileIndexCallback(TILE_TYPE.GOAL, this.win.bind(this));
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
     
     // Create the operator
+    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
+    this.antenna.anchor.set(0.5, 1)
     this.operator = game.add.existing(
       new Operator(
         this.game, 
@@ -115,16 +123,13 @@ export default class extends Phaser.State {
       this.gLava.add(this.lava);
     }
     // Locate lava to the left of the screen
-    this.lava.x = -config.horizontalTiles * (config.tileWidth + 1);
+    this.lava.x = -config.horizontalTiles * (config.tileWidth);
     // Start the lava timer
     game.time.events.add(
       this.lavaStartTimeMS, 
       this.lava.start, 
       this.lava
     );
-
-    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
-    this.antenna.anchor.set(0.5, 1)
   }
 
   create() {
@@ -149,12 +154,30 @@ export default class extends Phaser.State {
   }
   
   swapGamepads() {
-    console.log("swapping gamepads")
+    console.log("Swapping gamepads")
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
     this.dweller.swapGamepad();
     this.operator.swapGamepad();
+  }
+
+  win() {
+    this.lava.stop();
+
+    this.dweller.disableController();
+    this.operator.disableController();
+
+    // Show win graphics
+  }
+
+  lose () {
+    this.lava.stop();
+
+    this.dweller.disableController();
+    this.operator.disableController();
+
+    // Show lose graphics
   }
 
   collideActor(collider, actor) {
@@ -166,10 +189,15 @@ export default class extends Phaser.State {
   }
 
   update() {
-    game.physics.arcade.collide(this.dweller, this.layer);
-    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
-    game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
-    game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
+    if (this.gameState === GAME_STATE.PLAY) {
+      game.physics.arcade.collide(this.dweller, this.layer);
+      game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
+      game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
+      game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
+    }
+    else if (this.gameState === GAME_STATE.END) {
+      // Get end screen input
+    }
   }
 
   render() {
