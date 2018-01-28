@@ -34,14 +34,14 @@ export default class extends Phaser.State {
     this.load.audio('r_morse','src/audio/R.ogg')
     this.load.audio('m_morse','src/audio/M.ogg')
     
-    this.load.spritesheet('au','src/sprites/actors/AU.png', 16, 16, 5)
-    this.load.spritesheet('ad','src/sprites/actors/AD.png', 16, 16, 5)
-    this.load.spritesheet('ar','src/sprites/actors/AR.png', 16, 16, 5)
-    this.load.spritesheet('al','src/sprites/actors/AL.png', 16, 16, 5)
-    this.load.spritesheet('m','src/sprites/actors/M.png', 16, 16, 4)
-    this.load.spritesheet('dweller','src/sprites/actors/Sprite_P1.png', 16, 16, 5)
-    this.load.spritesheet('operator','src/sprites/actors/Sprite_P2.png', 16, 16, 4)
-    this.load.spritesheet('antenna','src/sprites/actors/operator_antenna.png', 20, 48, 5)
+    this.load.spritesheet('au','src/sprites/actors/AU.png', 16, 16)
+    this.load.spritesheet('ad','src/sprites/actors/AD.png', 16, 16)
+    this.load.spritesheet('ar','src/sprites/actors/AR.png', 16, 16)
+    this.load.spritesheet('al','src/sprites/actors/AL.png', 16, 16)
+    this.load.spritesheet('m','src/sprites/actors/M.png', 16, 16)
+    this.load.spritesheet('dweller','src/sprites/actors/Sprite_P1.png', 16, 16)
+    this.load.spritesheet('operator','src/sprites/actors/Sprite_P2.png', 16, 16)
+    this.load.spritesheet('antenna','src/sprites/actors/operator_antenna.png', 20, 48)
 
     this.load.image('signal','src/sprites/actors/signal.png')
   }

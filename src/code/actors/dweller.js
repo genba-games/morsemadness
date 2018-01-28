@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import Actor from './actor'
+import config from '../config'
 import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Actor {
@@ -10,7 +11,14 @@ export default class extends Actor {
 
     // Enable physics
     game.physics.arcade.enable(this);
+    let boundingBoxOffset = 2;
     this.body.collideWorldBounds = true;
+    this.body.setSize(
+        config.tileWidth - boundingBoxOffset, 
+        config.tileHeight - boundingBoxOffset, 
+        boundingBoxOffset / 2, 
+        boundingBoxOffset / 2,
+    );
     
     this.animations.add('left', [2], 1, true)
     this.animations.add('right', [1], 1, true)
@@ -24,7 +32,7 @@ export default class extends Actor {
     )
     this.animations.add(
         'death', 
-        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0,4],
+        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 4],
         25,
         false,
     ).onComplete.add(this.kill);

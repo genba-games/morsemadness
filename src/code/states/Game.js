@@ -102,7 +102,7 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     // Create the operator
-    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 46, 'antenna'))
+    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 50, 'antenna'))
     this.antenna.anchor.set(0.5, 1)
     this.operator = game.add.existing(
       new Operator(
@@ -161,16 +161,28 @@ export default class extends Phaser.State {
         tx.kill();
       });
     }.bind(this), this);
+
+    // Swap characters
+    game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function () {
+      this.swapRoles();
+    }.bind(this), this);
   }
   
-  swapGamepads() {
-    console.log("Swapping gamepads")
+  swapRoles() {
+    // Kill all active signals
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
+    // Swap gamepads
     this.dweller.swapGamepads();
     this.operator.swapGamepads();
+    // Swap appereances
+    let dwellerKey = this.dweller.key;
+    this.dweller.loadTexture(this.operator.key);
+    this.operator.loadTexture(dwellerKey);
+    // Show swap text
     this.swapText.alpha=1
+    
   }
 
   win() {
