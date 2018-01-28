@@ -36,7 +36,7 @@ export default class extends Phaser.State {
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
 
     // Generate the maze
-    generateMaze(operatorMap, 0, 6, 59, 13, this.gActors, 0.6, 0.25);
+    generateMaze(operatorMap, 0, 6, 59, 13, this.gActors, 0.4, 0.25);
     
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
@@ -97,8 +97,8 @@ export default class extends Phaser.State {
 
   update () {
     if (this.debugKey.isDown) {
-      let i=Math.floor(Math.random()*Math.floor(this.signals.length))
-      let pattern = this.signals[i].pattern
+      let i = Math.floor(Math.random()*Math.floor(signals.length))
+      let pattern = signals[i].pattern
       morseFactory(this.game, this.gTx, pattern)
     }
   }

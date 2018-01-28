@@ -113,12 +113,12 @@ function generateMaze(tilemapData,
       let wall_up = x > 0 ? ref[x-1][y] === TILE_TYPE.WALL : true;
       let wall_down = x < height-1 ? ref[x+1][y] === TILE_TYPE.WALL : true;
       let wall_left = y > 0 ? ref[x][y-1] === TILE_TYPE.WALL : true;
-      let wall_right = y < width-1 ? ref[x][y+1] === TILE_TYPE.WALL : true;
+      let wall_right = y < width ? ref[x][y+1] === TILE_TYPE.WALL : true;
       // Clear coordinate flags
       let clear_up = x > 0 ? ref[x-1][y] === TILE_TYPE.CLEAR : false;
       let clear_down = x < height-1 ? ref[x+1][y] === TILE_TYPE.CLEAR : false;
       let clear_left = y > 0 ? ref[x][y-1] === TILE_TYPE.CLEAR : false;
-      let clear_right = y < width-1 ? ref[x][y+1] === TILE_TYPE.CLEAR : false;
+      let clear_right = y < width ? ref[x][y+1] === TILE_TYPE.CLEAR : false;
 
       // Place door
       if (wall_up && wall_down && clear_left && clear_right) 
