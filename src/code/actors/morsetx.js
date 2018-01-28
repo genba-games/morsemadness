@@ -20,6 +20,7 @@ class Morse extends Actor{
   }
   collide(target){
     //check if target equals morses name
+    console.log('colliding morse with signal')
     if(target.name===this.name){
       target.kill()
       this.kill()
@@ -41,7 +42,7 @@ function factory(game, group, transmissions, door, player = 1) {
   let tint= 0xffffff-(Math.random()*0x444444)
   transmissions.forEach((tx, id) => {
     let morse = group.getFirstExists(false);
-    if (!morse) {
+    if (!morse || morse.name!=tx.name) {
       morse=game.add.existing(new Morse(game, origin, tx.y, tx.art, tx))
       group.add(morse)
     } else {

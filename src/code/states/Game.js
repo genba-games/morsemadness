@@ -112,10 +112,9 @@ export default class extends Phaser.State {
 
   update() {
     game.physics.arcade.collide(this.dweller, this.layer);
-    game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
+    game.physics.arcade.collide(this.dweller, this.gActors, this.collideActors);
     
-    
-    game.physics.arcade.collide(this.gtX, this.gSignal, this.collideActors);    
+    game.physics.arcade.collide(this.gSignal, this.gTx, this.collideActors);
   }
   render() {
     if (__DEV__) {

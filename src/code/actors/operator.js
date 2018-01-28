@@ -33,7 +33,7 @@ class Operator extends Actor {
         this.signal.name=tx.name
         this.signal.reset(this.x+2, this.y);
         this.signal.body.velocity.x = +400;
-        this.signalTime = game.time.now + 500;
+        this.signalTime = game.time.now + 100;
         console.log(this.signal.name)
       }
     }
