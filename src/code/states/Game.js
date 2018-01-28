@@ -224,6 +224,8 @@ export default class extends Phaser.State {
     }
     if (this.swapText.alpha>0.1){
       this.swapText.alpha-=0.008
+    }else{
+      this.swapText.alpha=0
     }
     
     if (this.gameState === GAME_STATE.PLAY) {

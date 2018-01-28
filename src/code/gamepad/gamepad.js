@@ -13,36 +13,30 @@ var GAMEPAD_KEY = {
  */
 var defaultKeymap = [{
     [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.W,
         Phaser.Keyboard.UP,
         Phaser.Gamepad.PS3XC_DPAD_UP,
     ],
     [GAMEPAD_KEY.DOWN]: [
-        Phaser.Keyboard.S,
         Phaser.Keyboard.DOWN,
         Phaser.Gamepad.PS3XC_DPAD_DOWN,
     ],
     [GAMEPAD_KEY.LEFT]: [
-        Phaser.Keyboard.A,
         Phaser.Keyboard.LEFT,
         Phaser.Gamepad.PS3XC_DPAD_LEFT,
         Phaser.Gamepad.AXIS_0
     ],
     [GAMEPAD_KEY.RIGHT]: [
-        Phaser.Keyboard.D,
         Phaser.Keyboard.RIGHT,
         Phaser.Gamepad.PS3XC_DPAD_RIGHT,
         Phaser.Gamepad.AXIS_0
     ],
     [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.X,
-        Phaser.Keyboard.SPACE,
+        Phaser.Keyboard.ENTER,        
         Phaser.Gamepad.PS3XC_X,
         Phaser.Gamepad.BUTTON_2,
 
     ],
     [GAMEPAD_KEY.INTERACT]: [
-        Phaser.Keyboard.Z,
         Phaser.Gamepad.PS3XC_CIRCLE,
         Phaser.Gamepad.BUTTON_1,
 
@@ -50,19 +44,24 @@ var defaultKeymap = [{
 },
 {
     [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.ONE,
+        Phaser.Keyboard.W,        
+        Phaser.Gamepad.PS3XC_DPAD_UP,
+        
     ],
     [GAMEPAD_KEY.DOWN]: [
-        Phaser.Keyboard.TWO,
+        Phaser.Keyboard.S,
+        Phaser.Gamepad.PS3XC_DPAD_DOWN,
     ],
     [GAMEPAD_KEY.LEFT]: [
-        Phaser.Keyboard.THREE,
+        Phaser.Keyboard.A,
+        Phaser.Gamepad.PS3XC_DPAD_LEFT,
     ],
     [GAMEPAD_KEY.RIGHT]: [
-        Phaser.Keyboard.FOUR,
+        Phaser.Keyboard.D,
+        Phaser.Gamepad.PS3XC_DPAD_RIGHT,
     ],
     [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.FIVE,
+        Phaser.Keyboard.SPACE,
         Phaser.Gamepad.BUTTON_2,
 
     ],

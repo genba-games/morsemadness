@@ -51,10 +51,8 @@ export default class extends Actor {
   }
 
   kill() {
-      this.
-      game.state.getCurrentState().lose();
+      this.game.state.getCurrentState().lose();
       super.kill()
-      this.play('rip');
   }
 
   update() {
