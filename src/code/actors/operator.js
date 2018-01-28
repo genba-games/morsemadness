@@ -5,7 +5,8 @@ import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 
 class Operator extends Actor {
-  constructor(game, x, y, asset, keymap, gamepad, signalGroup) {
+  constructor(game, x, y, asset, gamepad, signalGroup) {
+
     super(game, x, y, asset);
     this.gamepad = new Gamepad(this, keymap, gamepad);
     this.signalGroup=signalGroup
@@ -17,10 +18,12 @@ class Operator extends Actor {
       M: game.add.audio(T.M.morse),
     }
     this.anchor.setTo(0.5)
+    console.log(keymap)
   }
   sendSignal(tx) {
     //create a bullet in the bulletGroup
-    if (game.time.now > signalTime) {
+    console.log(tx)
+    if (game.time.now > this.signalTime) {
       //  Grab the first bullet we can from the pool
       signal = this.signalGroup.getFirstExists(false);
       signal.name=tx.name
@@ -28,7 +31,7 @@ class Operator extends Actor {
         //  And fire it
         signal.reset(this.x+2, this.y);
         signal.body.velocity.x = +400;
-        signalTime = game.time.now + 200;
+        this.signalTime = game.time.now + 200;
       }
     }
 
@@ -40,33 +43,67 @@ class Operator extends Actor {
   update() {
     if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
-      sendSignal(T.U)
+      this.sendSignal(T.U)
+      console.log("fuck")
     }
     else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {
-      sendSignal(T.D)
+      this.sendSignal(T.D)
     }
 
     if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1) {
-      sendSignal(T.L)
+      this.sendSignal(T.L)
     }
     else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
       || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1) {
-      sendSignal(T.R)
+      this.sendSignal(T.R)
     }
 
     if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
-      sendSignal(T.M)
+      this.sendSignal(T.M)
     }
     if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)) {
-      sendSignal(T.M)
+      this.sendSignal(T.M)
     }
   }
 }
 function factory(game, x, y, asset, keymap, gamepad, signalGroup, morseGroup) {
-
   game.add.existing(new Operator(game, x, y, asset, keymap, gamepad, signalGroup))
+  console.log(keymap)
 }
-
+const keymap = {
+  [GAMEPAD_KEY.UP]: [
+      Phaser.Keyboard.W,
+      Phaser.Keyboard.UP,
+      Phaser.Gamepad.PS3XC_DPAD_UP,
+  ],
+  [GAMEPAD_KEY.DOWN]: [
+      Phaser.Keyboard.S,
+      Phaser.Keyboard.DOWN,
+      Phaser.Gamepad.PS3XC_DPAD_DOWN,
+  ],
+  [GAMEPAD_KEY.LEFT]: [
+      Phaser.Keyboard.A,
+      Phaser.Keyboard.LEFT,
+      Phaser.Gamepad.PS3XC_DPAD_LEFT,
+  ],
+  [GAMEPAD_KEY.RIGHT]: [
+      Phaser.Keyboard.D,
+      Phaser.Keyboard.RIGHT,
+      Phaser.Gamepad.PS3XC_DPAD_RIGHT,
+  ],
+  [GAMEPAD_KEY.ACTION]: [
+      Phaser.Keyboard.X,
+      Phaser.Keyboard.SPACE,
+      Phaser.Gamepad.PS3XC_X,
+      Phaser.Gamepad.BUTTON_2,
+      
+  ],
+  [GAMEPAD_KEY.INTERACT]: [
+      Phaser.Keyboard.Z,
+      Phaser.Gamepad.PS3XC_CIRCLE,
+      Phaser.Gamepad.BUTTON_1,
+  ],
+}
 module.exports = { operatorFactory: factory }
