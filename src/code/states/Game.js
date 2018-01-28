@@ -152,23 +152,23 @@ export default class extends Phaser.State {
     // Enable physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    // DEBUG
-    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
-      let i = Math.floor(signals.length * Math.random());
-      let pattern = signals[i].pattern;
-      morseFactory(this.game, this.gTx, pattern);
-    }.bind(this), this);
+    // DEBUG Controls
+    // game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
+    //   let i = Math.floor(signals.length * Math.random());
+    //   let pattern = signals[i].pattern;
+    //   morseFactory(this.game, this.gTx, pattern);
+    // }.bind(this), this);
 
-    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function () {
-      this.gTx.forEachAlive(tx => {
-        tx.kill();
-      });
-    }.bind(this), this);
+    // game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function () {
+    //   this.gTx.forEachAlive(tx => {
+    //     tx.kill();
+    //   });
+    // }.bind(this), this);
 
-    // Swap characters
-    game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function () {
-      this.swapRoles();
-    }.bind(this), this);
+    // // Swap characters
+    // game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function () {
+    //   this.swapRoles();
+    // }.bind(this), this);
   }
   
   swapRoles() {
