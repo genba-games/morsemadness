@@ -22,7 +22,7 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
-    this.lavaStartTimeMS = 1000000;
+    this.lavaStartTimeMS = 10000;
 
     this.reset()
   }
