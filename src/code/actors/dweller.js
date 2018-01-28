@@ -32,11 +32,11 @@ export default class extends Actor {
     )
     this.animations.add(
         'death', 
-        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 4],
+        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0,],
         25,
         false,
     ).onComplete.add(this.kill);
-    
+    this.animations.add('rip',[4],true)
     // Movement speed
     this.speed = 90;
   }
@@ -51,8 +51,10 @@ export default class extends Actor {
   }
 
   kill() {
+      this.
       game.state.getCurrentState().lose();
       super.kill()
+      this.play('rip');
   }
 
   update() {

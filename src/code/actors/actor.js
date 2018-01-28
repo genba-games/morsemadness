@@ -25,8 +25,9 @@ export default class extends Phaser.Sprite {
       this.gamepad.setGamepad(game.input.gamepad.pad1)      
       this.gamepad.setKeymap(0)
     }
+    this.disableController()
   }
-
+  
   /**
    * Defines collision logic for this object.
    * @param {Phaser.Sprite} target Object colliding with this object.

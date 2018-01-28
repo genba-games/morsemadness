@@ -1,6 +1,6 @@
 var config = {
   gameWidth: 960,
-  gameHeight: 544,
+  gameHeight: 496,
   tileWidth: 16,
   tileHeight: 16,
   localStorageName: 'transmissionADKL'
