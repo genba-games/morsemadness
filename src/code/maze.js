@@ -1,5 +1,6 @@
 import generate from 'generate-maze'
 import { doorFactory, DOOR_ORIENTATION } from './actors/door'
+import config from './config'
 import Item from './actors/item'
 
 var TILE_TYPE = {
@@ -19,6 +20,8 @@ var TILE_TYPE = {
  * to place the generated maze.
  * @param {Number} width Width of the maze. MUST be odd.
  * @param {Number} height Height of the maze. MUST be odd.
+ * @param {Player} player Player instance to locate inside the maze. The player
+ * will be placed in the starting position of the maze.
  * @param {Phaser.Group} actorGroup Group that will hold the players and 
  * generated doors and items.
  * @param {Number} doorChance Number between 0 and 1 with the chance to create 
@@ -33,7 +36,7 @@ var TILE_TYPE = {
 function generateMaze(tilemapData,
                       horizontalOffset, verticalOffset,
                       width, height,
-                      actorGroup,
+                      player, actorGroup,
                       doorChance, itemChance) {
   if (width % 2 === 0 || height % 2 === 0)
     throw 'Cannot generate maze with even dimensions. Dimensions MUST be odd!';
@@ -85,17 +88,18 @@ function generateMaze(tilemapData,
   let ref = tilemapData.map(function(arr) { return arr.slice(); });
   
   // Set player start position
-  
-  // candidates = [];
-  // for (let x=verticalOffset; x < height; x += 1) {
-  //   // Check if there's a clear path to be able to get to the end
-  //   if (tilemapData[x][width-1] === TILE_TYPE.CLEAR)
-  //     candidates.push(x);
-  //   // Create a wall in the next column to set the end
-  //   tilemapData[x][width] = TILE_TYPE.WALL;
-  // }
-  // x = candidates[Math.floor(Math.random() * candidates.length)];
-  // tilemapData[x][width] = TILE_TYPE.GOAL;
+  candidates = [];
+  for (let x=verticalOffset; x < height; x += 1) {
+    // Check if there's a clear path to be able to get to the end
+    if (tilemapData[x][0] === TILE_TYPE.CLEAR)
+      candidates.push(x);
+  }
+  x = candidates[Math.floor(Math.random() * candidates.length)];
+  // Mark the tile so that doors and items don't consider this position
+  ref[x][0] = 'X';
+  // Set player to the selected position
+  player.x = x * config.tileWidth;
+  player.y = 0;
 
   // Set maze doors:
   // * Doors must be place on coordinates that have either both left and right 
