@@ -16,7 +16,7 @@ export default class extends Phaser.State {
     // Setup groups
     this.gTilemap = this.gTilemap || this.game.add.group();
     this.gActors = this.gActors || this.game.add.group();
-    this.gTx = this.gActors || this.game.add.group();
+    this.gTx = this.gTx || this.game.add.group();
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
@@ -87,6 +87,8 @@ export default class extends Phaser.State {
 
     // Start gamepads to track controller input
     game.input.gamepad.start();
+
+    this.signals=signals
   }
   
   create () {

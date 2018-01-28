@@ -13,49 +13,58 @@ function factory(game, group, transmissions, player = 1) {
     R: game.add.audio(T.R.morse),
     M: game.add.audio(T.M.morse),
   }
- 
+  
   
   
   group.forEachAlive(aTx => {
     aTx.x -= position
   })
-
+  let tint= 0xffffff-(Math.random()*0x444444)
   transmissions.forEach(tx => {
     let morse=group.create(origin, tx.y, tx.art)
     origin += config.tileWidth
     morse.events.onKilled.add(audio[tx.name].play)
+    morse.a = morse.animations.add('glow')
+    morse.animations.add('glow', tx.cycle, 12, true)
+    morse.play('glow')
+    morse.tint=tint
   })
 }
 
 const T = {
   U: {
-    art: 'u',
+    art: 'au',
     morse: 'u_morse',
     name: 'U',
+    cycle:[0,1,2,3,4,3,2,1,],
     y: 0 * config.tileHeight
   },
   D: {
-    art: 'd',
+    art: 'ad',
     morse: 'd_morse',
     name: 'D',
+    cycle:[4,3,2,1,0,1,2,3],
     y: 1 * config.tileHeight
   },
   L: {
-    art: 'l',
+    art: 'al',
     morse: 'l_morse',
     name: 'L',
+    cycle:[0,1,2,3,4,3,2,1,],
     y: 2 * config.tileHeight
   },
   R: {
-    art: 'r',
+    art: 'ar',
     morse: 'r_morse',
     name: 'R',
+    cycle:[0,1,2,3,4,3,2,1,],
     y: 3 * config.tileHeight
   },
   M: {
     art: 'm',
     morse: 'm_morse',
     name: 'M',
+    cycle:[0,1,2,3,2,1,],
     y: 4 * config.tileHeight
   }
 }
