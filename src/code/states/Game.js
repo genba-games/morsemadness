@@ -52,18 +52,18 @@ export default class extends Phaser.State {
     generateMaze(operatorMap, 
                  0, 6, 59, 13, 
                  this.dweller, this.gActors, 
-                 0.4, 0.25);
+                 0.4, 0.25,
+                 this.gTx);
     
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
     game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
-    var map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
-    map.addTilesetImage('tiles1');
-    var layer = map.createLayer(0);
-    layer.resizeWorld();
-    this.gTilemap.add(layer);
-
-    
+    this.map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
+    this.map.addTilesetImage('tiles1');
+    this.map.setCollisionByExclusion([TILE_TYPE.CLEAR, TILE_TYPE.GOAL])
+    this.layer = this.map.createLayer(0);
+    this.layer.resizeWorld();
+    this.gTilemap.add(this.layer);
 
     this.game.add.existing(new Operator({
       game: this.game,
@@ -94,23 +94,34 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
-
-    // Start gamepads to track controller input
-    game.input.gamepad.start();
   }
   
   create () {
     this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 
+    // Initialize the game
     this.reset();
+
+    // Start gamepads to track controller input
+    game.input.gamepad.start();
+
+    // Enable physics
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+  }
+
+  collideActors(dweller, actor) {
+    console.log('COLLIDING');
+    actor.collide(dweller);
   }
 
   update () {
-    if (this.debugKey.isDown) {
-      let i = Math.floor(Math.random()*Math.floor(signals.length))
-      let pattern = signals[i].pattern
-      morseFactory(this.game, this.gTx, pattern)
-    }
+    // if (this.debugKey.isDown) {
+    //   let i = Math.floor(Math.random()*Math.floor(signals.length))
+    //   let pattern = signals[i].pattern
+    //   morseFactory(this.game, this.gTx, pattern)
+    // }
+    game.physics.arcade.collide(this.dweller, this.layer);
+    game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
   }
   render () {
     if (__DEV__) {

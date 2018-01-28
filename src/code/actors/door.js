@@ -1,5 +1,6 @@
 import Actor from './actor'
 import config from '../config'
+import signals from'../actors/morsetx'
 var randomObjProp = require('random-obj-prop')
 
 /**
@@ -40,9 +41,9 @@ function getRandomDoorType() {
  * Doors are what generate morse codes when a player attempts to cross it.
  */
 class Door extends Actor {
-  constructor(game, x, y, type, orientation) {
+  constructor(game, x, y, type, orientation, morseGroup) {
     super(game, x, y, type.graphics);
-    
+    this.morseGroup = morseGroup
     this.active = true;
     this.difficulty = type.difficulty;
     
@@ -57,7 +58,9 @@ class Door extends Actor {
         // Stop door from sending more codes
         this.active = false;
         // Call Morse Factory and create a new combo
-        
+        let i = Math.floor(Math.random()*Math.floor(signals.length))
+        let pattern = signals[i].pattern
+        morseFactory(game, this.morseGroup, pattern)
     }    
   }
 }
@@ -71,7 +74,7 @@ class Door extends Actor {
  * @param {DOOR_TYPE} doorType Door type. If this parameter is not defined a
  * random type of door will be generated.
  */
-function doorFactory(group, x, y, orientation, doorType) {
+function doorFactory(group, x, y, orientation, doorType, morseGroup) {
   if (orientation === undefined)
     throw 'Orientation was not defined when creating door.';
 
@@ -81,8 +84,9 @@ function doorFactory(group, x, y, orientation, doorType) {
   // Resolve door type
   doorType = doorType || getRandomDoorType();
 
-  group.add(new Door(group.game, x, y, doorType, orientation));
+  group.add(new Door(group.game, x, y, doorType, orientation, morseGroup));
 }
+
 
 module.exports = {
   DOOR_TYPE,
