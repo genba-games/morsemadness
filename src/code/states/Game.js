@@ -13,7 +13,6 @@ export default class extends Phaser.State {
   preload () {
     // Load the tilemap
     let tilemap = 'src/tilemaps/basetilemap.csv';
-    game.load.image('tiles1', 'src/sprites/tileset.png');
   }
 
   reset() {
@@ -28,8 +27,7 @@ export default class extends Phaser.State {
     var operatorMap = Array(5).fill(
       [
         TILE_TYPE.CLEAR,
-        ...Array(config.horizontalTiles - 2).fill(TILE_TYPE.CLEAR), 
-        TILE_TYPE.WALL
+        ...Array(config.horizontalTiles - 1).fill(TILE_TYPE.CLEAR),
       ]
     )
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.WALL));
@@ -39,7 +37,7 @@ export default class extends Phaser.State {
     }
 
     // Generate the maze
-    generateMaze(operatorMap, 0, 6, 59, 11, this.gActors, 0.6, 0.25);
+    generateMaze(operatorMap, 0, 6, 59, 13, this.gActors, 0.6, 0.25);
     
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);

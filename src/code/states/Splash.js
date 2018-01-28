@@ -16,6 +16,9 @@ export default class extends Phaser.State {
     //
     this.load.image('dweller', 'src/sprites/dweller.png')
 
+    // Tilesets
+    this.load.image('tiles1', 'src/sprites/tiles.png')
+
     // Doors
     // for (let type in DOOR_TYPE) {
     //   type = DOOR_TYPE[type];
