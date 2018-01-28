@@ -21,6 +21,19 @@ export default class extends Phaser.State {
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
 
+    // Create the dweller
+    if (!this.dweller) {
+      this.dweller = new Dweller({
+        game: this.game,
+        x:35,
+        y:35,
+        asset:'dweller',
+        gamepad: game.input.gamepad.pad1,
+      })
+      this.game.add.existing(this.dweller);
+    }
+    this.dweller.reset();
+
     // Prepare the maze tilemap
     var operatorMap = Array(5).fill(
       [
@@ -36,7 +49,10 @@ export default class extends Phaser.State {
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
 
     // Generate the maze
-    generateMaze(operatorMap, 0, 6, 59, 13, this.gActors, 0.6, 0.25);
+    generateMaze(operatorMap, 
+                 0, 6, 59, 13, 
+                 this.dweller, this.gActors, 
+                 0.4, 0.25);
     
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
@@ -47,13 +63,7 @@ export default class extends Phaser.State {
     layer.resizeWorld();
     this.gTilemap.add(layer);
 
-    this.game.add.existing(new Dweller({
-      game: this.game,
-      x:35,
-      y:35,
-      asset:'dweller',
-      gamepad: game.input.gamepad.pad1,
-    }));
+    
 
     this.game.add.existing(new Operator({
       game: this.game,
@@ -97,7 +107,7 @@ export default class extends Phaser.State {
 
   update () {
     if (this.debugKey.isDown) {
-      let i=Math.floor(Math.random()*Math.floor(signals.length))
+      let i = Math.floor(Math.random()*Math.floor(signals.length))
       let pattern = signals[i].pattern
       morseFactory(this.game, this.gTx, pattern)
     }
