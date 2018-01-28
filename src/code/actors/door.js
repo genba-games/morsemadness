@@ -44,8 +44,11 @@ class Door extends Actor {
   constructor(game, x, y, type, orientation, morseGroup) {
     super(game, x, y, type.graphics);
     this.morseGroup = morseGroup
-    this.active = true;
     this.difficulty = type.difficulty;
+    this.active = false;
+
+    // Set physics
+    this.body.immovable = true;
     
     if (orientation === DOOR_ORIENTATION.LR) {
       this.anchor.setTo(0.5);
@@ -55,15 +58,26 @@ class Door extends Actor {
     }
   }
 
+  /**
+   * Creates a new combo for the operator
+   * @param {Dweller} target 
+   */
   collide(target) {
-    if (this.active) {
+    if (!this.active) {
         // Stop door from sending more codes
-        this.active = false;
+        this.active = !this.active;
         // Call Morse Factory and create a new combo
         let i = Math.floor(signals.length * Math.random());
         let pattern = signals[i].pattern
-        morseFactory(game, this.morseGroup, pattern, this)
-    }    
+        morseFactory(game, this.morseGroup, pattern, this);
+    }
+  }
+
+  /**
+   * Opens the door and allows the player to pass
+   */
+  open() {
+    this.body.enable = false;
   }
 }
 
@@ -88,7 +102,6 @@ function doorFactory(group, x, y, orientation, doorType, morseGroup) {
 
   group.add(new Door(group.game, x, y, doorType, orientation, morseGroup));
 }
-
 
 module.exports = {
   DOOR_TYPE,

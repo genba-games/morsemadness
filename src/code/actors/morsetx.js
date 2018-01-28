@@ -1,11 +1,25 @@
 import Phaser from 'phaser'
 import config from '../config'
 import Actor from './actor'
+
 class Signal extends Actor{
-  constructor(game, x, y, asset) {
+  constructor(game, x, y, asset, type) {
     super(game, x, y, asset);
+
+    this.animations.add('glow', type.cycle, 12, true)
+
+    this.door = false;
+  }
+
+  kill() {
+    if (this.door) {
+      console.log('Opening door');
+      this.door.open();
+    }
+    super.kill();
   }
 }
+
 function factory(game, group, transmissions, door, player = 1) {
   let messageLength = transmissions.length
   let position = messageLength * config.tileWidth
@@ -15,16 +29,16 @@ function factory(game, group, transmissions, door, player = 1) {
     aTx.x -= position
   })
   let tint= 0xffffff-(Math.random()*0x444444)
-  transmissions.forEach(tx => {
+  transmissions.forEach((tx, id) => {
     let morse = group.getFirstExists(false);
-    if(!morse){
-      morse=game.add.existing(new Signal(game, origin, tx.y, tx.art))
+    if (!morse) {
+      morse=game.add.existing(new Signal(game, origin, tx.y, tx.art, tx))
       group.add(morse)
-    }else{
+    } else {
       morse.reset(origin,tx.y)
     }
-    morse.a = morse.animations.add('glow')
-    morse.animations.add('glow', tx.cycle, 12, true)
+    // Assign the door if it is the last key in a transmission
+    morse.door = id === transmissions.length - 1 && door;
     morse.play('glow')
     morse.tint=tint
     morse.checkWorldBounds=true
