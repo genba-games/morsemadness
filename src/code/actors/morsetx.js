@@ -27,7 +27,7 @@ class Morse extends Actor{
         this.body.velocity.x =+600
       }else{
         target.kill()
-        
+        game.state.getCurrentState().swapGamepads()
       }
     }
   }

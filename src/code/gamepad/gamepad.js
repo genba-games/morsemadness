@@ -93,7 +93,7 @@ function keyPressed(keymap, key) {
     for (let k in key) {
         k = key[k];
         if (game.input.keyboard.isDown(k)
-            || (this.pad && this.pad.isDown(k)))
+            || (this.pad && this.pad.justPressed(k)))
             return true;
     }
     return false;
@@ -109,17 +109,19 @@ function keyPressed(keymap, key) {
  * @param {Phaser.Gamepad} [gamepad] Optional gamepad to assign to the 
  * player.
  */
-function Gamepad(player, keymap, gamepad) {
+function Gamepad(player, keymap, pad) {
     this.player = player;
 
     this.setKeymap(keymap)
-    this.pad = gamepad;
-
+    this.setGamepad(pad)
     this._keyPressed = keyPressed
     this.keyPressed = function (key) {
         return this._keyPressed(this.keymap, key);
     }
 };
+Gamepad.prototype.setGamepad=function(p){
+    this.pad=p
+}
 Gamepad.prototype.setKeymap = function (n) {
     if (typeof (n) == 'number') {
         this.padId = n

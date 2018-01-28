@@ -24,7 +24,7 @@ export default class extends Actor {
     )
     this.animations.add(
         'death', 
-        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0],
+        [1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 3, 2, 0,4],
         25,
         false,
     ).onComplete.add(this.kill);
@@ -34,7 +34,7 @@ export default class extends Actor {
     // Movement speed
     this.speed = 90;
   }
-
+  
   collide(target) {
     if (this.canMove) {
         this.body.velocity.x = 0;
@@ -79,6 +79,10 @@ export default class extends Actor {
             this.animations.play('right')
         }
         else this.body.velocity.x = 0;
+
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)){
+            this.animations.play('twist')
+        }
     }
   }
 }
