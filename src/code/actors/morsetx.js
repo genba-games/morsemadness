@@ -29,6 +29,7 @@ function factory(game, group, transmissions, player = 1) {
     morse.tint=tint
     morse.checkWorldBounds=true
     morse.outOfBoundsKill=true
+    morse.name=tx.name
     origin += config.tileWidth
   })
 }
@@ -94,4 +95,4 @@ const signals = [
   { pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M], difficulty: 0 },
   { pattern: [T.R, T.L, T.L, T.L, T.M], difficulty: 0 },]
 
-module.exports = { signals, morseFactory: factory }
+module.exports = { signals, morseFactory: factory,T }
