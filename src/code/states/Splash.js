@@ -23,7 +23,7 @@ export default class extends Phaser.State {
     //   type = DOOR_TYPE[type];
     //   this.load.image(type.graphics, type.graphics_path);
     // }
-    this.load.image('door1','src/sprites/actors/Door_1.png')
+    this.load.spritesheet('door1','src/sprites/actors/door_1.png',16,16,5)
 
     this.load.image('u','src/sprites/placeholder.png')
     this.load.image('d','src/sprites/placeholder.png')

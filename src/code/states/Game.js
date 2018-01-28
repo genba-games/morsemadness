@@ -80,8 +80,6 @@ export default class extends Phaser.State {
   }
 
   create() {
-    this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-
     // Initialize the game
     this.reset();
 
@@ -90,6 +88,20 @@ export default class extends Phaser.State {
 
     // Enable physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    // DEBUG
+    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
+      console.log(this);
+      let i = Math.floor(signals.length * Math.random());
+      let pattern = signals[i].pattern;
+      morseFactory(this.game, this.gTx, pattern);
+    }.bind(this), this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function() {
+      this.gTx.forEachAlive(tx => {
+        tx.kill();
+      });
+    }.bind(this), this);
   }
 
   collideActors(collider, actor) {
@@ -99,11 +111,6 @@ export default class extends Phaser.State {
 
 
   update() {
-    // if (this.debugKey.isDown) {
-    //   let i = Math.floor(Math.random()*Math.floor(signals.length))
-    //   let pattern = signals[i].pattern
-    //   morseFactory(this.game, this.gTx, pattern)
-    // }
     game.physics.arcade.collide(this.dweller, this.layer);
     game.physics.arcade.overlap(this.dweller, this.gActors, this.collideActors);
     

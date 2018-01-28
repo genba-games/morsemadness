@@ -1,6 +1,6 @@
 import Actor from './actor'
 import config from '../config'
-import signals from'../actors/morsetx'
+import { signals, morseFactory } from'../actors/morsetx'
 var randomObjProp = require('random-obj-prop')
 
 /**
@@ -44,24 +44,48 @@ class Door extends Actor {
   constructor(game, x, y, type, orientation, morseGroup) {
     super(game, x, y, type.graphics);
     this.morseGroup = morseGroup
-    this.active = true;
     this.difficulty = type.difficulty;
+    this.active = false;
+
+    // Set physics
+    this.body.immovable = true;
+
+    // Define animations
+    this.animations.add('closed', [0], 12)
+    this.animations.add('active', [1, 0], 1, true)
+    this.animations.add('open', [], 12, false)
     
     if (orientation === DOOR_ORIENTATION.LR) {
+      this.anchor.setTo(0.5);
       this.angle += 90;
-      this.x += config.tileWidth;
+      this.x += config.tileWidth / 2;
+      this.y += config.tileHeight / 2;
     }
   }
 
+  /**
+   * Creates a new combo for the operator
+   * @param {Dweller} target 
+   */
   collide(target) {
-    if (this.active) {
+    if (!this.active) {
         // Stop door from sending more codes
-        this.active = false;
+        this.active = !this.active;
+        // Set door active animation
+        this.play('active');
         // Call Morse Factory and create a new combo
-        let i = Math.floor(Math.random()*Math.floor(signals.length))
+        let i = Math.floor(signals.length * Math.random());
         let pattern = signals[i].pattern
-        morseFactory(game, this.morseGroup, pattern)
-    }    
+        morseFactory(game, this.morseGroup, pattern, this);
+    }
+  }
+
+  /**
+   * Opens the door and allows the player to pass
+   */
+  open() {
+    this.body.enable = false;
+    this.play('open')
   }
 }
 
@@ -86,7 +110,6 @@ function doorFactory(group, x, y, orientation, doorType, morseGroup) {
 
   group.add(new Door(group.game, x, y, doorType, orientation, morseGroup));
 }
-
 
 module.exports = {
   DOOR_TYPE,
