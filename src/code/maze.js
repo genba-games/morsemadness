@@ -98,8 +98,8 @@ function generateMaze(tilemapData,
   // Mark the tile so that doors and items don't consider this position
   ref[x][0] = 'X';
   // Set player to the selected position
-  player.x = x * config.tileWidth;
-  player.y = 0;
+  player.position.x = 0;
+  player.position.y = x * config.tileWidth;
 
   // Set maze doors:
   // * Doors must be place on coordinates that have either both left and right 

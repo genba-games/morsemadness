@@ -94,15 +94,19 @@ export default class extends Phaser.State {
       },
       gamepad: game.input.gamepad.pad2,
     }));
-
-    // Start gamepads to track controller input
-    game.input.gamepad.start();
   }
   
   create () {
     this.debugKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 
+    // Initialize the game
     this.reset();
+
+    // Start gamepads to track controller input
+    game.input.gamepad.start();
+
+    // Enable physics
+    game.physics.startSystem(Phaser.Physics.ARCADE);
   }
 
   update () {
