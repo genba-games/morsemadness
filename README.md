@@ -6,11 +6,16 @@ https://berith.itch.io/m-m
 Made for the 2018 global gamejam that had "Transmission" as its theme. To check the GameJam version, checkout the global-gamejam-freeze branch which will no longer be updated.
 
 ### Controls 
-P1 WASD SPACE or first gamepad   
+P1 WASD ENTER or first gamepad   
 P2 ←↑→↓ ENTER or second gamepad  
 
-### TODO
+### Test it locally
+`$ npm install`  
+`$ npm run dev`
 
+### TODO
+* 4 players mode
+* Single gamepad mode
 ### TEAM
 Alejo Carballude  
 Diego Diaz  
