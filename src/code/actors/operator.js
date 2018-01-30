@@ -37,8 +37,6 @@ export default class extends Actor {
 
   collide(target) {
     //when morse arrows collide what do
-    console.log(target)
-    console.log("morse arrow collision")
   }
   
   update() {

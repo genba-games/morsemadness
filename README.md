@@ -13,9 +13,6 @@ P2 ←↑→↓ ENTER or second gamepad
 `$ npm install`  
 `$ npm run dev`
 
-### TODO
-* 4 players mode
-* Single gamepad mode
 ### TEAM
 Alejo Carballude  
 Diego Diaz  

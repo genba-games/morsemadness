@@ -6,9 +6,7 @@ import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 export default class extends Actor {
   constructor ({ game, x, y, asset, gamepad }) {
     super(game, x, y, asset)
-    
-    this.game = game;
-    
+        
     this.gamepad = new Gamepad(this, 0, gamepad);
 
     // Enable physics
@@ -53,7 +51,7 @@ export default class extends Actor {
   }
 
   kill() {
-      this.game.state.getCurrentState.lose();
+      this.game.state.getCurrentState().lose();
       super.kill()
   }
 
