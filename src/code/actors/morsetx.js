@@ -43,7 +43,6 @@ class Morse extends Actor {
 
   collide(target) {
     //check if target equals morses name
-    console.log('colliding morse with signal')
     if (target.name) {
       // If the target has the right code
       if (this.q.isNext(target.name)) {
@@ -89,8 +88,6 @@ function morseFactory(game, group, transmissions, door, player = 1) {
     })
   } else {
     //what happnes when we reach the limit?
-    console.log('limitReached')
-    console.log(game.state.getCurrentState())
     game.state.getCurrentState().swapRoles()
   }
 }
