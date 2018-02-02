@@ -29,25 +29,24 @@ export default class extends Phaser.State {
 
   reset() {
     // Game swap timers
-    this.stunTimer = game.time.now
-    this.swapTimer = game.time.now
-
+    this.stunTimer = this.game.time.now
+    this.swapTimer = this.game.time.now
+    
     // Setup groups
-    this.gTilemap = this.gTilemap || this.game.add.group();
-    this.gActors = this.gActors || this.game.add.group();
-    this.gTx = this.gTx || this.game.add.group();
-    this.gLava = this.gLava || this.game.add.group();
-    if (!this.gSignal) {
-      this.gSignal = this.game.add.group();
-      this.gSignal.enableBody = true;
-      this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
-      this.gSignal.createMultiple(30, 'signal');
-      this.gSignal.setAll('anchor.x', 0.5);
-      this.gSignal.setAll('anchor.y', 0.5);
-      this.gSignal.setAll('outOfBoundsKill', true);
-      this.gSignal.setAll('checkWorldBounds', true);
-    }
+    this.gTilemap = this.game.add.group();
+    this.gActors = this.game.add.group();
+    this.gTx = this.game.add.group();
+    this.gLava = this.game.add.group();
 
+    this.gSignal = this.game.add.group();
+    this.gSignal.enableBody = true;
+    this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
+    this.gSignal.createMultiple(30, 'signal');
+    this.gSignal.setAll('anchor.x', 0.5);
+    this.gSignal.setAll('anchor.y', 0.5);
+    this.gSignal.setAll('outOfBoundsKill', true);
+    this.gSignal.setAll('checkWorldBounds', true);
+    
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
@@ -58,17 +57,15 @@ export default class extends Phaser.State {
 
     this.gTx.enableBody = true;
 
-    // Create the dweller
-    if (!this.dweller) {
-      this.dweller = new Dweller({
-        game: this.game,
-        x: 35,
-        y: 35,
-        asset: 'dweller',
-        gamepad: game.input.gamepad.pad1,
-      })
-      this.game.add.existing(this.dweller);
-    }
+    // Create the dweller    
+    this.dweller = new Dweller({
+      game: this.game,
+      x: 35,
+      y: 35,
+      asset: 'dweller',
+      gamepad: this.game.input.gamepad.pad1,
+    })
+    this.game.add.existing(this.dweller);
     this.dweller.reset();
 
     // Prepare the maze tilemap
@@ -95,8 +92,8 @@ export default class extends Phaser.State {
 
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
-    game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
-    this.map = game.add.tilemap('world', config.tileWidth, config.tileHeight);
+    this.game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
+    this.map = this.game.add.tilemap('world', config.tileWidth, config.tileHeight);
     this.map.addTilesetImage('tiles1');
     this.map.setCollisionByExclusion([TILE_TYPE.CLEAR, TILE_TYPE.GOAL])
     this.map.setTileIndexCallback(TILE_TYPE.GOAL, this.win.bind(this));
@@ -105,34 +102,33 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
     
     // Create the operator
-    this.antenna = game.add.existing(new Phaser.Sprite(game, 32, 50, 'antenna'))
+    this.antenna = this.game.add.existing(new Phaser.Sprite(this.game, 32, 50, 'antenna'))
     this.antenna.anchor.set(0.5, 1)
-    this.operator = game.add.existing(
-      new Operator(
+    
+    this.operator = new Operator(
         this.game, 
         32, 
         40, 
         'operator', 
-        game.input.gamepad.pad2, 
+        this.game.input.gamepad.pad2, 
         this.gSignal
       )
-    );
+    this.game.add.existing(this.operator)
 
     // Setup lava
-    if (!this.lava) {
-      this.lava = new Lava(
-        this.game,
-        this.mazeX * config.tileWidth,
-        this.mazeY * config.tileHeight,
-        (this.mazeWidth + 1) * config.tileWidth,
-        this.mazeHeight * config.tileHeight,
-      );
-      this.gLava.add(this.lava);
-    }
+    this.lava = new Lava(
+      this.game,
+      this.mazeX * config.tileWidth,
+      this.mazeY * config.tileHeight,
+      (this.mazeWidth + 1) * config.tileWidth,
+      this.mazeHeight * config.tileHeight,
+    );
+    this.gLava.add(this.lava);
+    
     // Locate lava to the left of the screen
     this.lava.x = -config.horizontalTiles * (config.tileWidth);
     // Start the lava timer
-    game.time.events.add(
+    this.game.time.events.add(
       this.lavaStartTimeMS, 
       this.lava.start, 
       this.lava
@@ -142,15 +138,15 @@ export default class extends Phaser.State {
   }
 
   create() {
-    this.swapText=game.add.existing(new Phaser.Text(game,100,50,"SWAP",'bold 72pt Arial'))
+    this.swapText=this.game.add.existing(new Phaser.Text(this.game,100,50,"SWAP",'bold 72pt Arial'))
     this.swapText.addColor('rgba(179,200,176)',0)
     this.swapText.scale.setTo(10,10)
     this.swapText.alpha=0
     // Start gamepads to track controller input
-    game.input.gamepad.start();
+    this.game.input.gamepad.start();
 
     // Enable physics
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // DEBUG Controls
     // game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
@@ -169,6 +165,11 @@ export default class extends Phaser.State {
     // game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function () {
     //   this.swapRoles();
     // }.bind(this), this);
+
+    // Swap characters
+    this.game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(function () {
+      game.state.restart(true,false);
+    }.bind(this), this);
   }
   
   swapRoles() {
@@ -176,7 +177,7 @@ export default class extends Phaser.State {
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
-    if(this.swapTimer<game.time.now){
+    if(this.swapTimer<this.game.time.now){
       // Swap gamepads
       this.dweller.swapGamepads();
       this.operator.swapGamepads();
@@ -187,9 +188,9 @@ export default class extends Phaser.State {
       // Show swap text
       this.swapText.alpha=1
 
-      this.swapTimer=game.time.now+3000
+      this.swapTimer=this.game.time.now+3000
 
-      this.stunTimer=game.time.now+1000
+      this.stunTimer=this.game.time.now+1000
     }
   }
 
@@ -222,7 +223,7 @@ export default class extends Phaser.State {
   }
 
   update() {
-    if (this.stunTimer<game.time.now){
+    if (this.stunTimer<this.game.time.now){
       this.dweller.enableController()
       this.operator.enableController()
     }
@@ -233,14 +234,14 @@ export default class extends Phaser.State {
     }
     
     if (this.gameState === GAME_STATE.PLAY) {
-      game.physics.arcade.collide(this.dweller, this.layer);
-      game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
-      game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
-      game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
+      this.game.physics.arcade.collide(this.dweller, this.layer);
+      this.game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
+      this.game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
+      this.game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
     }
     else if (this.gameState === GAME_STATE.END
              && this.dweller.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
-      this.reset();
+      this.restart();
     }
   }
 

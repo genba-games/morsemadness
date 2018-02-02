@@ -5,10 +5,11 @@ import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Actor {
   constructor(game, x, y, asset, gamepad, signalGroup) {
-
+    console.log(gamepad)
+    
     super(game, x, y, asset);
-    this.gamepad = new Gamepad(this, 1, gamepad);
-    this.signalGroup=signalGroup
+    this. gamepad = new Gamepad(this, 1, gamepad);
+    this.signalGroup = signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
       D: game.add.audio(T.D.morse),
@@ -17,7 +18,8 @@ export default class extends Actor {
       M: game.add.audio(T.M.morse),
     };
     this.anchor.setTo(0.5);
-    this.signalTime=0;
+    this.signalTime = game.time.now;
+    this.controllerEnabled = true
   }
   sendSignal(tx) {
     //create a bullet in the bulletGroup
@@ -27,10 +29,10 @@ export default class extends Actor {
       if (this.signal) {
         //  And fire it
         this.audio[tx.name].play()
-        this.signal.name=tx.name
-        this.signal.reset(this.x+2, this.y);
+        this.signal.name = tx.name
+        this.signal.reset(this.x + 2, this.y);
         this.signal.body.velocity.x = + 1200;
-        this.signalTime = game.time.now +200;
+        this.signalTime = game.time.now + 200;
       }
     }
   }
@@ -38,12 +40,13 @@ export default class extends Actor {
   collide(target) {
     //when morse arrows collide what do
   }
-  
+
   update() {
     if (this.controllerEnabled) {
       if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
         this.sendSignal(T.U)
+        
       }
       else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {

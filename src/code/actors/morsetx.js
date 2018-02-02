@@ -67,6 +67,7 @@ function morseFactory(game, group, transmissions, door, player = 1) {
       aTx.x -= position
     })
     let tint = 0xffffff - (Math.random() * 0x444444)
+    // [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M]
     transmissions.forEach((tx, id) => {
       let morse = group.getFirstExists(false);
       if (!morse || morse.name != tx.name) {
@@ -91,7 +92,6 @@ function morseFactory(game, group, transmissions, door, player = 1) {
     game.state.getCurrentState().swapRoles()
   }
 }
-
 const T = {
   U: {
     art: 'au',
