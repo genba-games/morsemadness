@@ -22,11 +22,15 @@ export default class extends Phaser.State {
     // Doors
     this.load.spritesheet('door1', 'src/sprites/actors/door_1.png', 16, 16, 5);
 
-    this.load.audio('u_morse', 'src/audio/U.ogg')
-    this.load.audio('d_morse', 'src/audio/D.ogg')
-    this.load.audio('l_morse', 'src/audio/L.ogg')
-    this.load.audio('r_morse', 'src/audio/R.ogg')
-    this.load.audio('m_morse', 'src/audio/M.ogg')
+    this.load.audio('u_morse', 'src/audio/u.wav')
+    this.load.audio('d_morse', 'src/audio/d.wav')
+    this.load.audio('l_morse', 'src/audio/l.wav')
+    this.load.audio('r_morse', 'src/audio/r.wav')
+    this.load.audio('m_morse', 'src/audio/m.wav')
+
+    this.load.audio('op_sos', 'src/audio/op_sos.wav')
+    this.load.audio('rip', 'src/audio/rip.wav')
+
     
     this.load.spritesheet('au', 'src/sprites/actors/AU.png', 16, 16)
     this.load.spritesheet('ad', 'src/sprites/actors/AD.png', 16, 16)
