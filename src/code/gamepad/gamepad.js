@@ -47,7 +47,12 @@ var defaultKeymap = [{
         [GAMEPAD_KEY.UPDOWN_AXIS]: [
             Phaser.Gamepad.AXIS_1,
             Phaser.Gamepad.AXIS_7
+        ],
+        [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
+            Phaser.Gamepad.AXIS_0,
+            Phaser.Gamepad.AXIS_6
         ]
+
     }
 },
 {
@@ -106,20 +111,21 @@ function keyPressed(keymap, key) {
 
 
 function axisPressed(axes, axis, direction) {
+    console.log(axis)
     axis = axes[axis]
-    axis.forEach(a => {
+    console.log(axis)
+    for(let a in axis) {
+        a=axis[a]
         if (direction === '+') {
-            if (this.pad && this.pad.axis(a) < 0) {
-                console.log("arriba")
+            if (this.pad && this.pad.axis(a) < -0.8) {
                 return true
             }
         } else {
-            if (this.pad && this.pad.axis(a) > 0) {
-                console.log("abajo")
+            if (this.pad && this.pad.axis(a) > 0.8) {
                 return true
             }
         }
-    })
+    }
     return false
 
 }

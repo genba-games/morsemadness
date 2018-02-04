@@ -61,7 +61,6 @@ export default class extends Actor {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS,'+'))
         {
-            console.log("arriba en dweller")
             this.body.velocity.y = -this.speed;
             this.animations.play('up');
         }
@@ -74,14 +73,14 @@ export default class extends Actor {
         else this.body.velocity.y = 0;
 
         if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1)
+        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS,'+'))
         {
             this.body.velocity.x = -this.speed;
             this.animations.play('left');
             
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1)
+        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS,'-'))
         {
             this.body.velocity.x = this.speed;
             this.animations.play('right');
