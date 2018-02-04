@@ -59,13 +59,14 @@ export default class extends Actor {
   update() {
     if (this.controllerEnabled) {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1)
+        || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS,'+'))
         {
+            console.log("arriba en dweller")
             this.body.velocity.y = -this.speed;
             this.animations.play('up');
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-        ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1)
+        ||  this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS,'-'))
         {
             this.body.velocity.y = this.speed;
             this.animations.play('down');

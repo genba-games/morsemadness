@@ -4,6 +4,9 @@ var GAMEPAD_KEY = {
     LEFT: 'left',
     RIGHT: 'right',
     ACTION: 'action',
+    INTERACT: 'interact',
+    UPDOWN_AXIS: 'up_down_axis',
+    LEFTRIGHT_AXIS: 'left_right_axis',
 }
 
 /**
@@ -31,22 +34,26 @@ var defaultKeymap = [{
         Phaser.Gamepad.AXIS_0
     ],
     [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.Q,        
+        Phaser.Keyboard.Q,
         Phaser.Gamepad.PS3XC_X,
         Phaser.Gamepad.BUTTON_2,
-
     ],
     [GAMEPAD_KEY.INTERACT]: [
         Phaser.Keyboard.E,
         Phaser.Gamepad.PS3XC_CIRCLE,
         Phaser.Gamepad.BUTTON_1,
     ],
+    axes: {
+        [GAMEPAD_KEY.UPDOWN_AXIS]: [
+            Phaser.Gamepad.AXIS_1,
+            Phaser.Gamepad.AXIS_7
+        ]
+    }
 },
 {
     [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.I,        
+        Phaser.Keyboard.I,
         Phaser.Gamepad.PS3XC_DPAD_UP,
-        
     ],
     [GAMEPAD_KEY.DOWN]: [
         Phaser.Keyboard.K,
@@ -84,7 +91,6 @@ var defaultKeymap = [{
  */
 function keyPressed(keymap, key) {
     key = keymap[key];
-
     // Check if key was processed by Phaser
     if (key === true || key === false)
         return key;
@@ -98,6 +104,25 @@ function keyPressed(keymap, key) {
     return false;
 }
 
+
+function axisPressed(axes, axis, direction) {
+    axis = axes[axis]
+    axis.forEach(a => {
+        if (direction === '+') {
+            if (this.pad && this.pad.axis(a) < 0) {
+                console.log("arriba")
+                return true
+            }
+        } else {
+            if (this.pad && this.pad.axis(a) > 0) {
+                console.log("abajo")
+                return true
+            }
+        }
+    })
+    return false
+
+}
 /**
  * Creates a new gamepad with the specified keys for a player.
  * 
@@ -117,9 +142,13 @@ function Gamepad(player, keymap, pad) {
     this.keyPressed = function (key) {
         return this._keyPressed(this.keymap, key);
     }
+    this._axisPressed = axisPressed
+    this.axisPressed = function (axis, direction) {
+        return this._axisPressed(this.keymap.axes, axis, direction);
+    }
 };
-Gamepad.prototype.setGamepad=function(p){
-    this.pad=p
+Gamepad.prototype.setGamepad = function (p) {
+    this.pad = p
 }
 Gamepad.prototype.setKeymap = function (n) {
     if (typeof (n) == 'number') {
