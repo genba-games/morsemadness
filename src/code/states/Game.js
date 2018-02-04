@@ -56,15 +56,26 @@ export default class extends Phaser.State {
     this.signalQ = new MorseQ();
 
     this.gTx.enableBody = true;
-
+    // Create the pads and add them their callback to set their id
+    // Create the gamepad objects in our gamepad.js and set the keymap on connected.
+    this.dwellerPad=this.game.input.gamepad.pad1
+    this.dwellerPad.addCallbacks(this,{
+      onConnect:function(){
+        this.dwellerPad.rawPad=this.dwellerPad._rawPad}
+    })
+    this.operatorPad=this.game.input.gamepad.pad2
+    this.operatorPad.addCallbacks(this,{
+      onConnect:function(){console.log("456")}
+    })
     // Create the dweller    
     this.dweller = new Dweller({
       game: this.game,
       x: 35,
       y: 35,
       asset: 'dweller',
-      gamepad: this.game.input.gamepad.pad1,
+      gamepad: this.dwellerPad
     })
+    console.log(this.game.input.gamepad.pad1._rawPad)
     this.game.add.existing(this.dweller);
     this.dweller.reset();
 
@@ -144,7 +155,6 @@ export default class extends Phaser.State {
     this.swapText.alpha=0
     // Start gamepads to track controller input
     this.game.input.gamepad.start();
-
     // Enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 

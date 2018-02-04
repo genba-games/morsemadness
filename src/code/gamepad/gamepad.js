@@ -1,13 +1,4 @@
-var GAMEPAD_KEY = {
-    UP: 'up',
-    DOWN: 'down',
-    LEFT: 'left',
-    RIGHT: 'right',
-    ACTION: 'action',
-    INTERACT: 'interact',
-    UPDOWN_AXIS: 'up_down_axis',
-    LEFTRIGHT_AXIS: 'left_right_axis',
-}
+import {GAMEPAD_KEY,keymaps } from '../gamepad/gamepadConfig'
 
 /**
  * This keymap is assigned to any new Gamepad that does not define a keymap.
@@ -111,9 +102,7 @@ function keyPressed(keymap, key) {
 
 
 function axisPressed(axes, axis, direction) {
-    console.log(axis)
     axis = axes[axis]
-    console.log(axis)
     for(let a in axis) {
         a=axis[a]
         if (direction === '+') {
@@ -141,9 +130,8 @@ function axisPressed(axes, axis, direction) {
  */
 function Gamepad(player, keymap, pad) {
     this.player = player;
-
-    this.setKeymap(keymap)
     this.setGamepad(pad)
+    this.setKeymap(keymap)
     this._keyPressed = keyPressed
     this.keyPressed = function (key) {
         return this._keyPressed(this.keymap, key);
@@ -155,8 +143,16 @@ function Gamepad(player, keymap, pad) {
 };
 Gamepad.prototype.setGamepad = function (p) {
     this.pad = p
+    console.log(this.pad.rawPad)
+}
+Gamepad.prototype.test=function(){
+    console.log(game.time.now)
+    console.log('connect callback',this.pad)
+    console.log("pad connected?",this.pad.connected)
 }
 Gamepad.prototype.setKeymap = function (n) {
+    //the logic to select the keymap should go here.
+    
     if (typeof (n) == 'number') {
         this.padId = n
         this.keymap = defaultKeymap[n]

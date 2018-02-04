@@ -4,9 +4,7 @@ import Actor from './actor'
 import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Actor {
-  constructor(game, x, y, asset, gamepad, signalGroup) {
-    console.log(gamepad)
-    
+  constructor(game, x, y, asset, gamepad, signalGroup) {    
     super(game, x, y, asset);
     this. gamepad = new Gamepad(this, 1, gamepad);
     this.signalGroup = signalGroup

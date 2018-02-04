@@ -9,7 +9,7 @@ var GAMEPAD_KEY = {
     LEFTRIGHT_AXIS: 'left_right_axis',
 }
 
-keymaps= {
+var keymaps= {
     hori: {
         id: 'HORI CO.,LTD. HORIPAD mini4 (Vendor: 0f0d Product: 00ee)',
         keymap: {

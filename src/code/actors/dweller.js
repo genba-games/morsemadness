@@ -1,7 +1,9 @@
 import Phaser from 'phaser'
 import Actor from './actor'
 import config from '../config'
-import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
+import { Gamepad } from '../gamepad/gamepad'
+import {GAMEPAD_KEY } from '../gamepad/gamepadConfig'
+
 
 export default class extends Actor {
   constructor ({ game, x, y, asset, gamepad }) {
