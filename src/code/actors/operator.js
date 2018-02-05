@@ -4,9 +4,9 @@ import Actor from './actor'
 import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Actor {
-  constructor(game, x, y, asset, signalGroup) {    
+  constructor(game, x, y, asset, signalGroup) {
     super(game, x, y, asset);
-    this. gamepad = new Gamepad(this, 1, 'pad2');
+    this.gamepad = new Gamepad(this, 'pad2');
     this.signalGroup = signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
@@ -44,7 +44,7 @@ export default class extends Actor {
       if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
         this.sendSignal(T.U)
-        
+
       }
       else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {

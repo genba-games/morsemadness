@@ -8,7 +8,9 @@ const GAMEPAD_KEY = {
     UPDOWN_AXIS: 'up_down_axis',
     LEFTRIGHT_AXIS: 'left_right_axis',
 }
-
+/**
+ * Define this keymap 
+ */
 const KEYMAPS = {
     hori: {
         id: 'HORI CO.,LTD. HORIPAD mini4 (Vendor: 0f0d Product: 00ee)',

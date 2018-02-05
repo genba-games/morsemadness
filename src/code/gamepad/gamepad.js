@@ -1,80 +1,6 @@
 import { GAMEPAD_KEY, KEYMAPS } from '../gamepad/gamepadConfig'
 import merge from 'lodash/merge'
 /**
- * This keymap is assigned to any new Gamepad that does not define a keymap.
- * Console neutral, PS3XC and XBOX360 buttons are all the same. They are 
- * used to make bindings simpler to configure for developers.
- */
-var defaultKeymap = [{
-    [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.W,
-        Phaser.Gamepad.PS3XC_DPAD_UP,
-    ],
-    [GAMEPAD_KEY.DOWN]: [
-        Phaser.Keyboard.S,
-        Phaser.Gamepad.PS3XC_DPAD_DOWN,
-    ],
-    [GAMEPAD_KEY.LEFT]: [
-        Phaser.Keyboard.A,
-        Phaser.Gamepad.PS3XC_DPAD_LEFT,
-        Phaser.Gamepad.AXIS_0
-    ],
-    [GAMEPAD_KEY.RIGHT]: [
-        Phaser.Keyboard.D,
-        Phaser.Gamepad.PS3XC_DPAD_RIGHT,
-        Phaser.Gamepad.AXIS_0
-    ],
-    [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.Q,
-        Phaser.Gamepad.PS3XC_X,
-        Phaser.Gamepad.BUTTON_2,
-    ],
-    [GAMEPAD_KEY.INTERACT]: [
-        Phaser.Keyboard.E,
-        Phaser.Gamepad.PS3XC_CIRCLE,
-        Phaser.Gamepad.BUTTON_1,
-    ],
-    axes: {
-        [GAMEPAD_KEY.UPDOWN_AXIS]: [
-            Phaser.Gamepad.AXIS_1,
-            Phaser.Gamepad.AXIS_7
-        ],
-        [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
-            Phaser.Gamepad.AXIS_0,
-            Phaser.Gamepad.AXIS_6
-        ]
-
-    }
-},
-{
-    [GAMEPAD_KEY.UP]: [
-        Phaser.Keyboard.I,
-        Phaser.Gamepad.PS3XC_DPAD_UP,
-    ],
-    [GAMEPAD_KEY.DOWN]: [
-        Phaser.Keyboard.K,
-        Phaser.Gamepad.PS3XC_DPAD_DOWN,
-    ],
-    [GAMEPAD_KEY.LEFT]: [
-        Phaser.Keyboard.J,
-        Phaser.Gamepad.PS3XC_DPAD_LEFT,
-    ],
-    [GAMEPAD_KEY.RIGHT]: [
-        Phaser.Keyboard.L,
-        Phaser.Gamepad.PS3XC_DPAD_RIGHT,
-    ],
-    [GAMEPAD_KEY.ACTION]: [
-        Phaser.Keyboard.U,
-        Phaser.Gamepad.BUTTON_2,
-
-    ],
-    [GAMEPAD_KEY.INTERACT]: [
-        Phaser.Keyboard.O,
-        Phaser.Gamepad.BUTTON_1,
-    ],
-}]
-
-/**
  * Indicates whether a key assigned to a specific gamepad key is being 
  * pressed. 
  * Controller keys correspond to the keys of ``GAMEPAD_KEY`` object.
@@ -128,12 +54,9 @@ function axisPressed(keymap, axis, direction) {
  * Creates a new gamepad with the specified keys for a player.
  * 
  * @param {Player} player Player instance to be assigned to the new gamepad.
- * @param {Object} keymap Object containing the appropriate 
- * ``GAMEPAD_KEY``:[``Phaser.Keyboard``] configuration pairs. This is 
- * typically the controller assigned to the player.
  * @param {String} pad String to define which pad you'll set to this player.
  */
-function Gamepad(player, keymap, pad) {
+function Gamepad(player, pad) {
     this.player = player;
     this.createGamepad(pad);
     this.keymap = KEYMAPS[pad];

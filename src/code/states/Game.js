@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 import Dweller from '../actors/dweller'
 import Operator from '../actors/operator'
-import {GAMEPAD_KEY,KEYMAPS} from '../gamepad/gamepad'
+import { GAMEPAD_KEY, KEYMAPS } from '../gamepad/gamepad'
 import config from '../config'
 import { generateMaze, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
@@ -31,7 +31,7 @@ export default class extends Phaser.State {
     // Game swap timers
     this.stunTimer = this.game.time.now
     this.swapTimer = this.game.time.now
-    
+
     // Setup groups
     this.gTilemap = this.game.add.group();
     this.gActors = this.game.add.group();
@@ -46,7 +46,7 @@ export default class extends Phaser.State {
     this.gSignal.setAll('anchor.y', 0.5);
     this.gSignal.setAll('outOfBoundsKill', true);
     this.gSignal.setAll('checkWorldBounds', true);
-    
+
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
@@ -109,18 +109,18 @@ export default class extends Phaser.State {
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
-    
+
     // Create the operator
     this.antenna = this.game.add.existing(new Phaser.Sprite(this.game, 32, 50, 'antenna'))
     this.antenna.anchor.set(0.5, 1)
-    
+
     this.operator = new Operator(
-        this.game, 
-        32, 
-        40, 
-        'operator', 
-        this.gSignal
-      )
+      this.game,
+      32,
+      40,
+      'operator',
+      this.gSignal
+    )
     this.game.add.existing(this.operator)
 
     // Setup lava
@@ -132,13 +132,13 @@ export default class extends Phaser.State {
       this.mazeHeight * config.tileHeight,
     );
     this.gLava.add(this.lava);
-    
+
     // Locate lava to the left of the screen
     this.lava.x = -config.horizontalTiles * (config.tileWidth);
     // Start the lava timer
     this.game.time.events.add(
-      this.lavaStartTimeMS, 
-      this.lava.start, 
+      this.lavaStartTimeMS,
+      this.lava.start,
       this.lava
     );
 
@@ -146,10 +146,10 @@ export default class extends Phaser.State {
   }
 
   create() {
-    this.swapText=this.game.add.existing(new Phaser.Text(this.game,100,50,"SWAP",'bold 72pt Arial'))
-    this.swapText.addColor('rgba(179,200,176)',0)
-    this.swapText.scale.setTo(10,10)
-    this.swapText.alpha=0
+    this.swapText = this.game.add.existing(new Phaser.Text(this.game, 100, 50, "SWAP", 'bold 72pt Arial'))
+    this.swapText.addColor('rgba(179,200,176)', 0)
+    this.swapText.scale.setTo(10, 10)
+    this.swapText.alpha = 0
     // Start gamepads to track controller input
     this.game.input.gamepad.start();
     // Enable physics
@@ -175,16 +175,16 @@ export default class extends Phaser.State {
 
     // Swap characters
     this.game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(function () {
-      game.state.restart(true,false);
+      game.state.restart(true, false);
     }.bind(this), this);
   }
-  
+
   swapRoles() {
     // Kill all active signals
     this.gSignal.forEachAlive(alive => {
       alive.kill()
     })
-    if(this.swapTimer<this.game.time.now){
+    if (this.swapTimer < this.game.time.now) {
       // Swap gamepads
       this.dweller.swapGamepads();
       this.operator.swapGamepads();
@@ -193,11 +193,11 @@ export default class extends Phaser.State {
       this.dweller.loadTexture(this.operator.key);
       this.operator.loadTexture(dwellerKey);
       // Show swap text
-      this.swapText.alpha=1
+      this.swapText.alpha = 1
 
-      this.swapTimer=this.game.time.now+3000
+      this.swapTimer = this.game.time.now + 3000
 
-      this.stunTimer=this.game.time.now+1000
+      this.stunTimer = this.game.time.now + 1000
     }
   }
 
@@ -214,8 +214,8 @@ export default class extends Phaser.State {
 
     // Show win graphics
   }
-  
-  lose () {
+
+  lose() {
     this.stop()
 
     // Show lose graphics
@@ -230,24 +230,24 @@ export default class extends Phaser.State {
   }
 
   update() {
-    if (this.stunTimer<this.game.time.now){
+    if (this.stunTimer < this.game.time.now) {
       this.dweller.enableController()
       this.operator.enableController()
     }
-    if (this.swapText.alpha>0.1){
-      this.swapText.alpha-=0.008
-    }else{
-      this.swapText.alpha=0
+    if (this.swapText.alpha > 0.1) {
+      this.swapText.alpha -= 0.008
+    } else {
+      this.swapText.alpha = 0
     }
-    
+
     if (this.gameState === GAME_STATE.PLAY) {
       this.game.physics.arcade.collide(this.dweller, this.layer);
-      this.game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);   
+      this.game.physics.arcade.collide(this.dweller, this.gActors, this.collideActor);
       this.game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
       this.game.physics.arcade.overlap(this.dweller, this.gLava, this.collideCollider);
     }
     else if (this.gameState === GAME_STATE.END
-             && this.dweller.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
+      && this.dweller.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
       this.restart();
     }
   }
