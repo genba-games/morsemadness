@@ -6,10 +6,10 @@ import {GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
 
 export default class extends Actor {
-  constructor ({ game, x, y, asset, gamepad }) {
+  constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
-    this.gamepad = new Gamepad(this, 0, gamepad);
+    this.gamepad = new Gamepad(this, 0, 'pad1');
 
     // Enable physics
     game.physics.arcade.enable(this);

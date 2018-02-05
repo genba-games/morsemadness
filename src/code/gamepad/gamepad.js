@@ -1,5 +1,5 @@
-import {GAMEPAD_KEY,keymaps } from '../gamepad/gamepadConfig'
-
+import { GAMEPAD_KEY, KEYMAPS } from '../gamepad/gamepadConfig'
+import merge from 'lodash/merge'
 /**
  * This keymap is assigned to any new Gamepad that does not define a keymap.
  * Console neutral, PS3XC and XBOX360 buttons are all the same. They are 
@@ -86,36 +86,42 @@ var defaultKeymap = [{
  * @returns true if the key is being held, false otherwise.
  */
 function keyPressed(keymap, key) {
-    key = keymap[key];
-    // Check if key was processed by Phaser
-    if (key === true || key === false)
-        return key;
-    // If it wasn't, check for assigned keys
-    for (let k in key) {
-        k = key[k];
-        if (game.input.keyboard.isDown(k)
-            || (this.pad && this.pad.justPressed(k)))
-            return true;
+    if (keymap.buttons) {
+        let buttons = keymap.buttons
+        key = buttons[key];
+        // Check if key was processed by Phaser
+        if (key === true || key === false)
+            return key;
+        // If it wasn't, check for assigned keys
+        for (let k in key) {
+            k = key[k];
+            if (game.input.keyboard.isDown(k)
+                || (this.pad && this.pad.justPressed(k)))
+                return true;
+        }
+        return false;
     }
-    return false;
 }
 
 
-function axisPressed(axes, axis, direction) {
-    axis = axes[axis]
-    for(let a in axis) {
-        a=axis[a]
-        if (direction === '+') {
-            if (this.pad && this.pad.axis(a) < -0.8) {
-                return true
-            }
-        } else {
-            if (this.pad && this.pad.axis(a) > 0.8) {
-                return true
+function axisPressed(keymap, axis, direction) {
+    if (keymap.axes) {
+        let axes = keymap.axes
+        axis = axes[axis]
+        for (let a in axis) {
+            a = axis[a]
+            if (direction === '+') {
+                if (this.pad && this.pad.axis(a) < -0.8) {
+                    return true
+                }
+            } else {
+                if (this.pad && this.pad.axis(a) > 0.8) {
+                    return true
+                }
             }
         }
+        return false
     }
-    return false
 
 }
 /**
@@ -125,44 +131,43 @@ function axisPressed(axes, axis, direction) {
  * @param {Object} keymap Object containing the appropriate 
  * ``GAMEPAD_KEY``:[``Phaser.Keyboard``] configuration pairs. This is 
  * typically the controller assigned to the player.
- * @param {Phaser.Gamepad} [gamepad] Optional gamepad to assign to the 
- * player.
+ * @param {String} pad String to define which pad you'll set to this player.
  */
 function Gamepad(player, keymap, pad) {
     this.player = player;
-    this.setGamepad(pad)
-    this.setKeymap(keymap)
+    this.createGamepad(pad)
+    this.keymap=KEYMAPS[pad]
     this._keyPressed = keyPressed
     this.keyPressed = function (key) {
         return this._keyPressed(this.keymap, key);
     }
     this._axisPressed = axisPressed
     this.axisPressed = function (axis, direction) {
-        return this._axisPressed(this.keymap.axes, axis, direction);
+        return this._axisPressed(this.keymap, axis, direction);
     }
 };
-Gamepad.prototype.setGamepad = function (p) {
-    this.pad = p
-    console.log(this.pad.rawPad)
+Gamepad.prototype.createGamepad = function (pad) {
+    this.pad = this.player.game.input.gamepad[pad]
+    console.log(pad)
+    console.log(this.pad)
+    this.pad.addCallbacks(this, {
+        onConnect: this.setKeymap
+    })
 }
-Gamepad.prototype.test=function(){
-    console.log(game.time.now)
-    console.log('connect callback',this.pad)
-    console.log("pad connected?",this.pad.connected)
-}
-Gamepad.prototype.setKeymap = function (n) {
-    //the logic to select the keymap should go here.
-    
-    if (typeof (n) == 'number') {
-        this.padId = n
-        this.keymap = defaultKeymap[n]
-    } else if (!n) {
-        this.padId = 0
-        this.keymap = defaultKeymap[0];
-    } else {
-        this.padId = 0
-        this.keymap = n
+
+Gamepad.prototype.setKeymap = function () {
+    //This callback function executes when a pad is connected,
+    //it looks up into our KEYMAPS and if it doesn't find it, it sets the default ps3/xbox360 gamepad
+    let id = this.pad._rawPad.id
+    let padKeymap
+    for (let keymap in KEYMAPS) {
+        keymap = KEYMAPS[keymap]
+        if (keymap.id == id) {
+            padKeymap = keymap
+        }
     }
+    merge(this.keymap,padKeymap)
+
 }
 module.exports = {
     GAMEPAD_KEY: GAMEPAD_KEY,

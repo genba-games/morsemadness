@@ -1,68 +1,64 @@
-var GAMEPAD_KEY = {
+const GAMEPAD_KEY = {
     UP: 'up',
     DOWN: 'down',
     LEFT: 'left',
     RIGHT: 'right',
     ACTION: 'action',
-    INTERACT:'interact',
+    INTERACT: 'interact',
     UPDOWN_AXIS: 'up_down_axis',
     LEFTRIGHT_AXIS: 'left_right_axis',
 }
 
-var keymaps= {
+const KEYMAPS = {
     hori: {
         id: 'HORI CO.,LTD. HORIPAD mini4 (Vendor: 0f0d Product: 00ee)',
-        keymap: {
-            axes: {
-                [GAMEPAD_KEY.UPDOWN_AXIS]: [
-                    Phaser.Gamepad.AXIS_1,
-                    Phaser.Gamepad.AXIS_7
-                ],
-                [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
-                    Phaser.Gamepad.AXIS_0,
-                    Phaser.Gamepad.AXIS_6
-                ],
-            },
-            buttons: {
-                [GAMEPAD_KEY.ACTION]: [
-                    Phaser.Gamepad.BUTTON_1,
-                ],
-                [GAMEPAD_KEY.INTERACT]: [
-                    Phaser.Gamepad.BUTTON_0,
-                    Phaser.Gamepad.BUTTON_3
-                ]
-            }
+        axes: {
+            [GAMEPAD_KEY.UPDOWN_AXIS]: [
+                Phaser.Gamepad.AXIS_1,
+                Phaser.Gamepad.AXIS_7
+            ],
+            [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
+                Phaser.Gamepad.AXIS_0,
+                Phaser.Gamepad.AXIS_6
+            ],
+        },
+        buttons: {
+            [GAMEPAD_KEY.ACTION]: [
+                Phaser.Gamepad.BUTTON_1,
+            ],
+            [GAMEPAD_KEY.INTERACT]: [
+                Phaser.Gamepad.BUTTON_0,
+                Phaser.Gamepad.BUTTON_3
+            ]
         },
     },
     default: {
         id: 'default',
-        keymap: {
-            buttons: {
-                [GAMEPAD_KEY.UP]: [
-                    Phaser.Gamepad.PS3XC_DPAD_UP,
-                ],
-                [GAMEPAD_KEY.DOWN]: [
-                    Phaser.Gamepad.PS3XC_DPAD_DOWN,
-                ],
-                [GAMEPAD_KEY.LEFT]: [
-                    Phaser.Gamepad.PS3XC_DPAD_LEFT,
-                ],
-                [GAMEPAD_KEY.RIGHT]: [
-                    Phaser.Gamepad.PS3XC_DPAD_RIGHT,
-                ],
-                [GAMEPAD_KEY.ACTION]: [
-                    Phaser.Gamepad.PS3XC_X,
-                ],
-                [GAMEPAD_KEY.INTERACT]: [
-                    Phaser.Gamepad.PS3XC_CIRCLE,
-                    Phaser.Gamepad.PS3XC_SQUARE
-                ],
-            },
+        buttons: {
+            [GAMEPAD_KEY.UP]: [
+                Phaser.Gamepad.PS3XC_DPAD_UP,
+            ],
+            [GAMEPAD_KEY.DOWN]: [
+                Phaser.Gamepad.PS3XC_DPAD_DOWN,
+            ],
+            [GAMEPAD_KEY.LEFT]: [
+                Phaser.Gamepad.PS3XC_DPAD_LEFT,
+            ],
+            [GAMEPAD_KEY.RIGHT]: [
+                Phaser.Gamepad.PS3XC_DPAD_RIGHT,
+            ],
+            [GAMEPAD_KEY.ACTION]: [
+                Phaser.Gamepad.PS3XC_X,
+            ],
+            [GAMEPAD_KEY.INTERACT]: [
+                Phaser.Gamepad.PS3XC_CIRCLE,
+                Phaser.Gamepad.PS3XC_SQUARE
+            ],
         },
     },
-    P1keyboard: {
-        id: 'P1keyboard',
-        keymap: {
+    pad1: {
+        id: 'pad1Keyboard',
+        buttons: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.W,
             ],
@@ -81,12 +77,11 @@ var keymaps= {
             [GAMEPAD_KEY.INTERACT]: [
                 Phaser.Keyboard.E,
             ],
-
         }
     },
-    P2keyboard: {
-        id: 'P2keyboard',
-        keymap: {
+    pad2: {
+        id: 'pad2Keyboard',
+        buttons: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.I,
             ],
@@ -109,7 +104,7 @@ var keymaps= {
     }
 }
 
-module.exports={
-    GAMEPAD_KEY:GAMEPAD_KEY,
-    keymaps:keymaps
+module.exports = {
+    GAMEPAD_KEY: GAMEPAD_KEY,
+    KEYMAPS: KEYMAPS
 }

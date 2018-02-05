@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 import Dweller from '../actors/dweller'
 import Operator from '../actors/operator'
-import GAMEPAD_KEY from '../gamepad/gamepad'
+import {GAMEPAD_KEY,KEYMAPS} from '../gamepad/gamepad'
 import config from '../config'
 import { generateMaze, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
@@ -58,24 +58,22 @@ export default class extends Phaser.State {
     this.gTx.enableBody = true;
     // Create the pads and add them their callback to set their id
     // Create the gamepad objects in our gamepad.js and set the keymap on connected.
-    this.dwellerPad=this.game.input.gamepad.pad1
-    this.dwellerPad.addCallbacks(this,{
-      onConnect:function(){
-        this.dwellerPad.rawPad=this.dwellerPad._rawPad}
-    })
-    this.operatorPad=this.game.input.gamepad.pad2
-    this.operatorPad.addCallbacks(this,{
-      onConnect:function(){console.log("456")}
-    })
+    // this.dwellerPad=this.game.input.gamepad.pad1
+    // this.dwellerPad.addCallbacks(this,{
+    //   onConnect:function(){
+    //     this.dwellerPad.rawPad=this.dwellerPad._rawPad}
+    // })
+    // this.operatorPad=this.game.input.gamepad.pad2
+    // this.operatorPad.addCallbacks(this,{
+    //   onConnect:function(){console.log("456")}
+    // })
     // Create the dweller    
     this.dweller = new Dweller({
       game: this.game,
       x: 35,
       y: 35,
       asset: 'dweller',
-      gamepad: this.dwellerPad
     })
-    console.log(this.game.input.gamepad.pad1._rawPad)
     this.game.add.existing(this.dweller);
     this.dweller.reset();
 
@@ -121,7 +119,6 @@ export default class extends Phaser.State {
         32, 
         40, 
         'operator', 
-        this.game.input.gamepad.pad2, 
         this.gSignal
       )
     this.game.add.existing(this.operator)

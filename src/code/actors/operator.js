@@ -4,9 +4,9 @@ import Actor from './actor'
 import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 
 export default class extends Actor {
-  constructor(game, x, y, asset, gamepad, signalGroup) {    
+  constructor(game, x, y, asset, signalGroup) {    
     super(game, x, y, asset);
-    this. gamepad = new Gamepad(this, 1, gamepad);
+    this. gamepad = new Gamepad(this, 1, 'pad2');
     this.signalGroup = signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
