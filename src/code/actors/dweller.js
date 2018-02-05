@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import Actor from './actor'
 import config from '../config'
 import { Gamepad } from '../gamepad/gamepad'
-import {GAMEPAD_KEY } from '../gamepad/gamepadConfig'
+import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
 
 export default class extends Actor {
@@ -21,7 +21,7 @@ export default class extends Actor {
         boundingBoxOffset / 2, 
         boundingBoxOffset / 2,
     );
-    this.rip=game.add.audio('rip')
+    this.rip = game.add.audio('rip')
     this.animations.add('left', [2], 1, true)
     this.animations.add('right', [1], 1, true)
     this.animations.add('down', [0], 1, true)
