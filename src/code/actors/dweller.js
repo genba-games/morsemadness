@@ -9,7 +9,7 @@ export default class extends Actor {
   constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
-    this.gamepad = new Gamepad(this, 'pad2');
+    this.gamepad = new Gamepad(this, 'pad1');
 
     // Enable physics
     game.physics.arcade.enable(this);

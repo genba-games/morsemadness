@@ -6,7 +6,7 @@ import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
 export default class extends Actor {
   constructor(game, x, y, asset, signalGroup) {
     super(game, x, y, asset);
-    this.gamepad = new Gamepad(this, 'pad1');
+    this.gamepad = new Gamepad(this, 'pad2');
     this.signalGroup = signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
