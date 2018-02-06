@@ -8,20 +8,31 @@ const GAMEPAD_KEY = {
     UPDOWN_AXIS: 'up_down_axis',
     LEFTRIGHT_AXIS: 'left_right_axis',
 }
+
 /**
- * Define this keymap 
+ * List of available controller-specific keymap configurations.
+ * Keymap configurations assign game keys to controller buttons.
  */
 const KEYMAPS = {
-    hori: {
-        id: 'HORI CO.,LTD. HORIPAD mini4 (Vendor: 0f0d Product: 00ee)',
+    // Controllers
+    HORI: 'HORI CO.,LTD. HORIPAD mini4 (Vendor: 0f0d Product: 00ee)',
+    PS3XBOX360: 'PS3/XBOX360',
+    // Keyboard
+    KEYBOARDPLAYER1: 'pad1',
+    KEYBOARDPLAYER2: 'pad2',
+}
+
+/**
+ * Relates game keys to controller buttons for each keymap.
+ */
+const KEYMAP_KEYS = {
+    [KEYMAPS.HORI]: {
         axes: {
             [GAMEPAD_KEY.UPDOWN_AXIS]: [
-                Phaser.Gamepad.AXIS_1,
-                Phaser.Gamepad.AXIS_7
+                Phaser.Gamepad.AXIS_1
             ],
             [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
-                Phaser.Gamepad.AXIS_0,
-                Phaser.Gamepad.AXIS_6
+                Phaser.Gamepad.AXIS_0
             ],
         },
         buttons: {
@@ -34,8 +45,17 @@ const KEYMAPS = {
             ]
         },
     },
-    default: {
-        id: 'default',
+    [KEYMAPS.PS3XBOX360]: {
+        axes: {
+            [GAMEPAD_KEY.UPDOWN_AXIS]: [
+                Phaser.Gamepad.AXIS_1,
+                Phaser.Gamepad.AXIS_7
+            ],
+            [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
+                Phaser.Gamepad.AXIS_0,
+                Phaser.Gamepad.AXIS_6
+            ],
+        },
         buttons: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Gamepad.PS3XC_DPAD_UP,
@@ -58,8 +78,7 @@ const KEYMAPS = {
             ],
         },
     },
-    pad1: {
-        id: 'pad1Keyboard',
+    [KEYMAPS.KEYBOARDPLAYER1]: {
         buttons: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.W,
@@ -81,8 +100,7 @@ const KEYMAPS = {
             ],
         }
     },
-    pad2: {
-        id: 'pad2Keyboard',
+    [KEYMAPS.KEYBOARDPLAYER2]: {
         buttons: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.I,
@@ -103,10 +121,11 @@ const KEYMAPS = {
                 Phaser.Keyboard.P,
             ],
         }
-    }
+    }, 
 }
 
 module.exports = {
-    GAMEPAD_KEY: GAMEPAD_KEY,
-    KEYMAPS: KEYMAPS
+    GAMEPAD_KEY,
+    KEYMAPS,
+    KEYMAP_KEYS,
 }

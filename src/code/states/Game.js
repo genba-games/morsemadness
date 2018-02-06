@@ -22,7 +22,7 @@ export default class extends Phaser.State {
     this.mazeWidth = 59;
     this.mazeHeight = 13;
 
-    this.lavaStartTimeMS = 10000;
+    this.lavaStartTimeMS = 10000000;
 
     this.reset()
   }
@@ -173,7 +173,7 @@ export default class extends Phaser.State {
     //   this.swapRoles();
     // }.bind(this), this);
 
-    // Swap characters
+    // Restart game
     this.game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(function () {
       game.state.restart(true, false);
     }.bind(this), this);
@@ -181,9 +181,7 @@ export default class extends Phaser.State {
 
   swapRoles() {
     // Kill all active signals
-    this.gSignal.forEachAlive(alive => {
-      alive.kill()
-    })
+    this.gSignal.forEachAlive(alive => alive.kill() );
     if (this.swapTimer < this.game.time.now) {
       // Swap gamepads
       this.dweller.swapGamepads();

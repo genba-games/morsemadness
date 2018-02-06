@@ -9,7 +9,7 @@ export default class extends Actor {
   constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
-    this.gamepad = new Gamepad(this, 'pad1');
+    this.gamepad = new Gamepad(this, 'pad2');
 
     // Enable physics
     game.physics.arcade.enable(this);
@@ -61,13 +61,13 @@ export default class extends Actor {
   update() {
     if (this.controllerEnabled) {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS,'+'))
+        || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS, -1))
         {
             this.body.velocity.y = -this.speed;
             this.animations.play('up');
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-        ||  this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS,'-'))
+        ||  this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS, 1))
         {
             this.body.velocity.y = this.speed;
             this.animations.play('down');
@@ -75,21 +75,21 @@ export default class extends Actor {
         else this.body.velocity.y = 0;
 
         if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS,'+'))
+        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS, -1))
         {
             this.body.velocity.x = -this.speed;
             this.animations.play('left');
             
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS,'-'))
+        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS, 1))
         {
             this.body.velocity.x = this.speed;
             this.animations.play('right');
         }
         else this.body.velocity.x = 0;
 
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)){
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
             this.animations.play('twist')
         }
     }
