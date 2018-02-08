@@ -184,8 +184,7 @@ export default class extends Phaser.State {
     this.gSignal.forEachAlive(alive => alive.kill() );
     if (this.swapTimer < this.game.time.now) {
       // Swap gamepads
-      this.dweller.swapGamepads();
-      this.operator.swapGamepads();
+      this.dweller.swapGamepads(this.operator);
       // Swap appereances
       let dwellerKey = this.dweller.key;
       this.dweller.loadTexture(this.operator.key);

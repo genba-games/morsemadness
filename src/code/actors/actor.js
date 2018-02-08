@@ -27,14 +27,9 @@ export default class extends Phaser.Sprite {
     this.enableController();
   }
 
-  swapGamepads() {
-    if (this.gamepad.padId == 0) {
-      this.gamepad.setGamepad(game.input.gamepad.pad2)
-      this.gamepad.setKeymap(1)
-    } else if (this.gamepad.padId == 1) {
-      this.gamepad.setGamepad(game.input.gamepad.pad1)      
-      this.gamepad.setKeymap(0)
-    }
+  swapGamepads(swapee) {
+    // cover your eyes, don't let this shiny es6 loc blind you 😎
+    [this.gamepad, swapee.gamepad] = [swapee.gamepad, this.gamepad]
     this.disableController()
   }
   
