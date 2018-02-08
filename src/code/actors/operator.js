@@ -21,7 +21,6 @@ export default class extends Actor {
     this.signalTime = game.time.now;
   }
   sendSignal(tx) {
-    console.log(tx)
     //create a bullet in the bulletGroup
     if (game.time.now > this.signalTime) {
       //  Grab the first bullet we can from the pool
