@@ -133,6 +133,5 @@ class Gamepad {
 };
 
 module.exports = {
-    GAMEPAD_KEY: GAMEPAD_KEY,
     Gamepad: Gamepad,
 }
