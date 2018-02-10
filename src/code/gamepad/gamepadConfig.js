@@ -5,8 +5,6 @@ const GAMEPAD_KEY = {
     RIGHT: 'right',
     ACTION: 'action',
     INTERACT: 'interact',
-    UPDOWN_AXIS: 'up_down_axis',
-    LEFTRIGHT_AXIS: 'left_right_axis',
 }
 
 /**
@@ -27,12 +25,24 @@ const KEYMAPS = {
  */
 const KEYMAP_KEYS = {
     [KEYMAPS.HORI]: {
+        // This particular controller uses two different axes for 
+        // digital/analog input depending on its mode
         axes: {
-            [GAMEPAD_KEY.UPDOWN_AXIS]: [
-                Phaser.Gamepad.AXIS_1
+            [GAMEPAD_KEY.UP]: [
+                {axis: Phaser.Gamepad.AXIS_1, direction: -1},
+                {axis: Phaser.Gamepad.AXIS_7, direction: -1}
             ],
-            [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
-                Phaser.Gamepad.AXIS_0
+            [GAMEPAD_KEY.DOWN]: [
+                {axis: Phaser.Gamepad.AXIS_1, direction: 1},
+                {axis: Phaser.Gamepad.AXIS_7, direction: 1}
+            ],
+            [GAMEPAD_KEY.LEFT]: [
+                {axis: Phaser.Gamepad.AXIS_0, direction: -1},
+                {axis: Phaser.Gamepad.AXIS_6, direction: -1}
+            ],
+            [GAMEPAD_KEY.RIGHT]: [
+                {axis: Phaser.Gamepad.AXIS_0, direction: 1},
+                {axis: Phaser.Gamepad.AXIS_6, direction: 1}
             ],
         },
         buttons: {
@@ -47,13 +57,17 @@ const KEYMAP_KEYS = {
     },
     [KEYMAPS.PS3XBOX360]: {
         axes: {
-            [GAMEPAD_KEY.UPDOWN_AXIS]: [
-                Phaser.Gamepad.AXIS_1,
-                Phaser.Gamepad.AXIS_7
+            [GAMEPAD_KEY.UP]: [
+                {axis: Phaser.Gamepad.AXIS_1, direction: -1}
             ],
-            [GAMEPAD_KEY.LEFTRIGHT_AXIS]: [
-                Phaser.Gamepad.AXIS_0,
-                Phaser.Gamepad.AXIS_6
+            [GAMEPAD_KEY.DOWN]: [
+                {axis: Phaser.Gamepad.AXIS_1, direction: 1}
+            ],
+            [GAMEPAD_KEY.LEFT]: [
+                {axis: Phaser.Gamepad.AXIS_0, direction: -1}
+            ],
+            [GAMEPAD_KEY.RIGHT]: [
+                {axis: Phaser.Gamepad.AXIS_0, direction: 1}
             ],
         },
         buttons: {
@@ -79,7 +93,7 @@ const KEYMAP_KEYS = {
         },
     },
     [KEYMAPS.KEYBOARDPLAYER1]: {
-        buttons: {
+        keys: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.W,
             ],
@@ -101,7 +115,7 @@ const KEYMAP_KEYS = {
         }
     },
     [KEYMAPS.KEYBOARDPLAYER2]: {
-        buttons: {
+        keys: {
             [GAMEPAD_KEY.UP]: [
                 Phaser.Keyboard.I,
             ],

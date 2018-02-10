@@ -60,29 +60,25 @@ export default class extends Player {
 
   update() {
     if (this.status.controllerEnabled) {
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS, -1))
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
         {
             this.body.velocity.y = -this.speed;
             this.animations.play('up');
         }
-        else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-        ||  this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS, 1))
+        else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
         {
             this.body.velocity.y = this.speed;
             this.animations.play('down');
         }
         else this.body.velocity.y = 0;
 
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS, -1))
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
         {
             this.body.velocity.x = -this.speed;
             this.animations.play('left');
             
         }
-        else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-        || this.gamepad.axisPressed(GAMEPAD_KEY.LEFTRIGHT_AXIS, 1))
+        else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
         {
             this.body.velocity.x = this.speed;
             this.animations.play('right');

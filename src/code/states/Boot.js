@@ -21,6 +21,15 @@ export default class extends Phaser.State {
 
     this.load.image('loaderBg', './src/sprites/loader-bg.png')
     this.load.image('loaderBar', './src/sprites/loader-bar.png')
+
+    // This stops arrow keypresses from propagating to the browser. 
+    // It is meant to stop scrolling the webpage
+    this.game.input.keyboard.addKeyCapture([
+      Phaser.Keyboard.UP, 
+      Phaser.Keyboard.DOWN,
+      Phaser.Keyboard.LEFT, 
+      Phaser.Keyboard.RIGHT
+    ]);
   }
 
   render () {

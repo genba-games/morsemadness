@@ -7,8 +7,9 @@ import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 export default class extends Player {
   constructor(game, x, y, asset, signalGroup) {
     super(game, x, y, asset);
+
     this.gamepad = new Gamepad(this, 'pad2');
-    console.log(this.gamepad)
+
     this.signalGroup = signalGroup
     this.audio = {
       U: game.add.audio(T.U.morse),
@@ -20,6 +21,7 @@ export default class extends Player {
     this.anchor.setTo(0.5);
     this.signalTime = game.time.now;
   }
+
   sendSignal(tx) {
     //create a bullet in the bulletGroup
     if (game.time.now > this.signalTime) {
@@ -42,29 +44,25 @@ export default class extends Player {
 
   update() {
     if (this.status.controllerEnabled) {
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.UP)) {
         this.sendSignal(T.U)
 
       }
-      else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1) {
+      else if (this.gamepad.keyJustPressed(GAMEPAD_KEY.DOWN)) {
         this.sendSignal(T.D)
       }
 
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.LEFT)) {
         this.sendSignal(T.L)
       }
-      else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1) {
+      else if (this.gamepad.keyJustPressed(GAMEPAD_KEY.RIGHT)) {
         this.sendSignal(T.R)
       }
 
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.ACTION)) {
         this.sendSignal(T.M)
       }
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.INTERACT)) {
         this.sendSignal(T.M)
       }
     }
