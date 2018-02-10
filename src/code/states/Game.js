@@ -101,8 +101,14 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
 
     // Create the operator
-    this.antenna = this.game.add.existing(new Phaser.Sprite(this.game, 32, 50, 'antenna'))
-    this.antenna.anchor.set(0.5, 1)
+    this.antenna = this.game.add.existing(new Phaser.Sprite(
+        this.game, 
+        32, 
+        50, 
+        'antenna'
+      )
+    );
+    this.antenna.anchor.set(0.5, 1);
 
     this.operator = new Operator(
       this.game,
