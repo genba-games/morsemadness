@@ -66,5 +66,6 @@ export default class extends Player {
         this.sendSignal(T.M)
       }
     }
+    super.update()
   }
 }

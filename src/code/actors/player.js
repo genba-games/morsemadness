@@ -2,7 +2,7 @@ import Actor from './actor'
 export default class extends Actor {
     constructor(game, x, y, asset) {
         super(game, x, y, asset)
-
+        this.white=this.game.add.filter('White')
         this.status = {
             stun: false,
             controllerEnabled: true
@@ -36,12 +36,10 @@ export default class extends Actor {
     }
     stun() {
         if (!this.status.stun) {
-            this.tint = 0
             this.toggleController()
             this.toggleStun()
             game.time.events.add(Phaser.Timer.SECOND * 2, this.stun, this);
         } else if (this.status.stun) {
-            this.tint = 16777215
             this.toggleController()
             this.toggleStun()
         }
@@ -50,10 +48,7 @@ export default class extends Actor {
     toggleController() {
         this.status.controllerEnabled = !this.status.controllerEnabled
     }
-
     update() {
-        // if(this.status.stun){
-        //     this.tint=
-        // }
+        //if im stunned change my animation to stunned. not sure if i should do this here or back there.
     }
 }

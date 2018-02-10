@@ -89,5 +89,6 @@ export default class extends Player {
             this.animations.play('twist')
         }
     }
+    super.update()    
   }
 }
