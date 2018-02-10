@@ -1,11 +1,11 @@
 import Phaser from 'phaser'
-import Actor from './actor'
+import Player from './player'
 import config from '../config'
 import { Gamepad } from '../gamepad/gamepad'
 import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
 
-export default class extends Actor {
+export default class extends Player {
   constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
@@ -44,7 +44,7 @@ export default class extends Actor {
   }
   
   collide(target) {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         this.disableController();
@@ -59,7 +59,7 @@ export default class extends Actor {
   }
 
   update() {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || this.gamepad.axisPressed(GAMEPAD_KEY.UPDOWN_AXIS, -1))
         {

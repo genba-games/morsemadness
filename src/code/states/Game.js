@@ -28,10 +28,7 @@ export default class extends Phaser.State {
   }
 
   reset() {
-    // Game swap timers
-    this.stunTimer = this.game.time.now
-    this.swapTimer = this.game.time.now
-
+    this.swapTimer=this.game.time.now
     // Setup groups
     this.gTilemap = this.game.add.group();
     this.gActors = this.game.add.group();
@@ -181,10 +178,10 @@ export default class extends Phaser.State {
       this.operator.loadTexture(dwellerKey);
       // Show swap text
       this.swapText.alpha = 1
-
+      // StunThem
+      this.dweller.toggleStun()
+      this.operator.toggleStun()
       this.swapTimer = this.game.time.now + 3000
-
-      this.stunTimer = this.game.time.now + 1000
     }
   }
 

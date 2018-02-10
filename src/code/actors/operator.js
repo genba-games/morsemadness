@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
 import { T } from './morsetx'
-import Actor from './actor'
+import Player from './player'
 import { Gamepad } from '../gamepad/gamepad'
 import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
-export default class extends Actor {
+export default class extends Player {
   constructor(game, x, y, asset, signalGroup) {
     super(game, x, y, asset);
     this.gamepad = new Gamepad(this, 'pad2');
@@ -41,7 +41,7 @@ export default class extends Actor {
   }
 
   update() {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
       if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
         || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1) {
         this.sendSignal(T.U)
