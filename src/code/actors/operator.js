@@ -21,7 +21,7 @@ export default class extends Actor {
     this.anchor.setTo(0.5);
     this.signalTime = game.time.now;
   }
-  
+
   sendSignal(tx) {
     //create a bullet in the bulletGroup
     if (game.time.now > this.signalTime) {
@@ -44,25 +44,25 @@ export default class extends Actor {
 
   update() {
     if (this.controllerEnabled) {
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.UP)) {
         this.sendSignal(T.U)
 
       }
-      else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)) {
+      else if (this.gamepad.keyJustPressed(GAMEPAD_KEY.DOWN)) {
         this.sendSignal(T.D)
       }
 
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.LEFT)) {
         this.sendSignal(T.L)
       }
-      else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)) {
+      else if (this.gamepad.keyJustPressed(GAMEPAD_KEY.RIGHT)) {
         this.sendSignal(T.R)
       }
 
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.ACTION)) {
         this.sendSignal(T.M)
       }
-      if (this.gamepad.keyPressed(GAMEPAD_KEY.INTERACT)) {
+      if (this.gamepad.keyJustPressed(GAMEPAD_KEY.INTERACT)) {
         this.sendSignal(T.M)
       }
     }
