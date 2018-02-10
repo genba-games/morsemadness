@@ -32,15 +32,28 @@ export default class extends Actor {
         [this.gamepad, swapee.gamepad] = [swapee.gamepad, this.gamepad]
     }
     toggleStun() {
-        if (this.status.stun === false) {
+        this.status.stun = !this.status.stun
+    }
+    stun() {
+        if (!this.status.stun) {
+            this.tint = 0
             this.toggleController()
-            game.time.events.add(Phaser.Timer.SECOND * 2, this.toggleStun, this);
-        } else {
+            this.toggleStun()
+            game.time.events.add(Phaser.Timer.SECOND * 2, this.stun, this);
+        } else if (this.status.stun) {
+            this.tint = 16777215
             this.toggleController()
-            this.status.stun = !this.status.stun
+            this.toggleStun()
         }
     }
+
     toggleController() {
         this.status.controllerEnabled = !this.status.controllerEnabled
+    }
+
+    update() {
+        // if(this.status.stun){
+        //     this.tint=
+        // }
     }
 }

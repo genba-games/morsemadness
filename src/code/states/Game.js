@@ -185,8 +185,8 @@ export default class extends Phaser.State {
       // Show swap text
       this.swapText.alpha = 1
       // StunThem
-      this.dweller.toggleStun()
-      this.operator.toggleStun()
+      this.dweller.stun()
+      this.operator.stun()
       this.swapTimer = this.game.time.now + 3000
     }
   }
