@@ -8,6 +8,7 @@ export default class extends Phaser.State {
         }
         create() {
             this.op_sos=game.add.audio('op_sos')
+            this.op_sos.volume = 0.1
             this.op_sos.play()
             
             this.titleBackground = game.add.sprite(0, 0, 'title_background');

@@ -1,13 +1,15 @@
 import Phaser from 'phaser'
 import Actor from './actor'
 import config from '../config'
-import { Gamepad, GAMEPAD_KEY } from '../gamepad/gamepad'
+import { Gamepad } from '../gamepad/gamepad'
+import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
+
 
 export default class extends Actor {
-  constructor ({ game, x, y, asset, gamepad }) {
+  constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
-    this.gamepad = new Gamepad(this, 0, gamepad);
+    this.gamepad = new Gamepad(this, 'pad1');
 
     // Enable physics
     game.physics.arcade.enable(this);
@@ -19,7 +21,7 @@ export default class extends Actor {
         boundingBoxOffset / 2, 
         boundingBoxOffset / 2,
     );
-    this.rip=game.add.audio('rip')
+    this.rip = game.add.audio('rip')
     this.animations.add('left', [2], 1, true)
     this.animations.add('right', [1], 1, true)
     this.animations.add('down', [0], 1, true)
@@ -58,36 +60,32 @@ export default class extends Actor {
 
   update() {
     if (this.controllerEnabled) {
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.UP)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == -1)
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
         {
             this.body.velocity.y = -this.speed;
             this.animations.play('up');
         }
-        else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN)
-        ||  (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_1)) == 1)
+        else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
         {
             this.body.velocity.y = this.speed;
             this.animations.play('down');
         }
         else this.body.velocity.y = 0;
 
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == -1)
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
         {
             this.body.velocity.x = -this.speed;
             this.animations.play('left');
             
         }
-        else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT)
-        || (this.gamepad.pad.axis(Phaser.Gamepad.AXIS_0)) == 1)
+        else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
         {
             this.body.velocity.x = this.speed;
             this.animations.play('right');
         }
         else this.body.velocity.x = 0;
 
-        if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)){
+        if (this.gamepad.keyPressed(GAMEPAD_KEY.ACTION)) {
             this.animations.play('twist')
         }
     }
