@@ -22,10 +22,6 @@ export default class extends Player {
         boundingBoxOffset / 2,
     );
     this.rip = game.add.audio('rip')
-    this.animations.add('left', [2], 1, true)
-    this.animations.add('right', [1], 1, true)
-    this.animations.add('down', [0], 1, true)
-    this.animations.add('up', [3], 1, true)
     this.animations.add(
         'twist', 
         [0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 1, 3, 3, 2, 2, 0, 0, 1, 1, 1, 3, 3, 3, 2, 2, 2, 0, 0, 0],
@@ -54,6 +50,7 @@ export default class extends Player {
 
   kill() {
       this.rip.play()
+      this.frame=4      
       this.game.state.getCurrentState().lose();
       super.kill()
   }
@@ -63,25 +60,25 @@ export default class extends Player {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
         {
             this.body.velocity.y = -this.speed;
-            this.animations.play('up');
+            this.frame=3
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
         {
             this.body.velocity.y = this.speed;
-            this.animations.play('down');
+            this.frame=0
         }
         else this.body.velocity.y = 0;
 
         if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
         {
             this.body.velocity.x = -this.speed;
-            this.animations.play('left');
+            this.frame=2
             
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
         {
             this.body.velocity.x = this.speed;
-            this.animations.play('right');
+            this.frame=1
         }
         else this.body.velocity.x = 0;
 
