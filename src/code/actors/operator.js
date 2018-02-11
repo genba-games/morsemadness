@@ -18,8 +18,9 @@ export default class extends Player {
       R: game.add.audio(T.R.morse),
       M: game.add.audio(T.M.morse),
     };
-    this.anchor.setTo(0.5);
     this.signalTime = game.time.now;
+
+    
   }
 
   sendSignal(tx) {

@@ -28,7 +28,7 @@ export default class extends Phaser.State {
   }
 
   reset() {
-    this.swapTimer=this.game.time.now
+    this.swapTimer = this.game.time.now
     // Setup groups
     this.gTilemap = this.game.add.group();
     this.gActors = this.game.add.group();
@@ -98,14 +98,14 @@ export default class extends Phaser.State {
     this.gTilemap.add(this.layer);
 
     // Create the operator
+
     this.antenna = this.game.add.existing(new Phaser.Sprite(
-        this.game, 
-        32, 
-        50, 
-        'antenna'
-      )
-    );
-    this.antenna.anchor.set(0.5, 1);
+      this.game,
+      30,
+      8,
+      'antenna'
+    ));
+    this.antenna.animations.add('',[0,1,2],2,true).play()
 
     this.operator = new Operator(
       this.game,
@@ -113,7 +113,7 @@ export default class extends Phaser.State {
       40,
       'operator',
       this.gSignal
-    )
+    );
     this.game.add.existing(this.operator)
 
     // Setup lava
@@ -174,7 +174,7 @@ export default class extends Phaser.State {
 
   swapRoles() {
     // Kill all active signals
-    this.gSignal.forEachAlive(alive => alive.kill() );
+    this.gSignal.forEachAlive(alive => alive.kill());
     if (this.swapTimer < this.game.time.now) {
       // Swap gamepads
       this.dweller.swapGamepads(this.operator);
