@@ -2,13 +2,16 @@ import Actor from './actor'
 export default class extends Actor {
     constructor(game, x, y, asset) {
         super(game, x, y, asset)
+
         this.status = {
+            sprite: new Phaser.Sprite(game, 0, 0, 'status'),
             stun: false,
             controllerEnabled: true,
-            sprite: new Phaser.Sprite(game, 0, 0, 'status')
+            streak: false
         }
-        this.status.sprite.animations.add('stun', [1, 2, 3, 4], 10, true)
         this.addChild(this.status.sprite)
+
+        this.status.sprite.animations.add('stun', [1, 2, 3, 4], 10, true)
         this.status.sprite.frame = 0
     }
 
