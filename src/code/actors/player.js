@@ -4,14 +4,20 @@ export default class extends Actor {
         super(game, x, y, asset)
         this.status = {
             stun: false,
-            controllerEnabled: true
+            controllerEnabled: true,
+            sprite: new Phaser.Sprite(game, 0, 0, 'status')
         }
-        this.stunSprite = new Phaser.Sprite(game, 0, 0, 'stun')
-        this.stunSprite.animations.add('stun', [1, 2, 3, 4], 10, true)
-        this.addChild(this.stunSprite)
-        this.stunSprite.frame = 0
+        this.status.sprite.animations.add('stun', [1, 2, 3, 4], 10, true)
+        this.addChild(this.status.sprite)
+        this.status.sprite.frame = 0
     }
 
+    toggleStun() {
+        this.status.stun = !this.status.stun
+    }
+    toggleController() {
+        this.status.controllerEnabled = !this.status.controllerEnabled
+    }
     disableController() {
         this.status.controllerEnabled = false;
     }
@@ -34,27 +40,15 @@ export default class extends Actor {
         // cover your eyes, don't let this shiny es6 loc blind you 😎
         [this.gamepad, swapee.gamepad] = [swapee.gamepad, this.gamepad]
     }
-    toggleStun() {
-        this.status.stun = !this.status.stun
-    }
     stun() {
         if (!this.status.stun) {
-            this.toggleController()
-            this.toggleStun()
             game.time.events.add(Phaser.Timer.SECOND * 2, this.stun, this);
-            this.stunSprite.animations.play('stun')
+            this.status.sprite.animations.play('stun')
         } else if (this.status.stun) {
-            this.toggleController()
-            this.toggleStun()
-            this.stunSprite.animations.stop()
-            this.stunSprite.frame = 0
+            this.status.sprite.animations.stop()
+            this.status.sprite.frame = 0
         }
-    }
-
-    toggleController() {
-        this.status.controllerEnabled = !this.status.controllerEnabled
-    }
-    update() {
-        //if im stunned change my animation to stunned. not sure if i should do this here or back there.
+        this.toggleController()
+        this.toggleStun()
     }
 }

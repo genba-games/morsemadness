@@ -18,24 +18,18 @@ export default class extends Player {
       R: game.add.audio(T.R.morse),
       M: game.add.audio(T.M.morse),
     };
-    this.signalTime = game.time.now;
-
-    
   }
 
   sendSignal(tx) {
     //create a bullet in the bulletGroup
-    if (game.time.now > this.signalTime) {
-      //  Grab the first bullet we can from the pool
-      this.signal = this.signalGroup.getFirstExists(false);
-      if (this.signal) {
-        //  And fire it
-        this.audio[tx.name].play()
-        this.signal.name = tx.name
-        this.signal.reset(this.x + 2, this.y);
-        this.signal.body.velocity.x = + 1200;
-        this.signalTime = game.time.now + 200;
-      }
+    //  Grab the first bullet we can from the pool
+    this.signal = this.signalGroup.getFirstExists(false);
+    if (this.signal) {
+      //  And fire it
+      this.audio[tx.name].play()
+      this.signal.name = tx.name
+      this.signal.reset(this.x + 2, this.y);
+      this.signal.body.velocity.x = + 1200;
     }
   }
 

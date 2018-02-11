@@ -31,7 +31,7 @@ export default class extends Phaser.State {
     this.load.audio('op_sos', 'src/audio/op_sos.wav')
     this.load.audio('rip', 'src/audio/rip.wav')
 
-    
+
     this.load.spritesheet('au', 'src/sprites/actors/AU.png', 16, 16)
     this.load.spritesheet('ad', 'src/sprites/actors/AD.png', 16, 16)
     this.load.spritesheet('ar', 'src/sprites/actors/AR.png', 16, 16)
@@ -41,7 +41,7 @@ export default class extends Phaser.State {
     this.load.spritesheet('operator', 'src/sprites/actors/Sprite_P2.png', 16, 16)
     this.load.spritesheet('antenna', 'src/sprites/actors/operator_antenna.png', 20, 48)
 
-    this.load.spritesheet('stun','src/sprites/actors/stun.png',16,16)
+    this.load.spritesheet('status', 'src/sprites/actors/status.png', 16, 16)
 
     this.load.image('signal', 'src/sprites/actors/signal.png')
   }
