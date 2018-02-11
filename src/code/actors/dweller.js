@@ -1,11 +1,11 @@
 import Phaser from 'phaser'
-import Actor from './actor'
+import Player from './player'
 import config from '../config'
 import { Gamepad } from '../gamepad/gamepad'
 import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
 
-export default class extends Actor {
+export default class extends Player {
   constructor ({ game, x, y, asset}) {
     super(game, x, y, asset)
         
@@ -22,10 +22,6 @@ export default class extends Actor {
         boundingBoxOffset / 2,
     );
     this.rip = game.add.audio('rip')
-    this.animations.add('left', [2], 1, true)
-    this.animations.add('right', [1], 1, true)
-    this.animations.add('down', [0], 1, true)
-    this.animations.add('up', [3], 1, true)
     this.animations.add(
         'twist', 
         [0, 1, 3, 2, 0, 1, 3, 2, 0, 1, 1, 3, 3, 2, 2, 0, 0, 1, 1, 1, 3, 3, 3, 2, 2, 2, 0, 0, 0],
@@ -44,7 +40,7 @@ export default class extends Actor {
   }
   
   collide(target) {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         this.disableController();
@@ -54,34 +50,35 @@ export default class extends Actor {
 
   kill() {
       this.rip.play()
+      this.frame=4      
       this.game.state.getCurrentState().lose();
       super.kill()
   }
 
   update() {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
         if (this.gamepad.keyPressed(GAMEPAD_KEY.UP))
         {
             this.body.velocity.y = -this.speed;
-            this.animations.play('up');
+            this.frame=3
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.DOWN))
         {
             this.body.velocity.y = this.speed;
-            this.animations.play('down');
+            this.frame=0
         }
         else this.body.velocity.y = 0;
 
         if (this.gamepad.keyPressed(GAMEPAD_KEY.LEFT))
         {
             this.body.velocity.x = -this.speed;
-            this.animations.play('left');
+            this.frame=2
             
         }
         else if (this.gamepad.keyPressed(GAMEPAD_KEY.RIGHT))
         {
             this.body.velocity.x = this.speed;
-            this.animations.play('right');
+            this.frame=1
         }
         else this.body.velocity.x = 0;
 
@@ -89,5 +86,6 @@ export default class extends Actor {
             this.animations.play('twist')
         }
     }
+    super.update()    
   }
 }

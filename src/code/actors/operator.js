@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
 import { T } from './morsetx'
-import Actor from './actor'
+import Player from './player'
 import { Gamepad } from '../gamepad/gamepad'
 import { GAMEPAD_KEY } from '../gamepad/gamepadConfig'
 
-export default class extends Actor {
+export default class extends Player {
   constructor(game, x, y, asset, signalGroup) {
     super(game, x, y, asset);
 
@@ -18,23 +18,18 @@ export default class extends Actor {
       R: game.add.audio(T.R.morse),
       M: game.add.audio(T.M.morse),
     };
-    this.anchor.setTo(0.5);
-    this.signalTime = game.time.now;
   }
 
   sendSignal(tx) {
     //create a bullet in the bulletGroup
-    if (game.time.now > this.signalTime) {
-      //  Grab the first bullet we can from the pool
-      this.signal = this.signalGroup.getFirstExists(false);
-      if (this.signal) {
-        //  And fire it
-        this.audio[tx.name].play()
-        this.signal.name = tx.name
-        this.signal.reset(this.x + 2, this.y);
-        this.signal.body.velocity.x = + 1200;
-        this.signalTime = game.time.now + 200;
-      }
+    //  Grab the first bullet we can from the pool
+    this.signal = this.signalGroup.getFirstExists(false);
+    if (this.signal) {
+      //  And fire it
+      this.audio[tx.name].play()
+      this.signal.name = tx.name
+      this.signal.reset(this.x + 2, this.y);
+      this.signal.body.velocity.x = + 1200;
     }
   }
 
@@ -43,7 +38,7 @@ export default class extends Actor {
   }
 
   update() {
-    if (this.controllerEnabled) {
+    if (this.status.controllerEnabled) {
       if (this.gamepad.keyJustPressed(GAMEPAD_KEY.UP)) {
         this.sendSignal(T.U)
 
@@ -66,5 +61,6 @@ export default class extends Actor {
         this.sendSignal(T.M)
       }
     }
+    super.update()
   }
 }
