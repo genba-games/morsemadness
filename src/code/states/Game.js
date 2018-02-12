@@ -97,8 +97,7 @@ export default class extends Phaser.State {
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
 
-    // Create the operator
-
+    // Create the antenna
     this.antenna = this.game.add.existing(new Phaser.Sprite(
       this.game,
       30,
@@ -106,7 +105,8 @@ export default class extends Phaser.State {
       'antenna'
     ));
     this.antenna.animations.add('',[0,1,2],2,true).play()
-
+    
+    // Create the operator
     this.operator = new Operator(
       this.game,
       32,
@@ -114,8 +114,9 @@ export default class extends Phaser.State {
       'operator',
       this.gSignal
     );
+    
     this.game.add.existing(this.operator)
-
+    
     // Setup lava
     this.lava = new Lava(
       this.game,
@@ -125,7 +126,7 @@ export default class extends Phaser.State {
       this.mazeHeight * config.tileHeight,
     );
     this.gLava.add(this.lava);
-
+    
     // Locate lava to the left of the screen
     this.lava.x = -config.horizontalTiles * (config.tileWidth);
     // Start the lava timer
@@ -134,10 +135,13 @@ export default class extends Phaser.State {
       this.lava.start,
       this.lava
     );
-
+    // Creating sfx audio object.
+    this.sfx={}    
+    this.sfx.swap=game.add.audio('swap')
+    
     this.gameState = GAME_STATE.PLAY;
   }
-
+  
   create() {
     this.swapText = this.game.add.existing(new Phaser.Text(this.game, 100, 50, "SWAP", 'bold 72pt Arial'))
     this.swapText.addColor('rgba(179,200,176)', 0)
@@ -187,6 +191,8 @@ export default class extends Phaser.State {
       // StunThem
       this.dweller.stun()
       this.operator.stun()
+      this.sfx.swap.play()
+      
       this.swapTimer = this.game.time.now + 3000
     }
   }

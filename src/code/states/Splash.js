@@ -30,6 +30,7 @@ export default class extends Phaser.State {
 
     this.load.audio('op_sos', 'src/audio/op_sos.wav')
     this.load.audio('rip', 'src/audio/rip.wav')
+    this.load.audio('swap','src/audio/swap.wav')
 
 
     this.load.spritesheet('au', 'src/sprites/actors/AU.png', 16, 16)
