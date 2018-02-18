@@ -17,6 +17,7 @@ export default class extends Phaser.State {
 
     // Tilesets
     this.load.image('tiles1', 'src/sprites/tiles.png')
+    this.load.image('title_background', 'src/sprites/menu/maze.png');    
     this.load.spritesheet('lava', 'src/sprites/actors/lava.png', 16, 16, 3);
 
     // Doors
@@ -27,11 +28,13 @@ export default class extends Phaser.State {
     this.load.audio('l_morse', 'src/audio/l.wav')
     this.load.audio('r_morse', 'src/audio/r.wav')
     this.load.audio('m_morse', 'src/audio/m.wav')
-
-    this.load.audio('op_sos', 'src/audio/op_sos.wav')
-    this.load.audio('rip', 'src/audio/rip.wav')
     this.load.audio('swap','src/audio/swap.wav')
 
+    this.load.audio('opSos', 'src/audio/op_sos.wav')
+    this.load.audio('rip', 'src/audio/rip.wav')
+
+    this.load.audio('menuMusic','src/audio/menu_music.ogg')
+    
 
     this.load.spritesheet('au', 'src/sprites/actors/AU.png', 16, 16)
     this.load.spritesheet('ad', 'src/sprites/actors/AD.png', 16, 16)
