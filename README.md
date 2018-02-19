@@ -20,3 +20,9 @@ Kenia Cantero
 Lara Ibarra  
 Mateo Navarro   
 Paul Matousek  
+
+### Deploy it to itch.io
+To deploy first build it `npm run deploy`  
+Then zip it `zip -r MORSEMADNESSv0.x.x.zip build`  
+and finally, ship it ` butler push MORSEMADNESSv0.x.x.zip berith/m-m:HTML5`  
+###### the zip stage is optional
