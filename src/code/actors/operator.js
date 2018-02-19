@@ -21,7 +21,9 @@ export default class extends Player {
   }
 
   sendSignal(tx) {
-    //create a bullet in the bulletGroup
+    Object.keys(this.audio).forEach(morseSound=>{
+      this.audio[morseSound].stop()
+    })
     //  Grab the first bullet we can from the pool
     this.signal = this.signalGroup.getFirstExists(false);
     if (this.signal) {
