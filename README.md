@@ -1,4 +1,4 @@
-# Morse Madness!
+# Morse Madness! [![Build Status](https://travis-ci.org/genba-games/morsemadness.svg?branch=master)](https://travis-ci.org/genba-games/morsemadness)
 In a world where there are no heroes left...   
 A hopeless maze dweller rises up to the challenge and his trusty operator,they'll capture the flag and save the world. Coop game were player 1 takes the role of a maze dweller and player 2 takes the role of his trusty operator.  
 The maze dweller's objective is to get to the end of the maze before the lava gets to him. The operator's objective is to solve the doors morse code lock combinations sent to him by the dweller.   
