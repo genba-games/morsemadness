@@ -1,7 +1,10 @@
 language: node_js
-script:
+node_js:
+  - "9.4.0"
+install: 
   - npm install
   - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
+script:
   - npm run deploy
   - butler push build/ berith/m-m:HTML5
 
