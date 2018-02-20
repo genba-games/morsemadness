@@ -3,8 +3,9 @@ node_js:
   - "9.4.0"
 install: 
   - npm install
-  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
-  - chmod +x butler
+  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler -O ~/bin/butler
+  - chmod +x ~/bin/butler
+  - export PATH="$PATH:~/bin"
   - butler -V
 script:
   - npm run deploy
