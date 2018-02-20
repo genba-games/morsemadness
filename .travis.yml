@@ -1,0 +1,8 @@
+language: node_js
+install: 
+  - npm install
+  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
+script:
+  - npm run deploy
+  - butler push build/ berith/m-m:HTML5
+
