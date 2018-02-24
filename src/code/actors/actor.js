@@ -6,10 +6,6 @@ export default class extends Phaser.Sprite {
 
     game.physics.arcade.enable(this);
 
-    this.status = {
-      stun: false,
-      controllerEnabled: true
-    }
   }
   /**
    * Defines collision logic for this object.

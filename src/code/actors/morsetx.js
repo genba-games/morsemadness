@@ -31,8 +31,9 @@ class Morse extends Actor {
     super(game, x, y, asset);
 
     this.animations.add('glow', type.cycle, 12, true)
-
+    
     this.door = false;
+    this.score = game.score
   }
 
   kill() {
@@ -55,6 +56,7 @@ class Morse extends Actor {
       }
     }
     target.kill()
+    game.state.getCurrentState().score.addScore(10)
   }
 }
 
