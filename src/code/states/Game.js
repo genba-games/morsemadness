@@ -4,7 +4,7 @@ import Dweller from '../actors/dweller'
 import Operator from '../actors/operator'
 import { GAMEPAD_KEY, KEYMAPS } from '../gamepad/gamepad'
 import config from '../config'
-import { generateMaze, TILE_TYPE } from '../maze'
+import { generateMaze, generateDoors, generateItems, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 const arrayToCSV = require('array-to-csv')
@@ -65,26 +65,33 @@ export default class extends Phaser.State {
     this.dweller.reset();
 
     // Prepare the maze tilemap
+    // Make 5 blank rows for the operator
     var operatorMap = Array(5).fill(
-      [
-        TILE_TYPE.CLEAR,
-        ...Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR),
-      ]
+      Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR),
     );
+    // Make maze top wall row
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
-    for (let i = 0; i < config.verticalTiles - operatorMap.length - 2; i++) {
-      let arr = Array(config.horizontalTiles).fill(TILE_TYPE.CLEAR)
-      operatorMap.push(arr);
-    }
+    // Generate the maze
+    let maze = generateMaze(this.mazeWidth, this.mazeHeight, this.dweller);
+    operatorMap = operatorMap.concat(maze);
+    // Place maze doors
+    generateDoors(
+      maze, 
+      this.mazeX, 
+      this.mazeY, 
+      this.dweller, 
+      this.gActors, 
+      this.gTx, 
+      0.3
+    )
+    // Make maze bottom wall row
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
 
-    // Generate the maze
-    generateMaze(operatorMap,
-      this.mazeX, this.mazeY, this.mazeWidth, this.mazeHeight,
-      this.dweller, this.gActors,
-      0.4, 0.25,
-      this.gTx
-    );
+    // Displace dweller by the offset of the maze
+    // HACK This is not done at the creation of the dweller because the 
+    // HACK generation of doors and items depends on the position of the 
+    // HACK dweller assigned by generateMaze.
+    this.dweller.y += this.mazeY * config.tileHeight;
 
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
