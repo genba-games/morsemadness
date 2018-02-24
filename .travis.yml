@@ -7,6 +7,10 @@ install:
   - chmod +x ~/bin/butler
   - export PATH="$PATH:~/bin"
   - butler -V
-script:
-  - npm run deploy
-  - butler push build/ berith/m-m:HTML5
+jobs: 
+  include:
+    - stage: Build webpack sote
+      script: npm run deploy
+    - stage: Deploy with butler
+      if: branch = itch.io
+      script: butler push build/ berith/m-m:HTML5
