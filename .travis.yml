@@ -9,6 +9,4 @@ install:
   - butler -V
 script:
   - npm run deploy
-deploy:
   - butler push build/ berith/m-m:HTML5
-
