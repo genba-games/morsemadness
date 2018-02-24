@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "9.4.0"
+install: 
+  - npm install
+  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler -O ~/bin/butler
+  - chmod +x ~/bin/butler
+  - export PATH="$PATH:~/bin"
+  - butler -V
+jobs: 
+  include:
+    - stage: Test that the wepback site builds.
+      script: npm run deploy
+    - stage: Build and deploy with butler
+      if: branch = itch.io
+      script: 
+      - npm run deploy
+      - butler push build/ berith/m-m:HTML5
