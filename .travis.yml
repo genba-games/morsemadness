@@ -9,8 +9,10 @@ install:
   - butler -V
 jobs: 
   include:
-    - stage: Build webpack sote
+    - stage: Test that the wepback site builds.
       script: npm run deploy
-    - stage: Deploy with butler
+    - stage: Build and deploy with butler
       if: branch = itch.io
-      script: butler push build/ berith/m-m:HTML5
+      script: 
+      - npm run deploy
+      - butler push build/ berith/m-m:HTML5
