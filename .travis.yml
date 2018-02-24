@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "9.4.0"
+git:
+  - depth: 1
 install: 
   - npm install
   - wget https://dl.itch.ovh/butler/linux-amd64/head/butler -O ~/bin/butler
@@ -8,6 +10,7 @@ install:
   - export PATH="$PATH:~/bin"
   - butler -V
 script:
-  - npm run deploy
+  - npm run 
+deploy:
   - butler push build/ berith/m-m:HTML5
 
