@@ -1,27 +1,30 @@
 import Actor from './actor'
 import config from '../config'
-import { signals, morseFactory } from'../actors/morsetx'
+import { signals, morseFactory, SIGNAL_DIFFICULTY } from '../actors/morsetx'
 var randomObjProp = require('random-obj-prop')
 
 /**
  * Types of doors.
  */
+//TODO add tint
 var DOOR_TYPE = {
   EASY: {
     graphics: 'door1',
     graphicsPath: 'src/sprites/actors/Door_1.png',
-    difficulty: 0,
+    difficulty: SIGNAL_DIFFICULTY.EASY,
   },
-  // MEDIUM: {
-  //   graphics: '',
-  //   graphicsPath: '',
-  //   difficulty: 1,
-  // },
-  // HARD: {
-  //   graphics: '',
-  //   graphicsPath: '',
-  //   difficulty: 2,
-  // },
+  MEDIUM: {
+    graphics: 'door1',
+    graphicsPath: 'src/sprites/actors/Door_1.png',
+    difficulty: SIGNAL_DIFFICULTY.MEDIUM,
+    tint:0xffff00    
+  },
+  HARD: {
+    graphics: 'door1',
+    graphicsPath: 'src/sprites/actors/Door_1.png',
+    difficulty: SIGNAL_DIFFICULTY.HARD,
+    tint:0xff0000   
+  },
 }
 
 var DOOR_ORIENTATION = {
@@ -33,7 +36,7 @@ var DOOR_ORIENTATION = {
  * Gets a random type of door. Door types are defined in DOORTYPE.
  */
 function getRandomDoorType() {
-  return randomObjProp(DOOR_TYPE); 
+  return randomObjProp(DOOR_TYPE);
 }
 
 /**
@@ -55,13 +58,15 @@ class Door extends Actor {
     this.animations.add('closed', [0], 12)
     this.animations.add('active', [1, 0], 1, true)
     this.animations.add('open', [], 12, false)
-    
+
     if (orientation === DOOR_ORIENTATION.LR) {
       this.anchor.setTo(0.5);
       this.angle += 90;
       this.x += config.tileWidth / 2;
       this.y += config.tileHeight / 2;
     }
+    //Set difficulty color
+    if (type.tint) this.tint = type.tint
   }
 
   /**
@@ -70,14 +75,12 @@ class Door extends Actor {
    */
   collide(target) {
     if (!this.active) {
-        // Stop door from sending more codes
-        this.active = !this.active;
-        // Set door active animation
-        this.play('active');
-        // Call Morse Factory and create a new combo
-        let i = Math.floor(signals.length * Math.random());
-        let pattern = signals[i].pattern
-        morseFactory(this.game, this.morseGroup, pattern, this);
+      // Stop door from sending more codes
+      this.active = !this.active;
+      // Set door active animation
+      this.play('active');
+
+      morseFactory(this.game, this.morseGroup, this);
     }
   }
 
@@ -103,11 +106,20 @@ function doorFactory(group, x, y, orientation, doorType, morseGroup) {
   if (orientation === undefined)
     throw 'Orientation was not defined when creating door.';
 
+  // Set difficulty
+  let tier = x / config.horizontalTiles
+  // Vary in difficulty slight to make doors less homogeneous
+  let variance = 0.2;
+  tier -= -variance + 2 * variance * Math.random();
+  //Reduce updown doors difficulty
+  if (orientation == DOOR_ORIENTATION.UD) tier -= 0.1 
+
+  if (tier < 0.45) doorType = DOOR_TYPE.EASY
+  else if (tier < 0.8) doorType = DOOR_TYPE.MEDIUM
+  else doorType = DOOR_TYPE.HARD
+
   x = x * config.tileWidth;
   y = y * config.tileHeight;
-
-  // Resolve door type
-  doorType = doorType || getRandomDoorType();
 
   group.add(new Door(group.game, x, y, doorType, orientation, morseGroup));
 }
