@@ -12,32 +12,14 @@ var TILE_TYPE = {
 
 /**
  * Generates a maze and populates it doors and objects.
- * @param {Array[Array]} tilemapData Tilemap data. This group will hold the 
- * generated maze tiles.
- * @param {Number} horizontalOffset Tilemap horizontal offset from origin in 
- * which to place the generated maze.
- * @param {Number} verticalOffset Tilemap vertical offset from origin in which 
- * to place the generated maze.
  * @param {Number} width Width of the maze. MUST be odd.
  * @param {Number} height Height of the maze. MUST be odd.
  * @param {Player} player Player instance to locate inside the maze. The player
  * will be placed in the starting position of the maze.
- * @param {Phaser.Group} actorGroup Group that will hold the players and 
- * generated doors and items.
- * @param {Number} doorChance Number between 0 and 1 with the chance to create 
- * a door. A higher number represents a higher chance to have a door.
- * @param {Number} itemChance Number between 0 and 1 with the chance to create 
- * an item. A higher number represents a higher chance to create an item. Items 
- * are created after doors, so a higher door chance will reduce the number of 
- * generated items.
  * @returns {Array[Array]} Matrix of the specified width and height containing 
  * TILE_TYPE entries.
  */
-function generateMaze(tilemapData,
-                      horizontalOffset, verticalOffset,
-                      width, height,
-                      player, actorGroup,
-                      doorChance, itemChance, morseGroup) {
+function generateMaze(width, height, player) {
   if (width % 2 === 0 || height % 2 === 0)
     throw 'Cannot generate maze with even dimensions. Dimensions MUST be odd!';
   
@@ -48,16 +30,16 @@ function generateMaze(tilemapData,
   // to lower the number of coordinates required from the generator.
   let gen = generate((width + 1) / 2, (height + 1) / 2);
 
-  // Update width and height to account for offsets
-  height = height + verticalOffset;
-  width = width + horizontalOffset;
-
   // Convert the Eller matrix to a TILE_TYPE matrix.
   // No borders are included in the generated TILE_TYPE matrix, they are 
   // expected to be guaranteed by the game
-  for (let x=verticalOffset; x < height; x += 2) {
-    for (let y=horizontalOffset; y < width; y += 2) {
-      let piece = gen[(x-verticalOffset)/2][(y-horizontalOffset)/2];
+  let tilemapData = [];
+  for (let x=0; x < height; x += 2) {
+    tilemapData.push([]);
+    if (x < height - 1)
+      tilemapData.push([]); 
+    for (let y=0; y < width; y += 2) {
+      let piece = gen[x/2][y/2];
       // Set the current position to CLEAR
       tilemapData[x][y] = TILE_TYPE.CLEAR;
       // Set the corner down right to wall
@@ -72,9 +54,9 @@ function generateMaze(tilemapData,
   }
 
   // Set goal
-  // HACK this is out of the established bounds
+  // HACK This is out of the established bounds
   let candidates = [];
-  for (let x=verticalOffset; x < height; x += 1) {
+  for (let x=0; x < height; x += 1) {
     // Check if there's a clear path to be able to get to the end
     if (tilemapData[x][width-1] === TILE_TYPE.CLEAR)
       candidates.push(x);
@@ -83,23 +65,45 @@ function generateMaze(tilemapData,
   }
   let x = candidates[Math.floor(Math.random() * candidates.length)];
   tilemapData[x][width] = TILE_TYPE.GOAL;
-
-  // Being lazy and copying the whole structure to be able to place 
-  let ref = tilemapData.map(function(arr) { return arr.slice(); });
   
   // Set player start position
   candidates = [];
-  for (let x=verticalOffset; x < height; x += 1) {
+  for (let x=0; x < height; x += 1) {
     // Check if there's a clear path to be able to get to the end
     if (tilemapData[x][0] === TILE_TYPE.CLEAR)
       candidates.push(x);
   }
   x = candidates[Math.floor(Math.random() * candidates.length)];
-  // Mark the tile so that doors and items don't consider this position
-  ref[x][0] = 'X';
   // Set player to the selected position
   player.position.x = 0;
   player.position.y = x * config.tileWidth;
+
+  return tilemapData;
+};
+
+/**
+ * Generate a group of doors in the specified maze area.
+ * @param {Array[Array]} maze Array containing the maze.
+ * @param {Number} horizontalOffset Horizontal offset in tiles from the origin
+ * where the maze starts.
+ * @param {Number} verticalOffset Vertical offset in tiles from the origin
+ * where the maze starts.
+ * @param {Phaser.Group} actorGroup Group that will hold the players and 
+ * generated doors and items.
+ * @param {Phaser.Group} morseGroup Group that will hold the morse signals.
+ * @param {Number} [doorChance=0.5] Number between 0 and 1 with the chance to 
+ * create a door. A higher number represents a higher chance to have a door.
+ */
+function generateDoors(maze, horizontalOffset, verticalOffset, player, 
+                       actorGroup, morseGroup, doorChance=0.5)
+{
+  // Being lazy and copying the whole structure to be able to place doors
+  let ref = maze.map(function(arr) { return arr.slice(); });
+  // Mark where the player is so a door does not spawn in the same spot
+  ref[player.x / config.tileWidth][0] = 'X';
+
+  let width = maze[0].length;
+  let height = maze.length;
 
   // Set maze doors:
   // * Doors must be place on coordinates that have either both left and right 
@@ -107,8 +111,8 @@ function generateMaze(tilemapData,
   // * Doors cannot be next to other doors.
   if (!doorChance && doorChance !== 0)
     doorChance = 0.5;
-  for (let x=verticalOffset; x < height; x += 1) {
-    for (let y=horizontalOffset; y < width; y += 1) {
+  for (let x=0; x < height; x += 1) {
+    for (let y=0; y < width; y += 1) {
       // If placement roll does not succeed skip placement
       if (Math.random() > doorChance || ref[x][y] !== TILE_TYPE.CLEAR) 
         continue
@@ -126,17 +130,52 @@ function generateMaze(tilemapData,
 
       // Place door
       if (wall_up && wall_down && clear_left && clear_right) 
-        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.UD, undefined, morseGroup);
-      if (wall_left && wall_right && clear_up && clear_down)
-        ref[x][y] = doorFactory(actorGroup, y, x, DOOR_ORIENTATION.LR, undefined, morseGroup);
+        ref[x][y] = doorFactory(
+          actorGroup, 
+          y + horizontalOffset, 
+          x + verticalOffset, 
+          DOOR_ORIENTATION.UD,
+          undefined, 
+          morseGroup
+        );
+      if (wall_left && wall_right && clear_up && clear_down) 
+        ref[x][y] = doorFactory(
+          actorGroup, 
+          y + horizontalOffset, 
+          x + verticalOffset, 
+          DOOR_ORIENTATION.LR,
+          undefined, 
+          morseGroup
+        );
     }
   }
+}
+
+/**
+ * Generate a group of doors in the specified maze area.
+ * @param {Array[Array]} maze Array containing the maze.
+ * @param {Number} horizontalOffset Horizontal offset in tiles from the origin
+ * where the maze starts.
+ * @param {Number} verticalOffset Vertical offset in tiles from the origin
+ * where the maze starts.
+ * @param {Phaser.Group} actorGroup Group that will hold the players and 
+ * generated doors and items.
+ * @param {Number} [itemChance=0.5] Number between 0 and 1 with the chance to 
+ * create an item. A higher number represents a higher chance to have a item.
+ */
+function generateItems(maze, horizontalOffset, verticalOffset, actorGroup,
+  doorChance=0.5)
+{
+  // Being lazy and copying the whole structure to be able to place items
+  let ref = maze.map(function(arr) { return arr.slice(); });
+  // Mark where the player is so a door does not spawn in the same spot
+  ref[player.x / config.tileWidth][0] = 'X';
 
   // Set maze items.
   // if (!itemChance && itemChance !== 0)
   //   itemChance = 0.2;
-  // for (let x=verticalOffset; x < height; x += 1) {
-  //   for (let y=horizontalOffset; y < width; y += 1) {
+  // for (let x=0; x < height; x += 1) {
+  //   for (let y=0; y < width; y += 1) {
   //     // If placement roll does not succeed skip placement
   //     if (Math.random() > itemChance || ref[x][y] !== TILE_TYPE.CLEAR) 
   //       continue
@@ -144,11 +183,11 @@ function generateMaze(tilemapData,
   //     ref[x][y] = generateItem();
   //   }
   // }
-
-  return tilemapData;
-};
+}
 
 module.exports = {
   TILE_TYPE,
   generateMaze,
+  generateDoors,
+  generateItems,
 }
