@@ -7,19 +7,17 @@ export default class extends Actor {
             sprite: new Phaser.Sprite(game, 0, 0, 'status'),
             stun: false,
             controllerEnabled: true,
-            streak: false
+            streak: true
         }
         this.addChild(this.status.sprite)
 
         this.status.sprite.animations.add('stun', [1, 2, 3, 4], 10, true)
+        this.status.sprite.animations.add('streak', [5, 6, 7, 8], 10, true)
+        
         this.status.sprite.frame = 0
     }
-
-    toggleStun() {
-        this.status.stun = !this.status.stun
-    }
-    toggleController() {
-        this.status.controllerEnabled = !this.status.controllerEnabled
+    toggleStatus(toggled){
+        this.status[toggled]=!this.status[toggled]
     }
     disableController() {
         this.status.controllerEnabled = false;
@@ -51,7 +49,17 @@ export default class extends Actor {
             this.status.sprite.animations.stop()
             this.status.sprite.frame = 0
         }
-        this.toggleController()
-        this.toggleStun()
+        this.toggleStatus('controllerEnabled')
+        this.toggleStatus('stun')
+    }
+    streak() {
+        if (!this.status.streak) {
+            game.time.events.add(Phaser.Timer.SECOND * 3, this.streak, this)
+            this.status.sprite.animations.play('streak')
+        } else if (this.status.streak) {
+            this.status.sprite.animations.stop()
+            this.status.sprite.frame = 0
+        }
+        this.toggleStatus('streak')
     }
 }
