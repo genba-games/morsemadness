@@ -10,7 +10,7 @@ install:
   - export PATH="$PATH:~/bin"
   - butler -V
 script:
-  - npm run 
+  - npm run deploy
 deploy:
   - butler push build/ berith/m-m:HTML5
 
