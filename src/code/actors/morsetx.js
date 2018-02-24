@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import config from '../config'
 import Actor from './actor'
+var randomObjProp = require('random-obj-prop')
 
 class MorseQ {
   constructor() {
@@ -57,7 +58,8 @@ class Morse extends Actor {
   }
 }
 
-function morseFactory(game, group, transmissions, door, player = 1) {
+function morseFactory(game, group, door, player = 1) {
+  let transmissions = getSignal(door.difficulty)
   let offset = 1.5
   let messageLength = transmissions.length
   let position = offset * messageLength * config.tileWidth
@@ -130,33 +132,49 @@ const T = {
   }
 }
 
-const signals = [
-  { difficulty: 0, pattern: [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M] },
-  { difficulty: 0, pattern: [T.L, T.U, T.R, T.M] },
-  { difficulty: 0, pattern: [T.L, T.R, T.U, T.D, T.M] },
-  { difficulty: 0, pattern: [T.U, T.D, T.R, T.M] },
-  { difficulty: 0, pattern: [T.U, T.R, T.D, T.M] },
-  { difficulty: 0, pattern: [T.L, T.R, T.D, T.L, T.R, T.M] },
-  { difficulty: 0, pattern: [T.D, T.R, T.M] },
-  { difficulty: 0, pattern: [T.M, T.U, T.L, T.D, T.R, T.M] },
-  { difficulty: 0, pattern: [T.D, T.R, T.U, T.D, T.M] },
-  { difficulty: 0, pattern: [T.M, T.R, T.D, T.R, T.D] },
-  { difficulty: 0, pattern: [T.M, T.D, T.L, T.U, T.M] },
-  { difficulty: 0, pattern: [T.L, T.D, T.R, T.M] },
-  { difficulty: 0, pattern: [T.D, T.R, T.M] },
-  { difficulty: 0, pattern: [T.U, T.R, T.R, T.L, T.R, T.M, T.R, T.L] },
-  { difficulty: 0, pattern: [T.D, T.U, T.D, T.M, T.L, T.L, T.D, T.U, T.R, T.R] },
-  { difficulty: 0, pattern: [T.U, T.M, T.L, T.L, T.U, T.M, T.L, T.R, T.L, T.M] },
-  { difficulty: 0, pattern: [T.U, T.D, T.U, T.M, T.L, T.R, T.L, T.R, T.U, T.M, T.D, T.U, T.L, T.D, T.L, T.D] },
-  { difficulty: 0, pattern: [T.D, T.U, T.L, T.L, T.M, T.R, T.D] },
-  { difficulty: 0, pattern: [T.L, T.D, T.R, T.M, T.U] },
-  { difficulty: 0, pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M] },
-  { difficulty: 0, pattern: [T.R, T.L, T.L, T.L, T.M] },
-]
+const SIGNAL_DIFFICULTY = {
+  EASY: 0,
+  MEDIUM: 1,
+  HARD: 2
+}
 
+const signals = {
+  [SIGNAL_DIFFICULTY.EASY]: [
+    { pattern: [T.D, T.R, T.M] },
+    { pattern: [T.M, T.M, T.M, T.M] },
+    { pattern: [T.L, T.D, T.R, T.M] },
+    { pattern: [T.L, T.U, T.R, T.M] },
+    { pattern: [T.U, T.D, T.R, T.M] },
+    { pattern: [T.U, T.R, T.D, T.M] },
+  ],
+  [SIGNAL_DIFFICULTY.MEDIUM]: [
+    { pattern: [T.L, T.R, T.U, T.D, T.M] },
+    { pattern: [T.D, T.R, T.U, T.D, T.M] },
+    { pattern: [T.M, T.D, T.L, T.U, T.M] },
+    { pattern: [T.R, T.L, T.L, T.L, T.M] },
+    { pattern: [T.M, T.R, T.D, T.R, T.D] },
+    { pattern: [T.L, T.D, T.R, T.M, T.U] },
+    { pattern: [T.L, T.R, T.D, T.L, T.R, T.M] },
+    { pattern: [T.M, T.U, T.L, T.D, T.R, T.M] },
+    { pattern: [T.D, T.U, T.L, T.L, T.M, T.R, T.D] },
+  ],
+  [SIGNAL_DIFFICULTY.HARD]: [
+    { pattern: [T.U, T.R, T.R, T.L, T.R, T.M, T.R, T.L] },
+    { pattern: [T.D, T.U, T.D, T.M, T.L, T.L, T.D, T.U, T.R, T.R] },
+    { pattern: [T.U, T.U, T.D, T.D, T.L, T.R, T.L, T.R, T.M, T.M] },
+    { pattern: [T.U, T.M, T.L, T.L, T.U, T.M, T.L, T.R, T.L, T.M] },
+    { pattern: [T.D, T.M, T.U, T.M, T.D, T.M, T.L, T.M, T.D, T.M, T.R, T.M, T.U, T.M] },
+    { pattern: [T.U, T.D, T.U, T.M, T.L, T.R, T.L, T.R, T.U, T.M, T.D, T.U, T.L, T.D, T.L, T.D] },
+  ]
+}
+function getSignal(difficulty) {
+  if (difficulty == undefined) difficulty = randomObjProp(SIGNAL_DIFFICULTY)
+  return randomObjProp(signals[difficulty]).pattern
+}
 module.exports = {
   signals,
   morseFactory,
   MorseQ,
-  T
+  T,
+  SIGNAL_DIFFICULTY
 }
