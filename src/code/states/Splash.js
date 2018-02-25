@@ -14,9 +14,12 @@ export default class extends Phaser.State {
     //
     // load your assets
     //
-    // Eye catcher menu
+
+    //Menu
     this.load.image('title_background', 'src/sprites/menu/maze.png');    
     this.load.spritesheet('morseTitle','src/sprites/menu/morseTitleComplete.png')
+    this.load.image('titleScreenMorse','src/sprites/menu/morse.png')
+    this.load.image('titleScreenMadness','src/sprites/menu/madness.png')
     // Tilesets
     this.load.image('tiles1', 'src/sprites/tiles.png')
     this.load.spritesheet('lava', 'src/sprites/actors/lava.png', 16, 16, 3);

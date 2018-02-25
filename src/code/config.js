@@ -9,4 +9,5 @@ var config = {
 config.horizontalTiles = config.gameWidth / config.tileWidth;
 config.verticalTiles = config.gameHeight / config.tileHeight;
 
+
 export default config
