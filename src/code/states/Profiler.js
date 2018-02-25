@@ -41,7 +41,6 @@ export default class extends Phaser.State {
         this.operator.gamepad = new Gamepad(this.operator, 'pad1');
         this.score = new Score(this.game, 30, this.mazeY - 1)
         this.setCurrentTransmission()
-        this.generateMorse()
 
         this.missedText = this.game.add.text(0, 0, "Missed " + this.currentTransmission.missed)
         this.patternText = this.game.add.text(0, 30, "Pattern " + this.currentTransmission.pattern)
@@ -62,11 +61,8 @@ export default class extends Phaser.State {
     }
     updateCurrentTransmission() {
         this.currentTransmission.time = game.time.now - this.currentTransmission.time
-        this.pastTransmissions.push(this.currentTransmission)
+        this.pastTransmissions.push(Object.assign({}, this.currentTransmission))
         this.setCurrentTransmission()
-        this.gTx.forEachAlive(each => {
-            this.currentTransmission.pattern.push(each.name)
-        })
     }
     setCurrentTransmission() {
         this.currentTransmission.pattern = []
@@ -78,7 +74,18 @@ export default class extends Phaser.State {
     }
     update() {
         this.game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
-        this.currentPatternTime = this.game.time.now - this.currentTransmission.time
-        this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND)
+        this.currentPatternTime = this.game.time.now - this.currentTransmission.time;
+        this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND);
+
+        if (this.gTx.countLiving() == 0) {
+            this.gSignal.killAll();
+            this.generateMorse();
+            this.gTx.forEachAlive(each => {
+                this.currentTransmission.pattern.push(each.name)
+            })
+            this.patternText.setText("Pattern " + this.currentTransmission.pattern)
+            this.missedText.setText("Missed " + this.currentTransmission.missed)
+            
+        }
     }
 };
