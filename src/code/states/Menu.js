@@ -26,6 +26,7 @@ export default class extends Phaser.State {
         this.blackBox.beginFill(0x000000)
         this.blackBox.drawRect(0,0,config.gameWidth,config.gameHeight)
         this.blackBoxTween = this.game.add.tween(this.blackBox).to({alpha:0},11000,Phaser.Easing.Quadratic.In)
+        
         this.morse = this.game.add.image(0, 40, 'titleScreenMorse')
         this.setTitleScreenText(this.morse,11511)
         
@@ -42,7 +43,8 @@ export default class extends Phaser.State {
 
     }
     start_game() {
-        game.state.start('Game');
+        game.state.start('Profiler');        
+        // game.state.start('Game');
         game.input.keyboard.onDownCallback = undefined;
         this.menuMusic.destroy();
         this.opSos.play();

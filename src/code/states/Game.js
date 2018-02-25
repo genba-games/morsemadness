@@ -187,7 +187,7 @@ export default class extends Phaser.State {
     }.bind(this), this);
   }
 
-  swapRoles() {
+  miss() {
     // Kill all active signals
     this.gSignal.forEachAlive(alive => alive.kill());
     if (this.swapTimer < this.game.time.now) {

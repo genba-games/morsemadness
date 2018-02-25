@@ -52,7 +52,7 @@ class Morse extends Actor {
         // The signal is killed automatically when it goes out of bounds
         this.q.next().body.velocity.x = 600;
       } else {
-        game.state.getCurrentState().swapRoles()
+        game.state.getCurrentState().miss()
       }
     }
     target.kill()
@@ -61,7 +61,7 @@ class Morse extends Actor {
 }
 
 function morseFactory(game, group, door, player = 1) {
-  let transmissions = getSignal(door.difficulty)
+  let transmissions = door ? getSignal(door.difficulty) : getSignal()
   let offset = 1.5
   let messageLength = transmissions.length
   let position = offset * messageLength * config.tileWidth
@@ -93,7 +93,7 @@ function morseFactory(game, group, door, player = 1) {
     })
   } else {
     //what happnes when we reach the limit?
-    game.state.getCurrentState().swapRoles()
+    game.state.getCurrentState().miss()
   }
 }
 const T = {
