@@ -40,6 +40,7 @@
     "lodash": "^4.17.5",
     "phaser-ce": "^2.9.4",
     "random-obj-prop": "^1.0.0",
+    "ssri": "^5.2.4",
     "webfontloader": "^1.6.28"
   },
   "cordova": {
