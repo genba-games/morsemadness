@@ -20,9 +20,11 @@ export default class extends Phaser.State {
     this.load.spritesheet('morseTitle','src/sprites/menu/morseTitleComplete.png')
     this.load.image('titleScreenMorse','src/sprites/menu/morse.png')
     this.load.image('titleScreenMadness','src/sprites/menu/madness.png')
+
     // Tilesets
     this.load.image('tiles1', 'src/sprites/tiles.png')
     this.load.spritesheet('lava', 'src/sprites/actors/lava.png', 16, 16, 3);
+    this.load.spritesheet('bricks','src/sprites/brickwall.png',16,16,4)
 
     // Doors
     this.load.spritesheet('door1', 'src/sprites/actors/door_1.png', 16, 16, 5);
@@ -38,7 +40,7 @@ export default class extends Phaser.State {
     this.load.audio('rip', 'src/audio/rip.wav')
 
     this.load.audio('menuMusic','src/audio/menu_music.ogg')
-    
+
 
     this.load.spritesheet('au', 'src/sprites/actors/AU.png', 16, 16)
     this.load.spritesheet('ad', 'src/sprites/actors/AD.png', 16, 16)
@@ -47,9 +49,10 @@ export default class extends Phaser.State {
     this.load.spritesheet('m', 'src/sprites/actors/M.png', 16, 16)
     this.load.spritesheet('dweller', 'src/sprites/actors/Sprite_P1.png', 16, 16)
     this.load.spritesheet('operator', 'src/sprites/actors/Sprite_P2.png', 16, 16)
-    this.load.spritesheet('antenna', 'src/sprites/actors/operator_antenna.png', 20, 48)
-
     this.load.spritesheet('status', 'src/sprites/actors/status.png', 16, 16)
+    
+    this.load.spritesheet('startbutton','src/sprites/button.png',48,16)
+    this.load.spritesheet('antenna', 'src/sprites/actors/operator_antenna.png', 20, 48)
 
     this.load.image('signal', 'src/sprites/actors/signal.png')
   }
