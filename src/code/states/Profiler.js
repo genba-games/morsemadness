@@ -6,7 +6,6 @@ import { Gamepad } from '../gamepad/gamepad'
 import Score from '../score'
 const arrayToCSV = require('array-to-csv')
 
-
 export default class extends Phaser.State {
   create() {
     this.signalQ = new MorseQ();
@@ -32,18 +31,13 @@ export default class extends Phaser.State {
     this.map.addTilesetImage('bricks');
     this.layer = this.map.createLayer(0);
 
-    this.gTx = this.game.add.group();
+    this.gArrows = this.game.add.group();
     this.gActors = this.game.add.group();
 
     this.gSignal = this.game.add.group();
     this.gSignal.enableBody = true;
     this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
-
-    this.gSignal.createMultiple(30, 'signal');
-    this.gSignal.setAll('anchor.x', 0.5);
-    this.gSignal.setAll('anchor.y', 0.5);
-    this.gSignal.setAll('outOfBoundsKill', true);
-    this.gSignal.setAll('checkWorldBounds', true);
+    this.createSignals()
 
     this.operator = new Operator(
       this.game,
@@ -63,6 +57,13 @@ export default class extends Phaser.State {
 
     this.startButton = game.add.button(game.world.centerX - 48, 240, 'startbutton', this.toggleGeneration, this, 1, 0, 2);
   }
+  createSignals(){
+    this.gSignal.createMultiple(30, 'signal');
+    this.gSignal.setAll('anchor.x', 0.5);
+    this.gSignal.setAll('anchor.y', 0.5);
+    this.gSignal.setAll('outOfBoundsKill', true);
+    this.gSignal.setAll('checkWorldBounds', true);
+  }
   toggleGeneration() {
     this.generate = !this.generate
     if (this.generate == true) {
@@ -73,8 +74,8 @@ export default class extends Phaser.State {
     }
   }
   clearGeneration() {
-    this.gSignal.killAll();
-    this.gTx.killAll();
+    this.gArrows.killAll()
+    this.signalQ.reset()
   }
   miss() {
     //this happens when you make mistakes.
@@ -82,8 +83,8 @@ export default class extends Phaser.State {
     this.missedText.setText("Missed " + this.currentTransmission.missed)
   }
   generateMorse() {
-    morseFactory(this.game, this.gTx)
-    this.gTx.children.forEach(signal => {
+    morseFactory(this.game, this.gArrows)
+    this.gArrows.children.forEach(signal => {
       signal.y = signal.y + game.world.centerY - 32
     })
     //this stores the current transmission as an array
@@ -100,7 +101,7 @@ export default class extends Phaser.State {
     this.currentTransmission.time = game.time.now
   }
   storeCurrentTransmissions() {
-    this.gTx.forEachAlive(each => {
+    this.gArrows.forEachAlive(each => {
       this.currentTransmission.pattern.push(each.name)
     })
   }
@@ -108,12 +109,12 @@ export default class extends Phaser.State {
     actor.collide(collider);
   }
   update() {
-    this.game.physics.arcade.overlap(this.gSignal, this.gTx, this.collideActor);
+    this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);
 
     if (this.generate === true) {
       this.currentPatternTime = this.game.time.now - this.currentTransmission.time;
       this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND);
-      if (this.gTx.countLiving() == 0) {
+      if (this.gArrows.countLiving() == 0) {
         this.gSignal.killAll();
         this.generateMorse();
         this.storeCurrentTransmissions()
