@@ -14,6 +14,7 @@ export default class extends Phaser.State {
       GameAnalytics.setEnabledInfoLog(true);
       GameAnalytics.initialize(gakeys.game, gakeys.secret);
     }
+
     this.signalQ = new MorseQ();
     this.generate = false;
     this.currentTransmission = {
@@ -100,6 +101,7 @@ export default class extends Phaser.State {
   updateCurrentTransmission() {
     this.currentTransmission.time = game.time.now - this.currentTransmission.time
     this.pastTransmissions.push(Object.assign({}, this.currentTransmission))
+    this.sendGAEvent(this.currentTransmission)
     this.setCurrentTransmission()
   }
   setCurrentTransmission() {
@@ -114,6 +116,12 @@ export default class extends Phaser.State {
   }
   collideActor(collider, actor) {
     actor.collide(collider);
+  }
+  sendGAEvent(transmission){
+    if(gakeys.enabled){
+      GameAnalytics.addDesignEvent("Transmission:${transmission.pattern}:Missed",transmission.missed);
+      GameAnalytics.addDesignEvent("Transmission:${transmission.pattern}:Time",transmission.time);
+    }
   }
   update() {
     this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);

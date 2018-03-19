@@ -33,8 +33,6 @@ export default class extends Phaser.State {
         this.startProfilerButton.appear = () => { this.startProfilerButton.visible = true }
         game.time.events.add(13131, this.startProfilerButton.appear, this);
 
-
-
         // Titles
         this.morseTitle = this.game.add.image(0, 0, 'morseTitle')
 
@@ -59,14 +57,18 @@ export default class extends Phaser.State {
         this.game.input.keyboard.onDownCallback = this.startGame
 
     }
-    startGame() {
-        game.state.start('Game');
+    startState(state){
+        game.state.start(state);        
         game.input.keyboard.onDownCallback = undefined;
         this.menuMusic.destroy();
         this.opSos.play();
     }
+    startGame() {
+        this.startState('Profiler')
+        // this.startState('Game')
+    }
     startProfiler() {
-        game.state.start('Profiler');
+        this.startState('Profiler')
     }
     setTitleScreenText(titleObject, delay) {
         titleObject.anchor.setTo(0.5)
