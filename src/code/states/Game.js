@@ -8,6 +8,7 @@ import { generateMaze, generateDoors, generateItems, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 import Score from '../score'
+
 const arrayToCSV = require('array-to-csv')
 
 const GAME_STATE = {
@@ -165,10 +166,10 @@ export default class extends Phaser.State {
     
     // DEBUG Controls
     // game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
-      //   let i = Math.floor(signals.length * Math.random());
-      //   let pattern = signals[i].pattern;
-      //   morseFactory(this.game, this.gTx, pattern);
-      // }.bind(this), this);
+    //   let i = Math.floor(signals.length * Math.random());
+    //   let pattern = signals[i].pattern;
+    //   morseFactory(this.game, this.gTx, pattern);
+    // }.bind(this), this);
 
     // game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function () {
     //   this.gTx.forEachAlive(tx => {
@@ -191,6 +192,7 @@ export default class extends Phaser.State {
     // Kill all active signals
     this.gSignal.forEachAlive(alive => alive.kill());
     if (this.swapTimer < this.game.time.now) {
+      
       // Swap gamepads
       this.dweller.swapGamepads(this.operator);
       // Swap appereances
@@ -226,6 +228,11 @@ export default class extends Phaser.State {
     this.stop()
 
     // Show lose graphics
+  }
+  sendAnalyticsData(){
+    "maze:doors:solved"
+    "maze:doors:activated"
+    "maze:score"
   }
 
   collideActor(collider, actor) {
