@@ -4,10 +4,16 @@ import { MorseQ, signals, morseFactory, SIGNAL_DIFFICULTY } from '../actors/mors
 import Operator from '../actors/operator'
 import { Gamepad } from '../gamepad/gamepad'
 import Score from '../score'
+import {GameAnalytics} from 'gameanalytics'
+import gakeys from '../gakeys'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
   create() {
+    if(gakeys.enable){
+      GameAnalytics.setEnabledInfoLog(true);
+      GameAnalytics.initialize(gakeys.game, gakeys.secret);
+    }
     this.signalQ = new MorseQ();
     this.generate = false;
     this.currentTransmission = {
@@ -50,10 +56,11 @@ export default class extends Phaser.State {
     this.operator.gamepad = new Gamepad(this.operator, 'pad1');
     this.score = new Score(this.game, 30, this.mazeY - 1);
     this.setCurrentTransmission();
-
+    // current pattern 
     this.missedText = this.game.add.text(0, 0, "Missed " + this.currentTransmission.missed)
     this.patternText = this.game.add.text(0, 30, "Pattern " + this.currentTransmission.pattern)
     this.timeText = this.game.add.text(0, 60, "Time " + 0)
+
 
     this.startButton = game.add.button(game.world.centerX - 48, 240, 'startbutton', this.toggleGeneration, this, 1, 0, 2);
   }
