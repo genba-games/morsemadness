@@ -1,9 +1,13 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import config from '../config'
+import { initAnalytics } from '../analytics'
 
 export default class extends Phaser.State {
     create() {
+        // Start game analytics!
+        initAnalytics()
+        
         // Audio
         this.opSos = game.add.audio('opSos');
 
@@ -57,8 +61,8 @@ export default class extends Phaser.State {
         this.game.input.keyboard.onDownCallback = this.startGame
 
     }
-    startState(state){
-        game.state.start(state);        
+    startState(state) {
+        game.state.start(state);
         game.input.keyboard.onDownCallback = undefined;
         this.menuMusic.destroy();
         this.opSos.play();
