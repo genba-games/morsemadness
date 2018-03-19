@@ -4,13 +4,13 @@ import { MorseQ, signals, morseFactory, SIGNAL_DIFFICULTY } from '../actors/mors
 import Operator from '../actors/operator'
 import { Gamepad } from '../gamepad/gamepad'
 import Score from '../score'
-import {GameAnalytics} from 'gameanalytics'
+import { GameAnalytics } from 'gameanalytics'
 import gakeys from '../gakeys'
 const arrayToCSV = require('array-to-csv')
 
 export default class extends Phaser.State {
   create() {
-    if(gakeys.enable){
+    if (gakeys.enable) {
       GameAnalytics.setEnabledInfoLog(true);
       GameAnalytics.initialize(gakeys.game, gakeys.secret);
     }
@@ -65,7 +65,7 @@ export default class extends Phaser.State {
 
     this.startButton = game.add.button(game.world.centerX - 48, 240, 'startbutton', this.toggleGeneration, this, 1, 0, 2);
   }
-  createSignals(){
+  createSignals() {
     this.gSignal.createMultiple(30, 'signal');
     this.gSignal.setAll('anchor.x', 0.5);
     this.gSignal.setAll('anchor.y', 0.5);
@@ -99,10 +99,12 @@ export default class extends Phaser.State {
     this.updateCurrentTransmission()
   }
   updateCurrentTransmission() {
-    this.currentTransmission.time = game.time.now - this.currentTransmission.time
-    this.pastTransmissions.push(Object.assign({}, this.currentTransmission))
-    this.sendGAEvent(this.currentTransmission)
-    this.setCurrentTransmission()
+    if (this.currentTransmission.pattern) {
+      this.currentTransmission.time = game.time.now - this.currentTransmission.time
+      this.pastTransmissions.push(Object.assign({}, this.currentTransmission))
+      this.sendGAEvent(this.currentTransmission)
+      this.setCurrentTransmission()
+    }
   }
   setCurrentTransmission() {
     this.currentTransmission.pattern = []
@@ -111,16 +113,18 @@ export default class extends Phaser.State {
   }
   storeCurrentTransmissions() {
     this.gArrows.forEachAlive(each => {
-      this.currentTransmission.pattern.push(each.name)
+      this.currentTransmission.pattern +=each.name
     })
   }
   collideActor(collider, actor) {
     actor.collide(collider);
   }
-  sendGAEvent(transmission){
-    if(gakeys.enabled){
-      GameAnalytics.addDesignEvent("Transmission:${transmission.pattern}:Missed",transmission.missed);
-      GameAnalytics.addDesignEvent("Transmission:${transmission.pattern}:Time",transmission.time);
+  sendGAEvent(transmission) {
+    let missedEvent = `Transmission:${transmission.pattern}:Missed`
+    let timeEvent = `Transmission:${transmission.pattern}:Time`
+    if (gakeys.enable) {
+      GameAnalytics.addDesignEvent(missedEvent, transmission.missed);
+      GameAnalytics.addDesignEvent(timeEvent, transmission.time);
     }
   }
   update() {
