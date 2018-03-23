@@ -222,14 +222,14 @@ export default class extends Phaser.State {
   win() {
     sendCompleteEvent(this.level, this.score.value)
     this.stop()
-    this.game.start_state('Win')
+    this.game.state.start('Win')
     // Show win graphics
   }
 
   lose() {
     sendLoseEvent(this.level, this.score.value)
     this.stop()
-    this.game.start_state('Lose')
+    this.game.state.start('Lose')
     // Show lose graphics
   }
 

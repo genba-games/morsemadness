@@ -4,6 +4,6 @@ import config from '../config'
 
 export default class extends Phaser.State {
     create() {
-        this.game.start_state('Menu')
+        this.game.state.start('Menu')
     }
 };
