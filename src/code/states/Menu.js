@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import config from '../config'
-import { initAnalytics,sendDesignEvent } from '../analytics'
+import { initAnalytics, sendDesignEvent } from '../analytics'
 
 export default class extends Phaser.State {
     create() {
@@ -65,12 +65,10 @@ export default class extends Phaser.State {
         game.input.keyboard.onDownCallback = undefined;
         this.menuMusic.destroy();
         this.opSos.play();
-        sendDesignEvent(`state:menu:start:${state}`,1)
+        sendDesignEvent(`state:menu:start:${state}`, 1)
     }
     startGame() {
-        this.startState('Profiler')
-        // this.startState('Game')
-        
+        this.startState('Game')
     }
     startProfiler() {
         this.startState('Profiler')

@@ -214,7 +214,6 @@ export default class extends Phaser.State {
 
   stop() {
     this.lava.stop();
-
     // Stop players
     this.dweller.stop();
     this.operator.stop();
@@ -223,12 +222,14 @@ export default class extends Phaser.State {
   win() {
     sendCompleteEvent(this.level, this.score.value)
     this.stop()
+    this.game.start_state('Win')
     // Show win graphics
   }
 
   lose() {
     sendLoseEvent(this.level, this.score.value)
     this.stop()
+    this.game.start_state('Lose')
     // Show lose graphics
   }
 
