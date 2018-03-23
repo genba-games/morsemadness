@@ -16,18 +16,18 @@ export function sendDesignEvent(event, value) {
 
 export function sendCompleteEvent(level, score) {
     if (gakeys.enable) {
-        GameAnalytcis.addProgressionEvent(EGAProgressionStatus.Complete,level, '', '', score)
+        GameAnalytics.addProgressionEvent(EGAProgressionStatus.Complete,level, '', '', score)
     }
 }
 
 export function sendLoseEvent(level, score) {
     if (gakeys.enable) {
-        GameAnalytcis.addProgressionEvent(EGAProgressionStatus.Fail, level, '', '', score)
+        GameAnalytics.addProgressionEvent(EGAProgressionStatus.Fail, level, '', '', score)
     }
 }
 
 export function sendStartEvent(level) {
     if (gakeys.enable) {
-        GameAnalytcis.addProgressionEvent(EGAProgressionStatus.start, level)
+        GameAnalytics.addProgressionEvent(EGAProgressionStatus.start, level)
     }
 }
