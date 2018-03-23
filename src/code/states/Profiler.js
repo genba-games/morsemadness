@@ -114,8 +114,8 @@ export default class extends Phaser.State {
     actor.collide(collider);
   }
   sendGAEvent(transmission) {
-    let missedEvent = `Transmission:${transmission.pattern}:Missed`
-    let timeEvent = `Transmission:${transmission.pattern}:Time`
+    let missedEvent = `Profiler:Transmission:${transmission.pattern}:Missed`
+    let timeEvent = `Profiler:Transmission:${transmission.pattern}:Time`
     sendDesignEvent(missedEvent, transmission.missed);
     sendDesignEvent(timeEvent, transmission.time);
   }

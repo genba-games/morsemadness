@@ -8,6 +8,7 @@ import { generateMaze, generateDoors, generateItems, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 import Score from '../score'
+import { sendDesignEvent, sendCompleteEvent, sendLoseEvent } from '../analytics';
 
 const arrayToCSV = require('array-to-csv')
 
@@ -25,7 +26,7 @@ export default class extends Phaser.State {
     this.mazeHeight = 13;
 
     this.lavaStartTimeMS = 10000;
-
+    this.level = 'hedge'
     this.reset()
   }
 
@@ -37,7 +38,7 @@ export default class extends Phaser.State {
     this.gTx = this.game.add.group();
     this.gLava = this.game.add.group();
     this.gUI = this.game.add.group();
-    
+
     this.gSignal = this.game.add.group();
     this.gSignal.enableBody = true;
     this.gSignal.physicsBodyType = Phaser.Physics.ARCADE;
@@ -46,15 +47,15 @@ export default class extends Phaser.State {
     this.gSignal.setAll('anchor.y', 0.5);
     this.gSignal.setAll('outOfBoundsKill', true);
     this.gSignal.setAll('checkWorldBounds', true);
-    
+
     // Kill all children in case groups are from previous game
     this.gActors.forEachAlive(o => o.destroy(), this);
     this.gTx.forEachAlive(o => o.destroy(), this);
     this.gSignal.forEachAlive(o => o.destroy(), this);
-    
+
     // Clear the signal queue
     this.signalQ = new MorseQ();
-    
+
     this.gTx.enableBody = true;
 
     // Create the dweller    
@@ -66,7 +67,7 @@ export default class extends Phaser.State {
     })
     this.game.add.existing(this.dweller);
     this.dweller.reset();
-    
+
     // Prepare the maze tilemap
     // Make 5 blank rows for the operator
     var operatorMap = Array(5).fill(
@@ -89,13 +90,13 @@ export default class extends Phaser.State {
     )
     // Make maze bottom wall row
     operatorMap.push(Array(config.horizontalTiles).fill(TILE_TYPE.PLAYER_WALL));
-    
+
     // Displace dweller by the offset of the maze
     // HACK This is not done at the creation of the dweller because the 
     // HACK generation of doors and items depends on the position of the 
     // HACK dweller assigned by generateMaze.
     this.dweller.y += this.mazeY * config.tileHeight;
-    
+
     // Create the tilemap
     operatorMap = arrayToCSV(operatorMap);
     this.game.cache.addTilemap('world', null, operatorMap, Phaser.Tilemap.CSV);
@@ -106,7 +107,7 @@ export default class extends Phaser.State {
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld();
     this.gTilemap.add(this.layer);
-    
+
     // Create the antenna
     this.antenna = this.game.add.existing(new Phaser.Sprite(
       this.game,
@@ -115,7 +116,7 @@ export default class extends Phaser.State {
       'antenna'
     ));
     this.antenna.animations.add('', [0, 1, 2], 2, true).play()
-    
+
     // Create the operator
     this.operator = new Operator(
       this.game,
@@ -124,9 +125,9 @@ export default class extends Phaser.State {
       'operator',
       this.gSignal
     );
-    
+
     this.game.add.existing(this.operator)
-    
+
     // Setup lava
     this.lava = new Lava(
       this.game,
@@ -136,7 +137,7 @@ export default class extends Phaser.State {
       this.mazeHeight * config.tileHeight,
     );
     this.gLava.add(this.lava);
-    
+
     // Locate lava to the left of the screen
     this.lava.x = -config.horizontalTiles * (config.tileWidth);
     // Start the lava timer
@@ -145,15 +146,15 @@ export default class extends Phaser.State {
       this.lava.start,
       this.lava
     );
-    this.score = new Score(this.game,30,this.mazeY-1)
+    this.score = new Score(this.game, 30, this.mazeY - 1)
     this.gUI.add(this.score)
     // Creating sfx audio object.
     this.sfx = {}
     this.sfx.swap = game.add.audio('swap')
-    
+
     this.gameState = GAME_STATE.PLAY;
   }
-  
+
   create() {
     this.swapText = this.game.add.existing(new Phaser.Text(this.game, 100, 50, "SWAP", 'bold 72pt Arial'))
     this.swapText.addColor('rgba(179,200,176)', 0)
@@ -163,7 +164,7 @@ export default class extends Phaser.State {
     this.game.input.gamepad.start();
     // Enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    
+
     // DEBUG Controls
     // game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
     //   let i = Math.floor(signals.length * Math.random());
@@ -192,7 +193,7 @@ export default class extends Phaser.State {
     // Kill all active signals
     this.gSignal.forEachAlive(alive => alive.kill());
     if (this.swapTimer < this.game.time.now) {
-      
+
       // Swap gamepads
       this.dweller.swapGamepads(this.operator);
       // Swap appereances
@@ -219,20 +220,15 @@ export default class extends Phaser.State {
   }
 
   win() {
+    sendCompleteEvent(this.level, this.score)
     this.stop()
-
     // Show win graphics
   }
 
   lose() {
+    sendLoseEvent(this.level, this.score)
     this.stop()
-
     // Show lose graphics
-  }
-  sendAnalyticsData(){
-    "maze:doors:solved"
-    "maze:doors:activated"
-    "maze:score"
   }
 
   collideActor(collider, actor) {
