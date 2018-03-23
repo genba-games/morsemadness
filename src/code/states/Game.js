@@ -8,7 +8,7 @@ import { generateMaze, generateDoors, generateItems, TILE_TYPE } from '../maze'
 import { MorseQ, morseFactory, signals } from '../actors/morsetx'
 import Lava from '../actors/lava'
 import Score from '../score'
-import { sendDesignEvent, sendCompleteEvent, sendLoseEvent } from '../analytics';
+import { sendDesignEvent, sendCompleteEvent, sendLoseEvent, sendStartEvent } from '../analytics';
 
 const arrayToCSV = require('array-to-csv')
 
@@ -26,7 +26,7 @@ export default class extends Phaser.State {
     this.mazeHeight = 13;
 
     this.lavaStartTimeMS = 10000;
-    this.level = 'hedge'
+    this.level = 'hedgemaze'
     this.reset()
   }
 
@@ -153,6 +153,7 @@ export default class extends Phaser.State {
     this.sfx.swap = game.add.audio('swap')
 
     this.gameState = GAME_STATE.PLAY;
+    sendStartEvent(this.level)
   }
 
   create() {
@@ -220,13 +221,13 @@ export default class extends Phaser.State {
   }
 
   win() {
-    sendCompleteEvent(this.level, this.score)
+    sendCompleteEvent(this.level, this.score.value)
     this.stop()
     // Show win graphics
   }
 
   lose() {
-    sendLoseEvent(this.level, this.score)
+    sendLoseEvent(this.level, this.score.value)
     this.stop()
     // Show lose graphics
   }
