@@ -10,7 +10,10 @@ install:
 jobs: 
   include:
     - stage: Test that the wepback site builds.
-      script: npm run deploy
+      script:
+      - envsubst < .env > .env
+      - cat .env 
+      - npm run deploy
     - stage: Build and deploy with butler
       if: branch = itch.io
       script: 
