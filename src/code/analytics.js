@@ -2,7 +2,6 @@ import { GameAnalytics, EGAProgressionStatus } from 'gameanalytics'
 import gakeys from './gakeys'
 
 export function initAnalytics() {
-    console.log(process.env.GA_ENABLE)
     if (gakeys.enable) {
         GameAnalytics.setEnabledInfoLog(true);
         GameAnalytics.configureBuild('0.1')

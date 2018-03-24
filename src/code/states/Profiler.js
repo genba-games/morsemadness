@@ -11,13 +11,23 @@ export default class extends Phaser.State {
   create() {
     this.signalQ = new MorseQ();
     this.generate = false;
-    this.currentTransmission = {
+    this.currentTx = {
       time: 0,
       pattern: [],
-      missed: 0
+      missed: 0,
+      accuracy: 0,
+      shots:0,
     }
-    this.pastTransmissions = [];
-
+    this.pastTx = [];
+    this.statsTx = {
+      timeAverage: 0,
+      missedAverage: 0,
+      timeTotal: 0,
+      missTotal: 0,
+      totalArrows: 0,
+      totalBullets: 0,
+      accuracy: 0,
+    }
     let profilerMap = Array(14)
     for (let i = 0; i < 7; i++) {
       profilerMap[i] = Array(config.horizontalTiles).fill(4);
@@ -52,11 +62,14 @@ export default class extends Phaser.State {
     this.score = new Score(this.game, 30, this.mazeY - 1);
     this.setCurrentTransmission();
     // current pattern 
-    this.missedText = this.game.add.text(0, 0, "Missed " + this.currentTransmission.missed)
-    this.patternText = this.game.add.text(0, 30, "Pattern " + this.currentTransmission.pattern)
+    this.missedText = this.game.add.text(0, 0, "Missed " + this.currentTx.missed)
     this.timeText = this.game.add.text(0, 60, "Time " + 0)
+    // tx stats
+    this.averageTimeText = this.game.add.text(350, 0, "Average time:" + this.statsTx.timeAverage)
+    this.averageMissText = this.game.add.text(350, 30, "Average misses:" + this.statsTx.missedAverage)
+    this.totalArrowsText = this.game.add.text(350, 60, "Arrows total:" + this.statsTx.totalArrows)
 
-
+    //start stop button
     this.startButton = game.add.button(game.world.centerX - 48, 240, 'startbutton', this.toggleGeneration, this, 1, 0, 2);
   }
   createSignals() {
@@ -81,8 +94,8 @@ export default class extends Phaser.State {
   }
   miss() {
     //this happens when you make mistakes.
-    this.currentTransmission.missed++
-    this.missedText.setText("Missed " + this.currentTransmission.missed)
+    this.currentTx.missed++
+    this.missedText.setText("Missed " + this.currentTx.missed)
   }
   generateMorse() {
     morseFactory(this.game, this.gArrows)
@@ -93,44 +106,68 @@ export default class extends Phaser.State {
     this.updateCurrentTransmission()
   }
   updateCurrentTransmission() {
-    if (this.currentTransmission.pattern.length > 0) {
-      this.currentTransmission.time = game.time.now - this.currentTransmission.time
-      this.pastTransmissions.push(Object.assign({}, this.currentTransmission))
-      this.sendGAEvent(this.currentTransmission)
+    if (this.currentTx.pattern.length > 0) {
+      this.currentTx.time = game.time.now - this.currentTx.time
+      this.currentTx.shots = this.currentTx.miss + this.currentTx.pattern.length
+      this.currentTx.accuracy = this.currentTx.miss / this.currentTx.shots
+      this.pastTx.push(Object.assign({}, this.currentTx))
+      this.setStatistics(this.currentTx)
+      this.sendGAEvent(this.currentTx)
       this.setCurrentTransmission()
     }
   }
   setCurrentTransmission() {
-    this.currentTransmission.pattern = []
-    this.currentTransmission.missed = 0
-    this.currentTransmission.time = game.time.now
+    this.currentTx.pattern = []
+    this.currentTx.missed = 0
+    this.currentTx.time = game.time.now
   }
   storeCurrentTransmissions() {
     this.gArrows.forEachAlive(each => {
-      this.currentTransmission.pattern += each.name
+      this.currentTx.pattern += each.name
     })
   }
   collideActor(collider, actor) {
     actor.collide(collider);
   }
-  sendGAEvent(transmission) {
-    let missedEvent = `Profiler:Transmission:${transmission.pattern}:Missed`
-    let timeEvent = `Profiler:Transmission:${transmission.pattern}:Time`
-    sendDesignEvent(missedEvent, transmission.missed);
-    sendDesignEvent(timeEvent, transmission.time);
+  sendGAEvent(tx) {
+    let accuracyEvent=`Profiler:Transmission:${tx.pattern}:Accuracy`
+    let shotsEvent=`Profiler:Transmission:${tx.pattern}:Shots`
+    let missedEvent = `Profiler:Transmission:${tx.pattern}:Missed`
+    let timeEvent = `Profiler:Transmission:${tx.pattern}:Time`
+    sendDesignEvent(accuracyEvent, tx.accuracy);
+    sendDesignEvent(missedEvent, tx.missed);
+    sendDesignEvent(timeEvent, tx.time);
+    sendDesignEvent(shotsEvent, tx.shots)
+  }
+  setStatistics(tx) {
+    this.statsTx.missTotal += tx.missed
+    this.statsTx.missedAverage = this.statsTx.missTotal / this.pastTx.length
+    this.statsTx.timeTotal += tx.time
+    this.statsTx.timeAverage = this.statsTx.timeTotal / this.pastTx.length
+    this.statsTx.totalArrows += tx.pattern.length
+    this.statsTx.totalBullets += (tx.pattern.length + this.statsTx.missTotal)
+    this.statsTx.accuracy = this.statsTx.totalBullets / this.statsTx.missTotal
+  }
+  updateTimer() {
+    this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND);
+  }
+  updateStatsText() {
+    this.missedText.setText("Missed " + this.currentTx.missed)
+    this.averageTimeText.setText("Average time:" + this.statsTx.timeAverage.toFixed(2))
+    this.averageMissText.setText("Average misses:" + this.statsTx.missedAverage.toFixed(2))
+    this.totalArrowsText.setText("Arrows total:" + this.statsTx.totalArrows)
   }
   update() {
     this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);
 
     if (this.generate === true) {
-      this.currentPatternTime = this.game.time.now - this.currentTransmission.time;
-      this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND);
+      this.currentPatternTime = this.game.time.now - this.currentTx.time;
+      this.updateTimer()
       if (this.gArrows.countLiving() == 0) {
         this.gSignal.killAll();
         this.generateMorse();
         this.storeCurrentTransmissions()
-        this.patternText.setText("Pattern " + this.currentTransmission.pattern)
-        this.missedText.setText("Missed " + this.currentTransmission.missed)
+        this.updateStatsText()
 
       }
     }
