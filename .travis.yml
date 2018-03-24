@@ -11,7 +11,7 @@ jobs:
   include:
     - stage: Test that the wepback site builds.
       script:
-      - envsubst < .env > .env
+      - sed -i 's/.*/echo & | envsubst/e' .env
       - cat .env 
       - npm run deploy
     - stage: Build and deploy with butler
