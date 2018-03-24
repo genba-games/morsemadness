@@ -1,5 +1,7 @@
+require('dotenv').config({path: '../../.env'})
 export default {
-    game: 'fakeKey',
-    secret: 'fakeSecret',
-    enable: false
-}
+    enable: false,
+    game: process.env.GA_GAME,
+    secret: process.env.GA_SECRET,
+    version: process.env.VERSION
+} 
