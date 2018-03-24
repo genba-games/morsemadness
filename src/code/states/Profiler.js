@@ -16,7 +16,9 @@ export default class extends Phaser.State {
       pattern: [],
       missed: 0,
       accuracy: 0,
-      shots:0,
+      shots: 0,
+      adjustedLength: 0,
+      arrowValue: 0
     }
     this.pastTx = [];
     this.statsTx = {
@@ -110,9 +112,11 @@ export default class extends Phaser.State {
       this.currentTx.time = game.time.now - this.currentTx.time
       this.currentTx.shots = this.currentTx.miss + this.currentTx.pattern.length
       this.currentTx.accuracy = this.currentTx.miss / this.currentTx.shots
+      this.currentTx.arrowValue = 1 / this.currentTx.accuracy
+      this.currentTx.adjustedLength = this.currentTx.pattern.length * (this.currentTx.arrowValue)
       this.pastTx.push(Object.assign({}, this.currentTx))
       this.setStatistics(this.currentTx)
-      this.sendGAEvent(this.currentTx)
+      this.sendGAEvents(this.currentTx)
       this.setCurrentTransmission()
     }
   }
@@ -129,15 +133,19 @@ export default class extends Phaser.State {
   collideActor(collider, actor) {
     actor.collide(collider);
   }
-  sendGAEvent(tx) {
-    let accuracyEvent=`Profiler:Transmission:${tx.pattern}:Accuracy`
-    let shotsEvent=`Profiler:Transmission:${tx.pattern}:Shots`
-    let missedEvent = `Profiler:Transmission:${tx.pattern}:Missed`
-    let timeEvent = `Profiler:Transmission:${tx.pattern}:Time`
-    sendDesignEvent(accuracyEvent, tx.accuracy);
-    sendDesignEvent(missedEvent, tx.missed);
-    sendDesignEvent(timeEvent, tx.time);
-    sendDesignEvent(shotsEvent, tx.shots)
+  sendGaEvents(tx) {
+    this.sendProfilerEvent(tx.pattern, 'Accuracy', tx.accuracy)
+    this.sendProfilerEvent(tx.pattern, 'Shots', tx.shots)
+    this.sendProfilerEvent(tx.pattern, 'Missed', tx.missed)
+    this.sendProfilerEvent(tx.pattern, 'Time', tx.time)
+    this.sendProfilerEvent(tx.pattern, 'Length', tx.pattern.length)
+    this.sendProfilerEvent(tx.pattern, 'AdjustedLength', tx.adjustedLength)
+    this.sendProfilerEvent(tx.pattern, 'ArrowValue', tx.arrowValue)
+
+  }
+  sendProfilerEvent(pattern, event, value) {
+    let dEvent = `Profiler:Transmission:${pattern}:${event}`
+    sendDesignEvent(dEvent, value);
   }
   setStatistics(tx) {
     this.statsTx.missTotal += tx.missed
