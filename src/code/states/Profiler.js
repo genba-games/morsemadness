@@ -11,6 +11,7 @@ export default class extends Phaser.State {
   create() {
     this.signalQ = new MorseQ();
     this.generate = false;
+    this.level = 'Training'
     this.currentTx = {
       time: 0,
       pattern: [],
@@ -30,6 +31,7 @@ export default class extends Phaser.State {
       totalBullets: 0,
       accuracy: 0,
     }
+    this.currentPatternTime = 0
     let profilerMap = Array(14)
     for (let i = 0; i < 7; i++) {
       profilerMap[i] = Array(config.horizontalTiles).fill(4);
@@ -63,16 +65,25 @@ export default class extends Phaser.State {
     this.operator.gamepad = new Gamepad(this.operator, 'pad1');
     this.score = new Score(this.game, 30, this.mazeY - 1);
     this.setCurrentTransmission();
+
     // current pattern 
-    this.missedText = this.game.add.text(0, 0, "Missed " + this.currentTx.missed)
-    this.timeText = this.game.add.text(0, 60, "Time " + 0)
+    this.missedText = this.game.add.text(0, 0, '')
+    this.timeText = this.game.add.text(0, 60, '')
+
     // tx stats
-    this.averageTimeText = this.game.add.text(350, 0, "Average time:" + this.statsTx.timeAverage)
-    this.averageMissText = this.game.add.text(350, 30, "Average misses:" + this.statsTx.missedAverage)
-    this.totalArrowsText = this.game.add.text(350, 60, "Arrows total:" + this.statsTx.totalArrows)
+    this.averageTimeText = this.game.add.text(350, 0, '')
+    this.accuracyText = this.game.add.text(350, 30, '')
+    this.totalArrowsText = this.game.add.text(350, 60, '')
+
+    this.initializeText()
 
     //start stop button
     this.startButton = game.add.button(game.world.centerX - 48, 240, 'startbutton', this.toggleGeneration, this, 1, 0, 2);
+
+  }
+  initializeText() {
+    this.updateStatsText()
+    this.updateTimer()
   }
   createSignals() {
     this.gSignal.createMultiple(30, 'signal');
@@ -85,9 +96,11 @@ export default class extends Phaser.State {
     this.generate = !this.generate
     if (this.generate == true) {
       this.startButton.setFrames(4, 3, 5)
+      sendStartEvent(this.level)
     } else {
       this.startButton.setFrames(1, 0, 2);
       this.clearGeneration();
+      sendCompleteEvent(this.level,0)
     }
   }
   clearGeneration() {
@@ -97,7 +110,7 @@ export default class extends Phaser.State {
   miss() {
     //this happens when you make mistakes.
     this.currentTx.missed++
-    this.missedText.setText("Missed " + this.currentTx.missed)
+    this.missedText.setText('Missed ' + this.currentTx.missed)
   }
   generateMorse() {
     morseFactory(this.game, this.gArrows)
@@ -133,7 +146,7 @@ export default class extends Phaser.State {
   collideActor(collider, actor) {
     actor.collide(collider);
   }
-  sendGaEvents(tx) {
+  sendGAEvents(tx) {
     this.sendProfilerEvent(tx.pattern, 'Accuracy', tx.accuracy)
     this.sendProfilerEvent(tx.pattern, 'Shots', tx.shots)
     this.sendProfilerEvent(tx.pattern, 'Missed', tx.missed)
@@ -154,16 +167,17 @@ export default class extends Phaser.State {
     this.statsTx.timeAverage = this.statsTx.timeTotal / this.pastTx.length
     this.statsTx.totalArrows += tx.pattern.length
     this.statsTx.totalBullets += (tx.pattern.length + this.statsTx.missTotal)
-    this.statsTx.accuracy = this.statsTx.totalBullets / this.statsTx.missTotal
+    this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
   }
   updateTimer() {
-    this.timeText.setText("Time " + this.currentPatternTime / Phaser.Timer.SECOND);
+    this.timeText.setText('Time ' + this.currentPatternTime / Phaser.Timer.SECOND);
   }
   updateStatsText() {
-    this.missedText.setText("Missed " + this.currentTx.missed)
-    this.averageTimeText.setText("Average time:" + this.statsTx.timeAverage.toFixed(2))
-    this.averageMissText.setText("Average misses:" + this.statsTx.missedAverage.toFixed(2))
-    this.totalArrowsText.setText("Arrows total:" + this.statsTx.totalArrows)
+    this.missedText.setText('Missed ' + this.currentTx.missed)
+    this.averageTimeText.setText('Time per pattern:' + this.statsTx.timeAverage.toFixed(2))
+    let acc = (this.statsTx.accuracy * 100).toFixed(2)
+    this.accuracyText.setText('Accuracy: ' + acc + '%')
+    this.totalArrowsText.setText('Arrows total: ' + this.statsTx.totalArrows)
   }
   update() {
     this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);
