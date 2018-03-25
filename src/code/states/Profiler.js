@@ -4,8 +4,9 @@ import { MorseQ, signals, morseFactory, SIGNAL_DIFFICULTY } from '../actors/mors
 import Operator from '../actors/operator'
 import { Gamepad } from '../gamepad/gamepad'
 import Score from '../score'
-import { sendDesignEvent } from '../analytics'
-const arrayToCSV = require('array-to-csv')
+import { sendDesignEvent, sendStartEvent } from '../analytics'
+const arrayToCSV = require('array-to-csv');
+const SECOND = Phaser.Timer.SECOND;
 
 export default class extends Phaser.State {
   create() {
@@ -100,7 +101,7 @@ export default class extends Phaser.State {
     } else {
       this.startButton.setFrames(1, 0, 2);
       this.clearGeneration();
-      sendCompleteEvent(this.level,0)
+      sendCompleteEvent(this.level, 0)
     }
   }
   clearGeneration() {
@@ -147,6 +148,7 @@ export default class extends Phaser.State {
     actor.collide(collider);
   }
   sendGAEvents(tx) {
+    // This could be a for using the property name.
     this.sendProfilerEvent(tx.pattern, 'Accuracy', tx.accuracy)
     this.sendProfilerEvent(tx.pattern, 'Shots', tx.shots)
     this.sendProfilerEvent(tx.pattern, 'Missed', tx.missed)
@@ -154,7 +156,6 @@ export default class extends Phaser.State {
     this.sendProfilerEvent(tx.pattern, 'Length', tx.pattern.length)
     this.sendProfilerEvent(tx.pattern, 'AdjustedLength', tx.adjustedLength)
     this.sendProfilerEvent(tx.pattern, 'ArrowValue', tx.arrowValue)
-
   }
   sendProfilerEvent(pattern, event, value) {
     let dEvent = `Profiler:Transmission:${pattern}:${event}`
@@ -170,11 +171,13 @@ export default class extends Phaser.State {
     this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
   }
   updateTimer() {
-    this.timeText.setText('Time ' + this.currentPatternTime / Phaser.Timer.SECOND);
+    let seconds = (this.currentPatternTime / SECOND).toFixed()
+    this.timeText.setText('Time ' + seconds);
   }
   updateStatsText() {
     this.missedText.setText('Missed ' + this.currentTx.missed)
-    this.averageTimeText.setText('Time per pattern:' + this.statsTx.timeAverage.toFixed(2))
+    let averageTime = (this.statsTx.timeAverage / SECOND).toFixed(2)
+    this.averageTimeText.setText('Time per pattern:' + averageTime)
     let acc = (this.statsTx.accuracy * 100).toFixed(2)
     this.accuracyText.setText('Accuracy: ' + acc + '%')
     this.totalArrowsText.setText('Arrows total: ' + this.statsTx.totalArrows)
