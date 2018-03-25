@@ -171,7 +171,7 @@ export default class extends Phaser.State {
     this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
   }
   updateTimer() {
-    let seconds = (this.currentPatternTime / SECOND).toFixed()
+    let seconds = (this.currentPatternTime / SECOND).toFixed(2)
     this.timeText.setText('Time ' + seconds);
   }
   updateStatsText() {
@@ -196,5 +196,6 @@ export default class extends Phaser.State {
 
       }
     }
+
   }
 };
