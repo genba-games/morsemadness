@@ -108,19 +108,24 @@ export default class extends Phaser.State {
     this.gArrows.killAll()
     this.signalQ.reset()
   }
+
   miss() {
-    //this happens when you make mistakes.
     this.currentTx.missed++
     this.missedText.setText('Missed ' + this.currentTx.missed)
   }
+
   generateMorse() {
     morseFactory(this.game, this.gArrows)
     this.gArrows.children.forEach(signal => {
       signal.y = signal.y + game.world.centerY - 32
     })
-    //this stores the current transmission as an array
     this.updateCurrentTransmission()
   }
+
+  /** 
+   * updateCurrentTransmission() process and store the current transmission in 
+   * past transmissions and updates the statistics object.
+   */
   updateCurrentTransmission() {
     if (this.currentTx.pattern.length > 0) {
       this.currentTx.time = game.time.now - this.currentTx.time
@@ -133,6 +138,15 @@ export default class extends Phaser.State {
       this.sendGAEvents(this.currentTx)
       this.setCurrentTransmission()
     }
+  }
+  setStatistics(tx) {
+    this.statsTx.missTotal += tx.missed
+    this.statsTx.missedAverage = this.statsTx.missTotal / this.pastTx.length
+    this.statsTx.timeTotal += tx.time
+    this.statsTx.timeAverage = this.statsTx.timeTotal / this.pastTx.length
+    this.statsTx.totalArrows += tx.pattern.length
+    this.statsTx.totalBullets += (tx.pattern.length + this.statsTx.missTotal)
+    this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
   }
   setCurrentTransmission() {
     this.currentTx.pattern = []
@@ -148,7 +162,7 @@ export default class extends Phaser.State {
     actor.collide(collider);
   }
   sendGAEvents(tx) {
-    // This could be a for using the property name.
+    // This could be a for using the property name for the event.
     this.sendProfilerEvent(tx.pattern, 'Accuracy', tx.accuracy)
     this.sendProfilerEvent(tx.pattern, 'Shots', tx.shots)
     this.sendProfilerEvent(tx.pattern, 'Missed', tx.missed)
@@ -161,15 +175,7 @@ export default class extends Phaser.State {
     let dEvent = `Profiler:Transmission:${pattern}:${event}`
     sendDesignEvent(dEvent, value);
   }
-  setStatistics(tx) {
-    this.statsTx.missTotal += tx.missed
-    this.statsTx.missedAverage = this.statsTx.missTotal / this.pastTx.length
-    this.statsTx.timeTotal += tx.time
-    this.statsTx.timeAverage = this.statsTx.timeTotal / this.pastTx.length
-    this.statsTx.totalArrows += tx.pattern.length
-    this.statsTx.totalBullets += (tx.pattern.length + this.statsTx.missTotal)
-    this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
-  }
+
   updateTimer() {
     let seconds = (this.currentPatternTime / SECOND).toFixed(2)
     this.timeText.setText('Time ' + seconds);
@@ -177,14 +183,13 @@ export default class extends Phaser.State {
   updateStatsText() {
     this.missedText.setText('Missed ' + this.currentTx.missed)
     let averageTime = (this.statsTx.timeAverage / SECOND).toFixed(2)
-    this.averageTimeText.setText('Time per pattern:' + averageTime)
+    this.averageTimeText.setText('Time/pattern: ' + averageTime)
     let acc = (this.statsTx.accuracy * 100).toFixed(2)
     this.accuracyText.setText('Accuracy: ' + acc + '%')
     this.totalArrowsText.setText('Arrows total: ' + this.statsTx.totalArrows)
   }
   update() {
     this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);
-
     if (this.generate === true) {
       this.currentPatternTime = this.game.time.now - this.currentTx.time;
       this.updateTimer()
