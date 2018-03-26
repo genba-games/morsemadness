@@ -32,7 +32,6 @@ export default class extends Phaser.State {
       totalBullets: 0,
       accuracy: 0,
     }
-    console.log(this.game.antialias)
 
     this.currentPatternTime = 0
     let profilerMap = Array(14)
@@ -70,7 +69,6 @@ export default class extends Phaser.State {
     this.game.add.existing(this.operator);
     this.operator.gamepad = new Gamepad(this.operator, 'pad1');
     this.score = new Score(this.game, 30, this.mazeY - 1);
-    this.setCurrentTransmission();
 
     // current pattern text
     let currentTab = game.add.image(0, 0, 'current')
@@ -106,6 +104,7 @@ export default class extends Phaser.State {
     this.generate = !this.generate
     if (this.generate == true) {
       this.startButton.setFrames(4, 3, 5)
+      this.setCurrentTransmission()
       sendStartEvent(this.level)
     } else {
       this.startButton.setFrames(1, 0, 2);
@@ -158,9 +157,14 @@ export default class extends Phaser.State {
     this.statsTx.accuracy = 1 - (this.statsTx.missTotal / this.statsTx.totalBullets)
   }
   setCurrentTransmission() {
+    this.currentTx.time = game.time.now
     this.currentTx.pattern = []
     this.currentTx.missed = 0
-    this.currentTx.time = game.time.now
+    this.currentTx.accuracy = 0
+    this.currentTx.shots = 0
+    this.currentTx.adjustedLength = 0
+    this.currentTx.arrowValue = 0
+
   }
   storeCurrentTransmissions() {
     this.gArrows.forEachAlive(each => {
@@ -198,15 +202,16 @@ export default class extends Phaser.State {
   }
   update() {
     this.game.physics.arcade.overlap(this.gSignal, this.gArrows, this.collideActor);
+
     if (this.generate === true) {
-      this.currentPatternTime = this.game.time.now - this.currentTx.time;
-      this.updateTimer()
       if (this.gArrows.countLiving() == 0) {
         this.gSignal.killAll();
         this.generateMorse();
         this.storeCurrentTransmissions()
         this.updateStatsText()
       }
+      this.currentPatternTime = this.game.time.now - this.currentTx.time;
+      this.updateTimer()
     }
   }
 
