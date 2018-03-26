@@ -24,7 +24,7 @@ export default class extends Phaser.State {
     // Tilesets
     this.load.image('tiles1', 'src/sprites/tiles.png')
     this.load.spritesheet('lava', 'src/sprites/actors/lava.png', 16, 16, 3);
-    this.load.spritesheet('bricks','src/sprites/brickwall.png',16,16,4)
+    this.load.spritesheet('bricks','src/sprites/brickwall.png', 16, 16, 4)
 
     // Doors
     this.load.spritesheet('door1', 'src/sprites/actors/door_1.png', 16, 16, 5);
@@ -51,7 +51,7 @@ export default class extends Phaser.State {
     this.load.spritesheet('operator', 'src/sprites/actors/Sprite_P2.png', 16, 16)
     this.load.spritesheet('status', 'src/sprites/actors/status.png', 16, 16)
     
-    this.load.spritesheet('startbutton','src/sprites/button.png',48,16)
+    this.load.spritesheet('startbutton','src/sprites/button.png', 48, 16)
     this.load.spritesheet('antenna', 'src/sprites/actors/operator_antenna.png', 20, 48)
 
     this.load.image('signal', 'src/sprites/actors/signal.png')
