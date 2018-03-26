@@ -55,6 +55,9 @@ export default class extends Phaser.State {
     this.load.spritesheet('antenna', 'src/sprites/actors/operator_antenna.png', 20, 48)
 
     this.load.image('signal', 'src/sprites/actors/signal.png')
+
+    this.load.image('current', 'src/sprites/current.png')
+    this.load.image('average', 'src/sprites/average.png')
   }
 
   create() {

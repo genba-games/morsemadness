@@ -4,7 +4,7 @@ import { MorseQ, signals, morseFactory, SIGNAL_DIFFICULTY } from '../actors/mors
 import Operator from '../actors/operator'
 import { Gamepad } from '../gamepad/gamepad'
 import Score from '../score'
-import { sendDesignEvent, sendStartEvent } from '../analytics'
+import { sendDesignEvent, sendStartEvent, sendCompleteEvent } from '../analytics'
 const arrayToCSV = require('array-to-csv');
 const SECOND = Phaser.Timer.SECOND;
 
@@ -32,14 +32,19 @@ export default class extends Phaser.State {
       totalBullets: 0,
       accuracy: 0,
     }
+    console.log(this.game.antialias)
+
     this.currentPatternTime = 0
     let profilerMap = Array(14)
     for (let i = 0; i < 7; i++) {
-      profilerMap[i] = Array(config.horizontalTiles).fill(4);
+      profilerMap[i] = Array(config.horizontalTiles).fill(5);
     }
     profilerMap[7] = profilerMap[13] = Array(config.horizontalTiles).fill(2);
     for (let i = 8; i < 13; i++) {
       profilerMap[i] = Array(config.horizontalTiles).fill(1);
+    }
+    for (let i = 14; i < 20; i++) {
+      profilerMap[i] = Array(config.horizontalTiles).fill(5);
     }
     profilerMap = arrayToCSV(profilerMap);
     this.game.cache.addTilemap('profiler', null, profilerMap, Phaser.Tilemap.CSV);
@@ -67,14 +72,18 @@ export default class extends Phaser.State {
     this.score = new Score(this.game, 30, this.mazeY - 1);
     this.setCurrentTransmission();
 
-    // current pattern 
-    this.missedText = this.game.add.text(0, 0, '')
-    this.timeText = this.game.add.text(0, 60, '')
+    // current pattern text
+    let currentTab = game.add.image(0, 0, 'current')
+    let currentTextX = currentTab.x + currentTab.width + 8
+    this.missedText = this.game.add.text(currentTextX, 0, '')
+    this.timeText = this.game.add.text(currentTextX, 32, '')
 
-    // tx stats
-    this.averageTimeText = this.game.add.text(350, 0, '')
-    this.accuracyText = this.game.add.text(350, 30, '')
-    this.totalArrowsText = this.game.add.text(350, 60, '')
+    // tx stats text
+    let averageTab = game.add.image(358, 0, 'average')
+    let averageTextX = averageTab.x + averageTab.width + 8
+    this.averageTimeText = this.game.add.text(averageTextX, 0, '')
+    this.accuracyText = this.game.add.text(averageTextX, 32, '')
+    this.totalArrowsText = this.game.add.text(averageTextX, 64, '')
 
     this.initializeText()
 
@@ -175,7 +184,6 @@ export default class extends Phaser.State {
     let dEvent = `Profiler:Transmission:${pattern}:${event}`
     sendDesignEvent(dEvent, value);
   }
-
   updateTimer() {
     let seconds = (this.currentPatternTime / SECOND).toFixed(2)
     this.timeText.setText('Time ' + seconds);
@@ -198,9 +206,8 @@ export default class extends Phaser.State {
         this.generateMorse();
         this.storeCurrentTransmissions()
         this.updateStatsText()
-
       }
     }
-
   }
+
 };
