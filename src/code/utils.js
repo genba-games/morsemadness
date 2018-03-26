@@ -4,6 +4,6 @@ export const centerGameObjects = (objects) => {
   })
 }
 
-export const nearestMultiple = (number,multiple) =>{
-  return ((number + multiple/2) / multiple) * multiple;
+export const nearestMultiple = (number, multiple) =>{
+  return ((number + multiple / 2) / multiple) * multiple;
 }
